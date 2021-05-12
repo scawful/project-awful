@@ -18,7 +18,7 @@ Contributors
 ------------
 
 - Bryan Zbojna
-- CodeX
+- Yusra Ahmed
 - Samu
 - Artem(353)
 - Ja-corn on Ja-cob
