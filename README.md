@@ -32,7 +32,7 @@ Contributors
 - Brevon/Jake The Dog
 - sunrocket9
 - dude_with_a_computer
-- Syd
+- rosescript
 - Hollow
 - Andrew Gascon/ the trickster / stickdinner
 
