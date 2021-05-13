@@ -18,11 +18,11 @@ Contributors
 ------------
 
 - Bryan Zbojna
-- CodeX
+- Yusra Ahmed
 - Samu
 - Artem(353)
 - Ja-corn on Ja-cob
-- Zach
+- zachtepper
 - HeySlamDunk
 - Larry
 - DeStRoYeR
@@ -32,9 +32,11 @@ Contributors
 - Brevon/Jake The Dog
 - sunrocket9
 - dude_with_a_computer
-- Syd
+- rosescript
 - Hollow
 - Andrew Gascon/ the trickster / stickdinner
+- Masacaai
+- Tameem
 
 MIT License
 -------
