@@ -35,6 +35,8 @@ Contributors
 - rosescript
 - Hollow
 - Andrew Gascon/ the trickster / stickdinner
+- Masacaai
+- Tameem
 
 MIT License
 -------
