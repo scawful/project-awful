@@ -26,7 +26,8 @@ void MainMenuState::initBackground()
 
 void MainMenuState::initFonts() 
 {    
-    if (!this->menu_font.loadFromFile("../assets/ACARDECLASSIC.ttf")) {
+    if (!this->menu_font.loadFromFile("../assets/ARCADECLASSIC.TTF")) 
+    {
         std::cout << "Error couldn't load menu font" << "\n";
     }       
 }
@@ -67,12 +68,13 @@ void MainMenuState::render(sf::RenderTarget* target)
     title.setString("Project Awful");
     title.setFillColor(sf::Color::Black);
     title.setFont(this->menu_font);
-    title.setPosition(470, 30);
     title.setCharacterSize(60);
+    title.setPosition( (1920 - title.getLocalBounds().width) / 2 , 30);
     target->draw(title);
     
     // Positional coordinates mouse tracing
     sf::Text mouseText;
+    mouseText.setFillColor(sf::Color::Black);
     mouseText.setPosition(this->mousePosView.x,this->mousePosView.y - 20);
     mouseText.setFont(this->menu_font);
     mouseText.setCharacterSize(12);
