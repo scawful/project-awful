@@ -8,6 +8,14 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <stack>
+#include <sstream>
 using namespace std;
 
-#endif core_hpp
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
+
+#endif
