@@ -52,7 +52,8 @@ Game::Game()
 Game::~Game()
 {
     delete this->window;
-    while(!this->states.empty()) {
+    while( !this->states.empty() ) 
+    {
         delete this->states.top();
         this->states.pop();
     }
@@ -77,22 +78,19 @@ void Game::updateSFMLEvents() {
 //            this->states.pop();
             this->window->close();
         }
-        
-        // Escape pressed: exit
-       if (this->sfEvent.type == sf::Event::KeyPressed && sfEvent.key.code == sf::Keyboard::Escape) {
-          this->window->close();
-       }
     }
 
 }
 
-void Game::update() {
+void Game::update() 
+{
     this->updateSFMLEvents();
     
     if(!this->states.empty()) 
     {    
         this->states.top()->update(this->dt);
-        if (this->states.top()->getQuit()) {
+        if (this->states.top()->getQuit()) 
+        {
             this->states.top()->endState();
             delete this->states.top();
             this->states.pop();
@@ -120,7 +118,7 @@ void Game::render()
 void Game::run() 
 {
     // Start the game loop
-    while (this->window->isOpen())
+    while ( this->window->isOpen() )
     {
         this->updateDt();
         this->update();
