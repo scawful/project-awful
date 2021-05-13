@@ -77,7 +77,7 @@ void MainMenuState::render(sf::RenderTarget* target)
     mouseText.setFillColor(sf::Color::Black);
     mouseText.setPosition(this->mousePosView.x,this->mousePosView.y - 20);
     mouseText.setFont(this->menu_font);
-    mouseText.setCharacterSize(12);
+    mouseText.setCharacterSize(24);
     stringstream ss;
     ss << this->mousePosView.x << " " << this->mousePosView.y;
     mouseText.setString(ss.str());
