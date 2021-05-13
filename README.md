@@ -8,7 +8,7 @@ Software
 - Genre: Rogue-like Dungeon Crawler
 - Platform: Windows, macOS, GNU/Linux
 - Toolchain: gcc, mingw-w64
-- Dependencies: Undecided
+- Dependencies: SFML
 
 Project Lead
 ------------
