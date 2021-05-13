@@ -24,7 +24,7 @@ void Game::initWindow()
     if ( this->fullscreen )
         this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Fullscreen, this->windowSettings);
     else
-        this->window = new sf::RenderWindow(sf::VideoMode(800, 600, window_bounds.bitsPerPixel), title, sf::Style::Titlebar | sf::Style::Close, this->windowSettings);
+        this->window = new sf::RenderWindow(sf::VideoMode(1920, 1080, window_bounds.bitsPerPixel), title, sf::Style::Titlebar | sf::Style::Close, this->windowSettings);
 
     this->window->setFramerateLimit(framerate_limit);
     this->window->setVerticalSyncEnabled(vertical_sync_enabled);
