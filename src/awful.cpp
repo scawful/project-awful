@@ -1,9 +1,11 @@
 #include "core.hpp"
+#include "Game.hpp"
 
 int main()
 {
-    cout << "Project Awful" << endl;
 
+    Game game;
+    game.run();
 
     return EXIT_SUCCESS;
 }
