@@ -26,7 +26,7 @@ protected:
     std::map<std::string, sf::Texture> textures;
         
 public:
-    State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
+    State(sf::RenderWindow* window, std::stack<State*>* states);
     virtual ~State();
     
     // Accessors
@@ -44,6 +44,8 @@ public:
     virtual void updateInput(const float& dt) = 0;
     virtual void update(const float& dt) = 0;
     virtual void render(sf::RenderTarget* target = nullptr) = 0;
+
+    string changeState;
 };
 
 #endif /* State_hpp */

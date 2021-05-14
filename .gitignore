@@ -37,3 +37,7 @@ build/Makefile
 build/CMakeFiles/cmake.check_cache
 build/CMakeFiles/CMakeDirectoryInformation.cmake
 build/assets
+build/CMakeFiles/Awful.dir/Actor/Actor.o
+build/CMakeFiles/Awful.dir/Actor/Actor.o.d
+build/CMakeFiles/Awful.dir/State/GameState.o
+build/CMakeFiles/Awful.dir/State/GameState.o.d

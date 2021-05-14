@@ -1,4 +1,5 @@
 #include "MainMenuState.hpp"
+#include "GameState.hpp"
 
 // Initializer functions
 void MainMenuState::initVariables() 
@@ -32,8 +33,8 @@ void MainMenuState::initFonts()
     }       
 }
 
-MainMenuState::MainMenuState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
-    : State(window, supportedKeys, states)
+MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* states)
+    : State(window, states)
 {
     this->initVariables();
     this->initBackground();
@@ -45,13 +46,19 @@ MainMenuState::~MainMenuState()
 
 }
 
+
 void MainMenuState::updateInput(const float & dt) 
 {
-
+    
 }
 
 void MainMenuState::update(const float& dt) 
 {
+    if ( this->changeState == "GameState" )
+    {
+        this->states->push(new GameState(this->window, this->states));
+    }
+
     this->updateMousePositions();
     this->updateInput(dt); 
 }

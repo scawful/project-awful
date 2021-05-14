@@ -2,7 +2,7 @@
 #define GameState_hpp
 
 #include "State.hpp"
-#include "Actor.hpp"
+#include "../Actor/Actor.hpp"
 
 class GameState: public State
 {
@@ -18,7 +18,7 @@ private:
     void initPlayers();
     
 public:
-    GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
+    GameState(sf::RenderWindow* window, std::stack<State*>* states);
     virtual ~GameState();
         
     // Functions

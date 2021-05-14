@@ -1,7 +1,7 @@
 #ifndef Actor_hpp
 #define Actor_hpp
 
-#include "core.hpp"
+#include "../core.hpp"
 
 class Actor
 {

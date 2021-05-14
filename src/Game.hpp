@@ -4,8 +4,10 @@
 
 #include "core.hpp"
 #include "State/MainMenuState.hpp"
+#include "State/GameState.hpp"
 
-class Game {
+class Game 
+{
 private:
     // Variables
     sf::RenderWindow *window;
@@ -20,8 +22,6 @@ private:
     
     std::stack<State*> states;
     
-    std::map<std::string, int> supportedKeys;
-
     // Initializations
     void initVariables();
     void initWindow();

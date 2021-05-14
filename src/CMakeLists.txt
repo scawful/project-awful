@@ -2,7 +2,7 @@
 project(awful)
 
 # add the executable
-add_executable(awful awful.cpp Game.cpp State/State.cpp State/MainMenuState.cpp Actor/Actor.cpp)
+add_executable(awful awful.cpp Game.cpp State/State.cpp State/MainMenuState.cpp State/GameState.cpp Actor/Actor.cpp)
 include_directories("../assets")
 
 # specify the C++ standard

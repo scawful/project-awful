@@ -38,7 +38,7 @@ void Game::initWindow()
 
 void Game::initStates() 
 {
-    this->states.push(new MainMenuState(this->window, &this->supportedKeys, &this->states));
+    this->states.push(new MainMenuState(this->window, &this->states));
 }
 
 
@@ -66,17 +66,24 @@ void Game::updateDt()
     this->dt = this->dtClock.restart().asSeconds();
 }
 
-void Game::updateSFMLEvents() {
-
-    while (this->window->pollEvent(sfEvent))
+void Game::updateSFMLEvents() 
+{
+    while ( this->window->pollEvent(sfEvent) )
     {
         // Close window: exit
-        if (this->sfEvent.type == sf::Event::Closed) 
+        if ( this->sfEvent.type == sf::Event::Closed ) 
         {
-//            this->states.top()->endState();
-//            delete this->states.top();
-//            this->states.pop();
             this->window->close();
+        }
+
+        // running into seg faults trying to change state
+        if ( this->sfEvent.type == sf::Event::KeyPressed )
+        {
+            if ( this->sfEvent.key.code == sf::Keyboard::Space )
+            {
+                //this->states.push( new GameState(this->window, &this->states) );
+                this->states.top()->changeState = "GameState";
+            }
         }
     }
 
@@ -86,10 +93,10 @@ void Game::update()
 {
     this->updateSFMLEvents();
     
-    if(!this->states.empty()) 
+    if( !this->states.empty() ) 
     {    
         this->states.top()->update(this->dt);
-        if (this->states.top()->getQuit()) 
+        if ( this->states.top()->getQuit() ) 
         {
             this->states.top()->endState();
             delete this->states.top();
@@ -108,7 +115,7 @@ void Game::render()
     this->window->clear();
 
     // render items
-    if(!this->states.empty())
+    if ( !this->states.empty() )
         this->states.top()->render();
 
     // Update the window

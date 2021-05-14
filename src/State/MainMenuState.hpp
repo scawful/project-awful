@@ -7,6 +7,7 @@ class MainMenuState : public State
 {
 private:
     // Variables
+    sf::Event sfEvent;
     sf::Texture backgroundTexture;
     sf::RectangleShape background;
     sf::Font menu_font;
@@ -17,7 +18,7 @@ private:
     void initFonts();
     
 public:
-    MainMenuState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
+    MainMenuState(sf::RenderWindow* window, std::stack<State*>* states);
     virtual ~MainMenuState();
         
     // Functions
@@ -26,6 +27,7 @@ public:
     void updateButtons();
     void update(const float& dt);
     void render(sf::RenderTarget* target = nullptr);
+
 };
 
 #endif /* MainMenuState_hpp */
