@@ -37,3 +37,4 @@ Contributors
 - Andrew Gascon/ the trickster / stickdinner
 - Masacaai
 - Tameem
+- Von Vic
