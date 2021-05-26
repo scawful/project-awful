@@ -7,10 +7,11 @@
 class GameState: public State
 {
 private:
-    sf::Font font;
-    
     // Variables
     Actor *actor;
+    sf::Font font;
+    sf::RectangleShape background;
+
     
     // Functions
     void initFonts();

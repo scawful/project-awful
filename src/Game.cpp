@@ -45,6 +45,7 @@ void Game::initStates()
 //Constructors / Destructors
 Game::Game() 
 {
+    cout << "Game::constructor - dev test" << endl;
     this->initWindow();
     this->initStates();
 }
