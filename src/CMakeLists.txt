@@ -1,5 +1,8 @@
+#Cmake version
+cmake_minimum_required(VERSION 3.10)
+
 # set the project name
-project(awful)
+project(awful VERSION 1.0)
 
 # add the executable
 add_executable(awful awful.cpp Game.cpp State/State.cpp State/MainMenuState.cpp State/GameState.cpp Actor/Actor.cpp)
