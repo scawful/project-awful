@@ -49,7 +49,6 @@ void GameState::update(const float& dt)
 
 void GameState::render(sf::RenderTarget* target)
 {
-    //target->clear(sf::Color::Red);
 
     if (!target)
         target = this->window;
