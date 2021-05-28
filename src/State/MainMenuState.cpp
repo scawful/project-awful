@@ -76,13 +76,13 @@ void MainMenuState::render(sf::RenderTarget* target)
     title.setFillColor(sf::Color::Black);
     title.setFont(this->menu_font);
     title.setCharacterSize(60);
-    title.setPosition( (1920 - title.getLocalBounds().width) / 2 , 30);
+    title.setPosition( (SCREEN_HEIGHT - title.getLocalBounds().width) / 2 , 30);
     target->draw(title);
     
     // Positional coordinates mouse tracing
     sf::Text mouseText;
     mouseText.setFillColor(sf::Color::Black);
-    mouseText.setPosition(this->mousePosView.x,this->mousePosView.y - 20);
+    mouseText.setPosition(this->mousePosView.x, this->mousePosView.y - 20);
     mouseText.setFont(this->menu_font);
     mouseText.setCharacterSize(24);
     stringstream ss;

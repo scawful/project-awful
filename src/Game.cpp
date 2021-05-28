@@ -24,7 +24,7 @@ void Game::initWindow()
     if ( this->fullscreen )
         this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Fullscreen, this->windowSettings);
     else
-        this->window = new sf::RenderWindow(sf::VideoMode(1920, 1080, window_bounds.bitsPerPixel), title, sf::Style::Titlebar | sf::Style::Close, this->windowSettings);
+        this->window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, window_bounds.bitsPerPixel), title, sf::Style::Titlebar | sf::Style::Close, this->windowSettings);
 
     this->window->setFramerateLimit(framerate_limit);
     this->window->setVerticalSyncEnabled(vertical_sync_enabled);
@@ -77,13 +77,14 @@ void Game::updateSFMLEvents()
             this->window->close();
         }
 
-        // running into seg faults trying to change state
         if ( this->sfEvent.type == sf::Event::KeyPressed )
         {
             if ( this->sfEvent.key.code == sf::Keyboard::Space )
             {
-                //this->states.push( new GameState(this->window, &this->states) );
-                this->states.top()->changeState = "GameState";
+                if ( this->states.top()->changeState == "MainMenuState")
+                    this->states.top()->changeState = "GameState";
+                else
+                    this->states.top()->changeState = "MainMenuState";
             }
         }
     }
