@@ -38,6 +38,7 @@ void Game::initWindow()
 
 void Game::initStates() 
 {
+    // add the MainMenuState to the stack of States 
     this->states.push(new MainMenuState(this->window, &this->states));
 }
 
@@ -52,6 +53,7 @@ Game::Game()
 
 Game::~Game()
 {
+    // dispose of the sfml window instance and pop any remaining states off the stack
     delete this->window;
     while( !this->states.empty() ) 
     {
@@ -69,6 +71,9 @@ void Game::updateDt()
 
 void Game::updateSFMLEvents() 
 {
+    // polling events from sfml using the sf::Event class
+    // handles more universal inputs across the game, such as escape for menus
+    // currently escape closes the game, but when we make the PauseMenu it will open that
     while ( this->window->pollEvent(sfEvent) )
     {
         // Close window: exit
@@ -79,6 +84,10 @@ void Game::updateSFMLEvents()
 
         if ( this->sfEvent.type == sf::Event::KeyPressed )
         {
+            // @scawful
+            // temporary state changing code
+            // if you keep pressing space you will just make an indefinite amount of states
+            // don't worry though, they all get destroyed properly
             if ( this->sfEvent.key.code == sf::Keyboard::Space )
             {
                 if ( this->states.top()->changeState == "MainMenuState")
@@ -100,6 +109,9 @@ void Game::update()
 {
     this->updateSFMLEvents();
     
+    // updating anything that happens inside of the states 
+    // passing in the delta time to help with consistent animations later on
+    // checks if any of the states are attempting to quit, so it can properly clean them off the stack
     if( !this->states.empty() ) 
     {    
         this->states.top()->update(this->dt);
