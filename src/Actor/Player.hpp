@@ -19,7 +19,6 @@ public:
     virtual ~Player();
         
     // Functions
-    void move(const float x, const float y, const float& dt);
     virtual void update(const float& dt);
 };
 

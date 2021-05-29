@@ -2,10 +2,7 @@
 
 void Actor::initVariables() 
 {
-    actorPositionX = 0;
-    actorPositionY = 0;
-    actorVelocityX = 0;
-    actorVelocityY = 0;
+    this->movementComponent = NULL;
 }
 
 Actor::Actor() 
@@ -15,7 +12,12 @@ Actor::Actor()
 
 Actor::~Actor() 
 {
-    
+    delete this->movementComponent;
+}
+
+void Actor::createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration) 
+{
+    this->movementComponent = new MovementComponent(this->sprite, maxVelocity, acceleration, deceleration);
 }
 
 void Actor::setTexture(sf::Texture& texture) 
@@ -25,14 +27,15 @@ void Actor::setTexture(sf::Texture& texture)
 
 void Actor::setPosition(const float x, const float y)
 {
-    actorPositionX = x;
-    actorPositionY = y;
     this->sprite.setPosition(x, y);
 }
 
-void Actor::move(const float x, const float y, const float& dt)
+void Actor::move(const float dir_x, const float dir_y, const float& dt)
 {
-
+    if ( this->movementComponent ) 
+    {
+        this->movementComponent->move(dir_x, dir_y, dt); // sets velocity
+    }
 }
 
 void Actor::update(const float & dt) 

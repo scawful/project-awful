@@ -2,6 +2,7 @@
 #define State_hpp
 
 #include "../core.hpp"
+#include "../Actor/Player.hpp"
 
 class State 
 {

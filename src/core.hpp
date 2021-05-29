@@ -10,6 +10,11 @@
 #include <string>
 #include <stack>
 #include <sstream>
+#include <ctime>
+#include <cstdlib>
+#include <fstream>
+#include <map>
+
 using namespace std;
 
 #include <SFML/System.hpp>

@@ -2,8 +2,6 @@
 #define GameState_hpp
 
 #include "State.hpp"
-#include "../Actor/Actor.hpp"
-#include "../Actor/Player.hpp"
 
 class GameState: public State
 {
