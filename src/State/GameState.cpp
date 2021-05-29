@@ -15,7 +15,6 @@ void GameState::initPlayers()
 {
     playerTexture.loadFromFile("../assets/dot.bmp");
     player = new Actor( 100, 100, playerTexture );
-    //player->setTexture(playerTexture);
 }
 
 GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : State(window, states)
@@ -31,11 +30,13 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : Sta
     this->initFonts();
     this->initTextures();
     this->initPlayers();
+    cout << "GameState::GameState created\n";
 }
 
 GameState::~GameState() 
 {
     delete player;
+    cout << "GameState::~GameState destroyed\n";
 }
 
 void GameState::updateInput(const float& dt)
@@ -52,6 +53,7 @@ void GameState::updateInput(const float& dt)
 
 void GameState::update(const float& dt)
 {
+    // temporary
     if ( this->changeState == "MainMenuState" )
     {
         this->states->push(new MainMenuState(this->window, this->states));

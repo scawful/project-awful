@@ -21,8 +21,7 @@ void MainMenuState::initBackground()
     // {
     //     throw "ERROR::MAINMENUSTATE::FAILED_TO_LOAD_BACKGROUND_TEXTURE";
     // }
-    
-    //this->background.setTexture(&this->backgroundTexture);
+    // this->background.setTexture(&this->backgroundTexture);
 }
 
 void MainMenuState::initFonts() 
@@ -39,11 +38,12 @@ MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* state
     this->initVariables();
     this->initBackground();
     this->initFonts();
+    cout << "MainMenuState::MainMenuState created\n";
 }
 
 MainMenuState::~MainMenuState()
 {
-
+    cout << "MainMenuState::~MainMenuState destroyed\n";
 }
 
 
@@ -78,6 +78,14 @@ void MainMenuState::render(sf::RenderTarget* target)
     title.setCharacterSize(60);
     title.setPosition( (SCREEN_WIDTH - title.getLocalBounds().width) / 2 , 30);
     target->draw(title);
+
+    sf::Text prompt;
+    prompt.setString("Press Space to begin");
+    prompt.setFillColor(sf::Color::Black);
+    prompt.setFont(this->menu_font);
+    prompt.setCharacterSize(28);
+    prompt.setPosition( (SCREEN_WIDTH - prompt.getLocalBounds().width) / 2 , 400);
+    target->draw(prompt);
     
     // Positional coordinates mouse tracing
     sf::Text mouseText;
@@ -85,7 +93,7 @@ void MainMenuState::render(sf::RenderTarget* target)
     mouseText.setPosition(this->mousePosView.x, this->mousePosView.y - 20);
     mouseText.setFont(this->menu_font);
     mouseText.setCharacterSize(12);
-    
+
     stringstream ss;
     ss << this->mousePosView.x << " " << this->mousePosView.y;
     mouseText.setString(ss.str());

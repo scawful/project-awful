@@ -14,7 +14,6 @@ private:
     sf::Texture playerTexture;
     sf::Event sfEvent;
 
-    
     // Functions
     void initFonts();
     void initTextures();
