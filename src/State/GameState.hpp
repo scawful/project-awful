@@ -8,7 +8,7 @@ class GameState: public State
 {
 private:
     // Variables
-    DungeonGenerator dungeonGenerator;
+    DungeonGenerator *dungeonGenerator;
     Player *player;
     sf::Font font;
     sf::RectangleShape background;

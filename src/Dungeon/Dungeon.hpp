@@ -20,29 +20,35 @@ namespace Dungeon
     class Room
     {
     private:
+        int roomID;
         Tile *tiles;
         Room *leftChild;
         Room *rightChild;
         sf::RectangleShape roomShape;
 
     public:
-        Room(int top, int left, int width, int height);
+        Room(int id, int top, int left, int width, int height);
         ~Room();
+        int id, top, left, width, height;
 
         Room* getLeftChild()
         {
-            return leftChild;
+            return this->leftChild;
         }
 
-        void setLeftChild(Room *leftChild)
+        Room* getRightChild()
         {
-            this->leftChild = leftChild;
+            return this->rightChild;
         }
 
-        void setRightChild(Room *rightChild)
+        int getRoomID()
         {
-            this->rightChild = rightChild;
+            return this->roomID;
         }
+
+        void setRoomID( int id );
+        void setLeftChild( Room *leftChild );
+        void setRightChild( Room *rightChild );
 
         Room& operator =(const Room &t)
         {

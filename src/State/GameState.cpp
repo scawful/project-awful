@@ -34,6 +34,8 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : Sta
     this->initFonts();
     this->initTextures();
     this->initPlayers();
+
+    this->dungeonGenerator = new DungeonGenerator();
     cout << "GameState::GameState created\n";
 }
 
@@ -72,6 +74,8 @@ void GameState::render(sf::RenderTarget* target)
         target = this->window;
 
     target->draw(this->background);
+
+    this->dungeonGenerator->render(*target);
 
     // the player class uses a reference argument, so we dereference the pointer to the RenderTarget
     this->player->render(*target);

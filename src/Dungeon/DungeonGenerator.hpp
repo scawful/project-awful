@@ -8,13 +8,15 @@ static int alloc_size = 10;
 class DungeonGenerator
 {
 private:
-    const static int maximumRoomSize = 256;
-    const static int minimumRoomSize = 16;
-    const static int minimumDimension = 4;
+    int maximumRoomSize;
+    int minimumRoomSize;
+    int minimumDimension;
     int allocatedRooms, usedRooms;
     int top, left, width, height;
+    int roomID;
 
-    Dungeon::Room *rooms;
+    Dungeon::Room *rootRoom;
+    vector<Dungeon::Room*> vectorRooms;
 
 public:
     void initOriginRoom();
@@ -23,8 +25,11 @@ public:
     ~DungeonGenerator();
 
     // Functions
+    void deleteDungeon( Dungeon::Room *room );
     bool splitRoom( Dungeon::Room *room );
-    void generateDungeons();
+    void generateDungeon( Dungeon::Room *room );
+
+    void render(sf::RenderTarget& target);
 
 };
 
