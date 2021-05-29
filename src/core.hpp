@@ -18,4 +18,7 @@ using namespace std;
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 
+#define SCREEN_WIDTH  800
+#define SCREEN_HEIGHT 600
+
 #endif

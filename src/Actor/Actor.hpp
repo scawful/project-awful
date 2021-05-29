@@ -12,6 +12,9 @@ private:
     // Initializer Functions
     void initVariables();
 
+    float actorPositionX, actorPositionY;
+    float actorVelocityX, actorVelocityY;
+
 protected:
     sf::Sprite sprite;
         
@@ -25,6 +28,7 @@ public:
     virtual void setPosition(const float x, const float y);
         
     // Functions
+    virtual void move(const float x, const float y, const float& dt);
     virtual void update(const float& dt);
     virtual void render(sf::RenderTarget& target);
 };
