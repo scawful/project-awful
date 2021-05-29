@@ -1,9 +1,0 @@
-Ancilla::Ancilla()
-{
-
-}
-
-Ancilla::~Ancilla()
-{
-
-}
