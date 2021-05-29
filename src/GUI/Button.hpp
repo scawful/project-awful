@@ -7,7 +7,8 @@ enum button { BTN_IDLE = 0, BTN_HOVER, BTN_ACTIVE };
 
 class Button 
 {
-private:
+private:    
+    // current state of the button based on the enum
     short unsigned buttonState;
     
     // shape will be the actual construct that makes up the button
@@ -44,3 +45,5 @@ public:
     void update(const sf::Vector2f& mousePos);
     void render(sf::RenderTarget& target);
 };
+
+#endif
