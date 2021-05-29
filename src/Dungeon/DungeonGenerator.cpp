@@ -2,31 +2,24 @@
 
 void DungeonGenerator::initOriginRoom()
 {
-    rootRoom = new Dungeon::Room( this->roomID, this->top, this->left, this->width, this->height );
+    rootRoom = new Dungeon::Room( this->roomID, (SCREEN_HEIGHT - 512) / 2, (SCREEN_WIDTH - 512) / 2, 512, 512 );
     roomID++;
     cout << "Origin Room initialized\n";
 }
 
 DungeonGenerator::DungeonGenerator()
 {
-    this->maximumRoomSize = 256 * 2;
-    this->minimumRoomSize = 64;
-    this->minimumDimension = 4;
-
-    this->top = 0;
-    this->left = 0;
-    this->width = this->maximumRoomSize;
-    this->height = this->maximumRoomSize;
     this->allocatedRooms = alloc_size;
     this->usedRooms = 0;
     this->roomID = 0;
+    this->dungeonID = 0;
 
     this->initOriginRoom();
     vectorRooms.push_back( rootRoom );
 
-    for ( int i = 0; i < 30; i++ )
+    for ( int i = 0; i < 5; i++ )
     {
-        random_device rd;     // only used once to initialise (seed) engine
+        random_device rd; 
         mt19937 rng(rd()); // random-number engine used (Mersenne-Twister in this case)
         uniform_int_distribution<int> splitRand(0, vectorRooms.size() - 1 ); // guaranteed unbiased
         auto splitID = splitRand(rng);
@@ -71,40 +64,38 @@ bool DungeonGenerator::splitRoom( Dungeon::Room *room )
 
     int maximum = 0;
     if ( horizontal )
-        maximum = this->height;
+        maximum = room->height - room->getMinimumRoomSize();
     else
-        maximum = this->width;
+        maximum = room->width - room->getMinimumRoomSize();
 
-    maximum -= this->minimumRoomSize;
-
-    if ( maximum <= this->minimumRoomSize )
+    if ( maximum <= room->getMinimumRoomSize() )
         return false;
 
     // split 
     uniform_int_distribution<int> splitRand(0,maximum); // guaranteed unbiased
     auto split = splitRand(rng);
 
-    if ( split < this->minimumRoomSize )
+    if ( split < room->getMinimumRoomSize() )
     {
-        split = this->minimumRoomSize;
+        split = room->getMinimumRoomSize();
     }
 
     if ( horizontal )
     {
-        cout << "Left Child: " << roomID << " " << top << " " << left << " " << split << " " << width << endl;
-        room->setLeftChild( new Dungeon::Room( roomID, top, left, split, width ) );
+        cout << "Left Child: " << roomID << " " << rootRoom->top << " " << rootRoom->left << " " << split << " " << room->width << endl;
+        room->setLeftChild( new Dungeon::Room( roomID, rootRoom->top, rootRoom->left, split, room->width ) );
         roomID++;
-        cout << "Right Child: " << roomID << " " << top + split << " " << left << " " << height - split << " " << width << endl;
-        room->setRightChild( new Dungeon::Room( roomID, top + split, left, height - split, width ) );
+        cout << "Right Child: " << roomID << " " << rootRoom->top + split << " " << rootRoom->left << " " << room->height - split << " " << room->width << endl;
+        room->setRightChild( new Dungeon::Room( roomID, rootRoom->top + split, rootRoom->left, room->height - split, room->width ) );
         roomID++;
     }
     else
     {
-        cout << "Left Child: " << roomID << " " << top << " " << left << " " << height << " " << split << endl;
-        room->setLeftChild( new Dungeon::Room( roomID, top, left, height, split ) );
+        cout << "Left Child: " << roomID << " " << rootRoom->top << " " << rootRoom->left << " " << room->height << " " << split << endl;
+        room->setLeftChild( new Dungeon::Room( roomID, rootRoom->top, rootRoom->left, room->height, split ) );
         roomID++;
-        cout << "Right Child: " << roomID << " " << top << " " << left + split << " " << height << " " << width - split << endl;
-        room->setRightChild( new Dungeon::Room( roomID, top, left + split, height, width - split ) );
+        cout << "Right Child: " << roomID << " " << room->top << " " << rootRoom->left + split << " " << room->height << " " << room->width - split << endl;
+        room->setRightChild( new Dungeon::Room( roomID, rootRoom->top, rootRoom->left + split, room->height, room->width - split ) );
         roomID++;
     }
     
@@ -125,35 +116,62 @@ void DungeonGenerator::generateDungeon( Dungeon::Room *room )
         mt19937 rng(rd()); // random-number engine used (Mersenne-Twister in this case)
 
         // if leaf node, create a dungeon within the minimum size constraints
-        uniform_int_distribution<int> dungeonTopRnd(0, this->height - this->minimumRoomSize );
-        uniform_int_distribution<int> dungeonLeftRnd(0, this->width - this->minimumRoomSize );
+        uniform_int_distribution<int> dungeonTopRnd(0, room->height - room->getMinimumRoomSize() );
+        uniform_int_distribution<int> dungeonLeftRnd(0, room->width - room->getMinimumRoomSize() );
 
-        int dungeonTop = ( this->height - this->minimumRoomSize <= 0 ) ? 0 : dungeonTopRnd(rng);
-        int dungeonLeft =  ( this->width - this->minimumRoomSize <= 0 ) ? 0 : dungeonLeftRnd(rng);
+        int dungeonTop = ( room->height - room->getMinimumRoomSize() <= 0 ) ? 0 : dungeonTopRnd(rng);
+        int dungeonLeft =  ( room->width - room->getMinimumRoomSize() <= 0 ) ? 0 : dungeonLeftRnd(rng);
 
-        uniform_int_distribution<int> dungeonHeightRnd(0, height - dungeonTop );
-        uniform_int_distribution<int> dungeonWidthRnd(0, width - dungeonLeft );
+        uniform_int_distribution<int> dungeonHeightRnd(0, room->height - dungeonTop );
+        uniform_int_distribution<int> dungeonWidthRnd(0, room->width - dungeonLeft );
 
-        int dungeonHeight = max( dungeonHeightRnd(rng), this->minimumRoomSize );
-        int dungeonWidth = max( dungeonWidthRnd(rng), this->minimumRoomSize );
-
-        room = new Dungeon::Room( roomID, top + dungeonTop, left+dungeonLeft, dungeonHeight, dungeonWidth );
-        roomID++;
+        int dungeonHeight = max( dungeonHeightRnd(rng), room->getMinimumRoomSize() );
+        int dungeonWidth = max( dungeonWidthRnd(rng), room->getMinimumRoomSize() );
+        
+        cout << "Dungeon: " << dungeonID << " " << rootRoom->top + dungeonTop << " " << rootRoom->left + dungeonLeft << " " << dungeonHeight << " " << dungeonWidth << endl;
+        room->setDungeonRoom( new Dungeon::Room( dungeonID, rootRoom->top + dungeonTop, rootRoom->left + dungeonLeft, dungeonHeight, dungeonWidth ) );
+        dungeonRooms.push_back( room );
+        dungeonID++;
     }
 }
 
 void DungeonGenerator::render(sf::RenderTarget& target)
 {
+    sf::RectangleShape rootRect;
+    rootRect.setSize( sf::Vector2f( rootRoom->height, rootRoom->width) );
+    rootRect.setPosition(sf::Vector2f( rootRoom->left, rootRoom->top ) );
+    rootRect.setFillColor( sf::Color::White );
+    rootRect.setOutlineThickness(5);
+    rootRect.setOutlineColor( sf::Color::Blue );
+    target.draw(rootRect);
+
     for ( int i = 0; i < vectorRooms.size(); i++ )
     {
         sf::RectangleShape roomRect;
-        roomRect.setSize( sf::Vector2f( vectorRooms[i]->height, vectorRooms[i]->width) );
-            //prompt.setPosition( (SCREEN_WIDTH - prompt.getLocalBounds().width) / 2 , 400);
-        roomRect.setPosition(sf::Vector2f( ((vectorRooms[i]->width - vectorRooms[i]->top) / 2) , vectorRooms[i]->left )) ;
+        roomRect.setSize( sf::Vector2f( vectorRooms[i]->height, vectorRooms[i]->width ) );
+        roomRect.setPosition( sf::Vector2f( vectorRooms[i]->top, vectorRooms[i]->left ) ) ;
         //roomRect.setPosition( sf::Vector2f( vectorRooms[i]->top , vectorRooms[i]->left ) );
         roomRect.setFillColor( sf::Color::Black );
         roomRect.setOutlineThickness(5);
         roomRect.setOutlineColor( sf::Color::Red );
         target.draw(roomRect);
     }
+
+
+    // for ( int i = 0; i < dungeonID; i++ )
+    // {
+    //     sf::RectangleShape dungeonRect;
+    //     dungeonRect.setSize( sf::Vector2f( dungeonRooms[i]->height, dungeonRooms[i]->width) );
+    //     dungeonRect.setPosition(sf::Vector2f( dungeonRooms[i]->top , dungeonRooms[i]->left )) ;
+    //     dungeonRect.setFillColor( sf::Color::Black );
+    //     dungeonRect.setOutlineThickness(5);
+    //     dungeonRect.setOutlineColor( sf::Color::Red );
+    //     target.draw(dungeonRect);
+    // }
+
+    // for( int i = 0; i < 512; i++ ) 
+    // {
+    //     for( int j = 0; j < 512; j++ )
+            
+    // }
 }

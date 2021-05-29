@@ -8,15 +8,12 @@ static int alloc_size = 10;
 class DungeonGenerator
 {
 private:
-    int maximumRoomSize;
-    int minimumRoomSize;
-    int minimumDimension;
     int allocatedRooms, usedRooms;
-    int top, left, width, height;
-    int roomID;
+    int roomID, dungeonID;
 
     Dungeon::Room *rootRoom;
     vector<Dungeon::Room*> vectorRooms;
+    vector<Dungeon::Room*> dungeonRooms;
 
 public:
     void initOriginRoom();

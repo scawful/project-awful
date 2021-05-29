@@ -17,14 +17,20 @@ namespace Dungeon
 
     };
 
+    //
+    // 
     class Room
     {
     private:
         int roomID;
+        int maximumRoomSize;
+        int minimumRoomSize;
         Tile *tiles;
         Room *leftChild;
         Room *rightChild;
+        Room *dungeon;
         sf::RectangleShape roomShape;
+        
 
     public:
         Room(int id, int top, int left, int width, int height);
@@ -47,13 +53,10 @@ namespace Dungeon
         }
 
         void setRoomID( int id );
-        void setLeftChild( Room *leftChild );
-        void setRightChild( Room *rightChild );
 
-        Room& operator =(const Room &t)
-        {
-            return *this;
-        } 
+        void deleteDungeon();
+        bool splitRoom();
+        void generateDungeon();
 
     };
 
