@@ -18,8 +18,7 @@ void GameState::initPlayers()
     //player->setTexture(playerTexture);
 }
 
-GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states)
-    : State(window, states)
+GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : State(window, states)
 {
     this->background.setSize(
          sf::Vector2f
@@ -28,7 +27,7 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states)
               static_cast<float>(this->window->getSize().y)
          )
     );
-    this->background.setFillColor(sf::Color::Red);
+    this->background.setFillColor(sf::Color::White);
     this->initFonts();
     this->initTextures();
     this->initPlayers();
@@ -58,6 +57,7 @@ void GameState::update(const float& dt)
         this->states->push(new MainMenuState(this->window, this->states));
     }
 
+    this->player->update(dt);
     this->updateInput(dt);
     this->updateKeytime(dt);
 }

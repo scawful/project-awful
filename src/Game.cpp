@@ -86,6 +86,11 @@ void Game::updateSFMLEvents()
                 else
                     this->states.top()->changeState = "MainMenuState";
             }
+
+            if ( this->sfEvent.key.code == sf::Keyboard::Escape )
+            {
+                this->window->close();
+            }
         }
     }
 

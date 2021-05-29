@@ -49,20 +49,18 @@ void Actor::move(const float x, const float y, const float& dt)
     }
 
     //Move the dot up or down
-    actorVelocityY += actorVelocityY;
+    actorPositionY += actorVelocityY;
 
     //If the dot went too far up or down
-    if( ( actorVelocityY < 0 ) || ( actorVelocityY + 20 > SCREEN_HEIGHT ) )
+    if( ( actorPositionY < 0 ) || ( actorPositionY + 20 > SCREEN_HEIGHT ) )
     {
         //Move back
-        actorVelocityY -= actorVelocityY;
+        actorPositionY -= actorVelocityY;
     }
 }
 
 void Actor::update(const float & dt) 
 {        
-
-
     this->sprite.setPosition( actorPositionX, actorPositionY );
 }
 
