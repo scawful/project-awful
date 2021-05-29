@@ -40,6 +40,7 @@ void Game::initStates()
 {
     // add the MainMenuState to the stack of States 
     this->states.push(new MainMenuState(this->window, &this->states));
+    this->states.top()->currentState = "MainMenuState";
 }
 
 
@@ -86,14 +87,25 @@ void Game::updateSFMLEvents()
         {
             // @scawful
             // temporary state changing code
-            // if you keep pressing space you will just make an indefinite amount of states
-            // don't worry though, they all get destroyed properly
+            // a little more memory friendly now
             if ( this->sfEvent.key.code == sf::Keyboard::Space )
             {
-                if ( this->states.top()->changeState == "MainMenuState")
-                    this->states.top()->changeState = "GameState";
-                else
-                    this->states.top()->changeState = "MainMenuState";
+                if ( this->states.top()->currentState == "MainMenuState")
+                {
+                    this->states.top()->endState();
+                    delete this->states.top();
+                    this->states.pop();
+                    this->states.push(new GameState(this->window, &this->states));
+                    this->states.top()->currentState = "GameState";
+                }
+                else if ( this->states.top()->currentState == "GameState" )
+                {
+                    this->states.top()->endState();
+                    delete this->states.top();
+                    this->states.pop();
+                    this->states.push(new MainMenuState(this->window, &this->states));
+                    this->states.top()->currentState = "MainMenuState";
+                }
             }
 
             if ( this->sfEvent.key.code == sf::Keyboard::Escape )

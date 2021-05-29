@@ -59,13 +59,6 @@ void GameState::updateInput(const float& dt)
 
 void GameState::update(const float& dt)
 {
-    // @scawful
-    // temporary
-    if ( this->changeState == "MainMenuState" )
-    {
-        this->states->push(new MainMenuState(this->window, this->states));
-    }
-
     // always make sure to call functions of subclasses within the holding class
     // in this case we are calling the players update function inside of GameState
     this->player->update(dt);

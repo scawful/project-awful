@@ -7,6 +7,8 @@ void Player::initVariables()
 
 void Player::initComponents() 
 {
+    // this calls the Actor member function to create a MovementComponent
+    // the lifespan of that component is handled entirely by the parent
     this->createMovementComponent(350.f, 15.f, 5.f);
 }
 
@@ -25,5 +27,10 @@ Player::~Player()
 void Player::update(const float& dt) 
 {
     this->movementComponent->update(dt);
-    //this->sprite.setPosition( actorPositionX, actorPositionY );
+
+    // click to attack (?)
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    {
+        this->attacking = true;
+    }
 }

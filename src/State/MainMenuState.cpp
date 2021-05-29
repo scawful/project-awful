@@ -56,13 +56,6 @@ void MainMenuState::updateInput(const float & dt)
 
 void MainMenuState::update(const float& dt) 
 {
-    // @scawful
-    // temporary shit
-    if ( this->changeState == "GameState" )
-    {
-        this->states->push(new GameState(this->window, this->states));
-    }
-
     // updateMousePositions comes from the parent State class, will be useful for GUI buttons 
     this->updateMousePositions();
     this->updateInput(dt); 
