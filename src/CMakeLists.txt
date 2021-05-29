@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.10)
 project(awful VERSION 1.0)
 
 # add the executable
-add_executable(awful awful.cpp Game.cpp State/State.cpp State/MainMenuState.cpp State/GameState.cpp Actor/Actor.cpp Actor/Player.cpp Components/MovementComponent.cpp)
+add_executable(awful awful.cpp Game.cpp State/State.cpp State/MainMenuState.cpp State/GameState.cpp Actor/Actor.cpp Actor/Player.cpp Components/MovementComponent.cpp Components/HitboxComponent.cpp)
 include_directories("../assets")
 
 # specify the C++ standard

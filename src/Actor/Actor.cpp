@@ -20,6 +20,11 @@ void Actor::createMovementComponent(const float maxVelocity, const float acceler
     this->movementComponent = new MovementComponent(this->sprite, maxVelocity, acceleration, deceleration);
 }
 
+void Actor::createHitboxComponent(sf::Sprite& sprite, float offset_x, float offset_y, float width, float height) 
+{
+    this->hitboxComponent = new HitboxComponent(sprite, offset_x, offset_y, width, height);
+}
+
 void Actor::setTexture(sf::Texture& texture) 
 {
     this->sprite.setTexture(texture);
@@ -46,5 +51,8 @@ void Actor::update(const float & dt)
 void Actor::render(sf::RenderTarget& target) 
 {
     target.draw(this->sprite);
+
+    if ( this->hitboxComponent )
+            this->hitboxComponent->render(target);
 }
 

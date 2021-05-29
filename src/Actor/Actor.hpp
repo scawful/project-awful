@@ -3,6 +3,7 @@
 
 #include "../core.hpp"
 #include "../Components/MovementComponent.hpp"
+#include "../Components/HitboxComponent.hpp"
 
 class Actor
 {
@@ -14,6 +15,7 @@ protected:
     sf::Sprite sprite;
 
     MovementComponent* movementComponent;
+    HitboxComponent* hitboxComponent;
     
 public:
     Actor();
@@ -21,6 +23,9 @@ public:
 
     // Components
     void createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration);
+    void createHitboxComponent(sf::Sprite& sprite,
+        float offset_x, float offset_y,
+        float width, float height);
     
     // Setters
     void setTexture(sf::Texture& texture);

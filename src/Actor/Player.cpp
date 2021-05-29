@@ -10,6 +10,7 @@ void Player::initComponents()
     // this calls the Actor member function to create a MovementComponent
     // the lifespan of that component is handled entirely by the parent
     this->createMovementComponent(350.f, 15.f, 5.f);
+    this->createHitboxComponent(this->sprite, 0.f, 0.f, 80.f, 80.f);
 }
 
 Player::Player(float x, float y, sf::Texture& texture_sheet) 
@@ -33,4 +34,7 @@ void Player::update(const float& dt)
     {
         this->attacking = true;
     }
+
+    this->hitboxComponent->update();
+
 }
