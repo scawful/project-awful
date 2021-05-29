@@ -9,6 +9,7 @@ void MainMenuState::initVariables()
 
 void MainMenuState::initBackground() 
 {
+    // set the size for the white background equal to the size of the window itself
     this->background.setSize(
          sf::Vector2f
          (
@@ -26,6 +27,7 @@ void MainMenuState::initBackground()
 
 void MainMenuState::initFonts() 
 {    
+    // loading the font to be used for the title and mouse cursor position display
     if (!this->menu_font.loadFromFile("../assets/ARCADECLASSIC.TTF")) 
     {
         std::cout << "Error couldn't load menu font" << "\n";
@@ -54,23 +56,28 @@ void MainMenuState::updateInput(const float & dt)
 
 void MainMenuState::update(const float& dt) 
 {
+    // @scawful
+    // temporary shit
     if ( this->changeState == "GameState" )
     {
         this->states->push(new GameState(this->window, this->states));
     }
 
+    // updateMousePositions comes from the parent State class, will be useful for GUI buttons 
     this->updateMousePositions();
     this->updateInput(dt); 
 }
 
 void MainMenuState::render(sf::RenderTarget* target)
 {
+    // if the target for whatever reason is invalid, attempt to render to the whole window
     if (!target)
         target = this->window;
     
+    // draw the white background
     target->draw(this->background);
         
-    // Literally the title lmao
+    // Create the text for the title
     sf::Text title;
     title.setString("Project Awful");
     title.setFillColor(sf::Color::Black);

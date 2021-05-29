@@ -13,8 +13,11 @@ void GameState::initTextures()
 
 void GameState::initPlayers() 
 {
+    // @scawful
+    // loading an image from a file to use as the sprite texture for the player
+    // super temporary, just the begin
     playerTexture.loadFromFile("../assets/dot.bmp");
-    player = new Actor( 100, 100, playerTexture );
+    player = new Player( 100, 100, playerTexture );
 }
 
 GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : State(window, states)
@@ -27,6 +30,7 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : Sta
          )
     );
     this->background.setFillColor(sf::Color::White);
+
     this->initFonts();
     this->initTextures();
     this->initPlayers();
@@ -41,6 +45,8 @@ GameState::~GameState()
 
 void GameState::updateInput(const float& dt)
 {
+    // dynamically fetch keyboard input in real time to move the player 
+    // currently inputs based on velocity rather than unit vectors, gonna change that
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         this->player->move(-10.f, 0.f, dt);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
@@ -53,12 +59,15 @@ void GameState::updateInput(const float& dt)
 
 void GameState::update(const float& dt)
 {
+    // @scawful
     // temporary
     if ( this->changeState == "MainMenuState" )
     {
         this->states->push(new MainMenuState(this->window, this->states));
     }
 
+    // always make sure to call functions of subclasses within the holding class
+    // in this case we are calling the players update function inside of GameState
     this->player->update(dt);
     this->updateInput(dt);
     this->updateKeytime(dt);
@@ -66,10 +75,11 @@ void GameState::update(const float& dt)
 
 void GameState::render(sf::RenderTarget* target)
 {
-
     if (!target)
         target = this->window;
 
     target->draw(this->background);
+
+    // the player class uses a reference argument, so we dereference the pointer to the RenderTarget
     player->render(*target);
 }
