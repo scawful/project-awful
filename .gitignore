@@ -1,3 +1,5 @@
+build/**
+CMakeFiles/**
 build/CMakeFiles/CMakeOutput.log
 build/CMakeFiles/Makefile.cmake
 build/CMakeFiles/Makefile2
@@ -93,3 +95,13 @@ build/.cmake/api/v1/reply/codemodel-v2-3a519c67595879501fd9.json
 build/.cmake/api/v1/reply/index-2021-05-26T06-41-49-0097.json
 build/.cmake/api/v1/reply/target-awful-Debug-9ae2f3f3adda8acef5a0.json
 build/.cmake/api/v1/reply/toolchains-v1-aa1611fca48e40965bc0.json
+ALL_BUILD.vcxproj
+ALL_BUILD.vcxproj.filters
+awful.sln
+awful.vcxproj
+awful.vcxproj.filters
+cmake_install.cmake
+CMakeCache.txt
+ZERO_CHECK.vcxproj
+ZERO_CHECK.vcxproj.filters
+.vscode/c_cpp_properties.json
