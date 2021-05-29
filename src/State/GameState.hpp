@@ -2,11 +2,13 @@
 #define GameState_hpp
 
 #include "State.hpp"
+#include "../Dungeon/DungeonGenerator.hpp"
 
 class GameState: public State
 {
 private:
     // Variables
+    DungeonGenerator dungeonGenerator;
     Player *player;
     sf::Font font;
     sf::RectangleShape background;
