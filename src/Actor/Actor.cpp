@@ -3,6 +3,7 @@
 void Actor::initVariables() 
 {
     this->movementComponent = NULL;
+    this->hitboxComponent = NULL;
 }
 
 Actor::Actor() 
@@ -13,6 +14,7 @@ Actor::Actor()
 Actor::~Actor() 
 {
     delete this->movementComponent;
+    delete this->hitboxComponent;
 }
 
 void Actor::createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration) 

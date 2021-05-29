@@ -14,7 +14,6 @@ HitboxComponent::HitboxComponent(sf::Sprite& sprite,
 
 HitboxComponent::~HitboxComponent() 
 {
-    
 }
 
 bool HitboxComponent::checkIntersect(const sf::FloatRect& frect) 
