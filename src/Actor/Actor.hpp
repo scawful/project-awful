@@ -6,17 +6,16 @@
 class Actor
 {
 private:
-    // Variables
-    bool attacking;
-        
     // Initializer Functions
     void initVariables();
 
 protected:
     sf::Sprite sprite;
-        
+    float actorPositionX, actorPositionY;
+    float actorVelocityX, actorVelocityY;
+    
 public:
-    Actor(float x, float y, sf::Texture& texture_sheet);
+    Actor();
     virtual ~Actor();
 
     void setTexture(sf::Texture& texture);
@@ -25,6 +24,7 @@ public:
     virtual void setPosition(const float x, const float y);
         
     // Functions
+    virtual void move(const float x, const float y, const float& dt);
     virtual void update(const float& dt);
     virtual void render(sf::RenderTarget& target);
 };

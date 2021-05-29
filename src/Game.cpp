@@ -24,7 +24,7 @@ void Game::initWindow()
     if ( this->fullscreen )
         this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Fullscreen, this->windowSettings);
     else
-        this->window = new sf::RenderWindow(sf::VideoMode(1920, 1080, window_bounds.bitsPerPixel), title, sf::Style::Titlebar | sf::Style::Close, this->windowSettings);
+        this->window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, window_bounds.bitsPerPixel), title, sf::Style::Titlebar | sf::Style::Close, this->windowSettings);
 
     this->window->setFramerateLimit(framerate_limit);
     this->window->setVerticalSyncEnabled(vertical_sync_enabled);
@@ -38,6 +38,7 @@ void Game::initWindow()
 
 void Game::initStates() 
 {
+    // add the MainMenuState to the stack of States 
     this->states.push(new MainMenuState(this->window, &this->states));
 }
 
@@ -52,6 +53,7 @@ Game::Game()
 
 Game::~Game()
 {
+    // dispose of the sfml window instance and pop any remaining states off the stack
     delete this->window;
     while( !this->states.empty() ) 
     {
@@ -69,6 +71,9 @@ void Game::updateDt()
 
 void Game::updateSFMLEvents() 
 {
+    // polling events from sfml using the sf::Event class
+    // handles more universal inputs across the game, such as escape for menus
+    // currently escape closes the game, but when we make the PauseMenu it will open that
     while ( this->window->pollEvent(sfEvent) )
     {
         // Close window: exit
@@ -77,13 +82,23 @@ void Game::updateSFMLEvents()
             this->window->close();
         }
 
-        // running into seg faults trying to change state
         if ( this->sfEvent.type == sf::Event::KeyPressed )
         {
+            // @scawful
+            // temporary state changing code
+            // if you keep pressing space you will just make an indefinite amount of states
+            // don't worry though, they all get destroyed properly
             if ( this->sfEvent.key.code == sf::Keyboard::Space )
             {
-                //this->states.push( new GameState(this->window, &this->states) );
-                this->states.top()->changeState = "GameState";
+                if ( this->states.top()->changeState == "MainMenuState")
+                    this->states.top()->changeState = "GameState";
+                else
+                    this->states.top()->changeState = "MainMenuState";
+            }
+
+            if ( this->sfEvent.key.code == sf::Keyboard::Escape )
+            {
+                this->window->close();
             }
         }
     }
@@ -94,6 +109,9 @@ void Game::update()
 {
     this->updateSFMLEvents();
     
+    // updating anything that happens inside of the states 
+    // passing in the delta time to help with consistent animations later on
+    // checks if any of the states are attempting to quit, so it can properly clean them off the stack
     if( !this->states.empty() ) 
     {    
         this->states.top()->update(this->dt);

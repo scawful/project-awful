@@ -2,13 +2,15 @@
 
 void Actor::initVariables() 
 {
-    this->attacking = false;
+    actorPositionX = 0;
+    actorPositionY = 0;
+    actorVelocityX = 0;
+    actorVelocityY = 0;
 }
 
-Actor::Actor(float x, float y, sf::Texture& texture_sheet) 
+Actor::Actor() 
 {
     this->initVariables();
-    this->setPosition(x, y);
 }
 
 Actor::~Actor() 
@@ -23,9 +25,15 @@ void Actor::setTexture(sf::Texture& texture)
 
 void Actor::setPosition(const float x, const float y)
 {
+    actorPositionX = x;
+    actorPositionY = y;
     this->sprite.setPosition(x, y);
 }
 
+void Actor::move(const float x, const float y, const float& dt)
+{
+
+}
 
 void Actor::update(const float & dt) 
 {        

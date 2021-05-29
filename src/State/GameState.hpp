@@ -3,16 +3,18 @@
 
 #include "State.hpp"
 #include "../Actor/Actor.hpp"
+#include "../Actor/Player.hpp"
 
 class GameState: public State
 {
 private:
     // Variables
-    Actor *actor;
+    Player *player;
     sf::Font font;
     sf::RectangleShape background;
+    sf::Texture playerTexture;
+    sf::Event sfEvent;
 
-    
     // Functions
     void initFonts();
     void initTextures();
