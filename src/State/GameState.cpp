@@ -42,6 +42,7 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : Sta
 GameState::~GameState() 
 {
     delete this->player;
+    delete this->dungeonGenerator;
     cout << "GameState::~GameState destroyed\n";
 }
 
