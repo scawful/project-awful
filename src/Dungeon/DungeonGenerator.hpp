@@ -3,8 +3,6 @@
 
 #include "Dungeon.hpp"
 
-static int alloc_size = 10;
-
 class DungeonGenerator
 {
 private:
@@ -14,6 +12,7 @@ private:
 
     Dungeon::Room *rootRoom;
     vector<Dungeon::Room*> vectorRooms;
+    vector<Dungeon::Room*> dungeonRooms;
 
 public:
     void initOriginRoom();

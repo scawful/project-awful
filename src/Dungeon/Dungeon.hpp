@@ -22,7 +22,6 @@ namespace Dungeon
     class Room
     {
     private:
-        int roomID;
         int minimumRoomSize;
         Tile *tiles;
         Room *leftChild;
@@ -50,13 +49,6 @@ namespace Dungeon
         {
             return this->dungeon;
         }
-
-        int getRoomID()
-        {
-            return this->roomID;
-        }
-
-        void setRoomID( int id );
 
         void drawRoom( sf::RenderTarget& target );
         bool splitRoom();
