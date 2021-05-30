@@ -49,11 +49,12 @@ namespace Dungeon
         {
             return this->dungeon;
         }
+        
+        void setDungeon( Room *dungeon );
+        void setLeftChild( Room *leftChild );
+        void setRightChild( Room *rightChild );
 
         void drawRoom( sf::RenderTarget& target );
-        bool splitRoom();
-        void generateDungeon();
-
     };
 
 

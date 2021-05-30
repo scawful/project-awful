@@ -6,6 +6,7 @@
 class DungeonGenerator
 {
 private:
+    int minimumRoomSize;
     int allocatedRooms, usedRooms;
     int roomID, dungeonID;
     int dungeonCount;
@@ -22,6 +23,8 @@ public:
 
     // Functions
     void deleteDungeon( Dungeon::Room *room );
+    bool splitRoom( Dungeon::Room *room );
+    void generateDungeon( Dungeon::Room *room );
 
     void render(sf::RenderTarget& target);
 
