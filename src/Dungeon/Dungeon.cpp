@@ -13,7 +13,6 @@ Dungeon::Room::Room(int id, int top, int left, int width, int height)
     this->rightChild = NULL;
     this->dungeon = NULL;
     this->minimumRoomSize = 5;
-
     cout << this->id << " " << this->top << " " << this->left << " " << this->width  << " " << this->height << endl;
 }
 
@@ -47,7 +46,6 @@ void Dungeon::Room::drawRoom( sf::RenderTarget& target )
     else
     {
         sf::RectangleShape roomRect;
-        
         roomRect.setPosition( sf::Vector2f( this->top, this->left ) ) ;
         roomRect.setSize( sf::Vector2f( this->height, this->width ) );
         roomRect.setFillColor( sf::Color::Black );

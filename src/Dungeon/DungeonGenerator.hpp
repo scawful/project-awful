@@ -7,13 +7,12 @@ class DungeonGenerator
 {
 private:
     int minimumRoomSize;
-    int allocatedRooms, usedRooms;
     int roomID, dungeonID;
     int dungeonCount;
 
     Dungeon::Room *rootRoom;
     vector<Dungeon::Room*> vectorRooms;
-    vector<Dungeon::Room*> dungeonRooms;
+    vector<Dungeon::Room*> corridors;
 
 public:
     void initOriginRoom();
@@ -25,6 +24,7 @@ public:
     void deleteDungeon( Dungeon::Room *room );
     bool splitRoom( Dungeon::Room *room );
     void generateDungeon( Dungeon::Room *room );
+    void generateCorridorBetween( Dungeon::Room *leftRoom, Dungeon::Room *rightRoom );
 
     void render(sf::RenderTarget& target);
 
