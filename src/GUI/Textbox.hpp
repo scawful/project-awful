@@ -19,4 +19,12 @@ public:
     Textbox () {}
     Textbox (int size, sf::Color color, bool selected);
     ~Textbox();
+    void setFont (sf::Font &font) {textbox.setFont(font);}
+    void setSize (int size) {textbox.setCharacterSize(size);}
+    void setPosition (sf::Vector2f pos) {textbox.setPosition(pos);}
+    void setLimit (bool TorF) {hasLimit = TorF;}
+    void setLimit (bool TorF, int Limit);
+    void setSelected (bool TorF);
+    std::string getText() {return text.str();}
+    void drawTo (sf::RenderWindow &window) {window.draw(textbox);}
 };
