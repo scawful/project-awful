@@ -17,7 +17,7 @@ void GameState::initPlayers()
     // loading an image from a file to use as the sprite texture for the player
     // super temporary, just the begin
     playerTexture.loadFromFile("../assets/dot.bmp");
-    this->player = new Player( 100, 100, playerTexture );
+    this->player = new Player( (SCREEN_WIDTH - playerTexture.getSize().x) / 2, (SCREEN_HEIGHT - playerTexture.getSize().y) / 2, playerTexture );
 }
 
 GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : State(window, states)
