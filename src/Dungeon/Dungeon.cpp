@@ -43,7 +43,7 @@ void Dungeon::Room::drawRoom( sf::RenderTarget& target )
         // if ( this->dungeon->height > 512 )
         //     this->height -= this->minimumRoomSize;
         
-        roomRect.setPosition( sf::Vector2f( this->dungeon->top, this->dungeon->left ) ) ;
+        roomRect.setPosition( sf::Vector2f( this->top, this->left ) ) ;
         roomRect.setSize( sf::Vector2f( this->height, this->width ) );
         roomRect.setFillColor( sf::Color::Black );
         roomRect.setOutlineThickness(3);
@@ -124,17 +124,17 @@ void Dungeon::Room::generateDungeon()
         mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 
         // if leaf node, create a dungeon within the minimum size constraints
-        uniform_int_distribution<int> dungeonTopRnd(0, height - minimumRoomSize );
-        uniform_int_distribution<int> dungeonLeftRnd(0, width - minimumRoomSize );
+        uniform_int_distribution<int> dungeonTopRnd(1, 500 - width - 1 );
+        uniform_int_distribution<int> dungeonLeftRnd(1, 500 - height - 1 );
 
-        int dungeonTop = ( height - minimumRoomSize <= 0 ) ? 0 : dungeonTopRnd(rng);
-        int dungeonLeft =  ( width - minimumRoomSize <= 0 ) ? 0 : dungeonLeftRnd(rng);
+        int dungeonTop = dungeonTopRnd(rng);
+        int dungeonLeft = dungeonLeftRnd(rng);
 
-        uniform_int_distribution<int> dungeonHeightRnd(0, height - dungeonTop );
-        uniform_int_distribution<int> dungeonWidthRnd(0, width - dungeonLeft );
+        uniform_int_distribution<int> dungeonHeightRnd( 500 / 2, 500 - 2 );
+        uniform_int_distribution<int> dungeonWidthRnd( 500 / 2, 500 - 2 );
 
-        int dungeonHeight = max( dungeonHeightRnd(rng), minimumRoomSize );
-        int dungeonWidth = max( dungeonWidthRnd(rng), minimumRoomSize );
+        int dungeonHeight = dungeonHeightRnd(rng);
+        int dungeonWidth = dungeonWidthRnd(rng);
         
         cout << "Dungeon: " << this->top + dungeonTop << " " << this->left + dungeonLeft << " " << dungeonHeight << " " << dungeonWidth << endl;
         dungeon = new Dungeon::Room( 0, this->top + dungeonTop, this->left + dungeonLeft, dungeonHeight, dungeonWidth );
