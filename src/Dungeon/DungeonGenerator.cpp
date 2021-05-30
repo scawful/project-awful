@@ -2,7 +2,7 @@
 
 void DungeonGenerator::initOriginRoom()
 {
-    rootRoom = new Dungeon::Room( this->roomID, (SCREEN_HEIGHT - 512) / 2, (SCREEN_WIDTH - 512) / 2, 512, 512 );
+    rootRoom = new Dungeon::Room( this->roomID, 10, 10, 512, 512 );
     roomID++;
     cout << "Origin Room initialized\n";
 }
@@ -13,11 +13,12 @@ DungeonGenerator::DungeonGenerator()
     this->usedRooms = 0;
     this->roomID = 0;
     this->dungeonID = 0;
+    this->dungeonCount = 0;
 
     this->initOriginRoom();
     vectorRooms.push_back( rootRoom );
 
-    for ( int i = 0; i < 5; i++ )
+    for ( int i = 0; i < 20; i++ )
     {
         random_device rd; 
         mt19937 rng(rd()); // random-number engine used (Mersenne-Twister in this case)
@@ -33,6 +34,17 @@ DungeonGenerator::DungeonGenerator()
     }
 
     rootRoom->generateDungeon();
+
+    for ( int i = 0; i < vectorRooms.size(); i++ )
+    {
+        if ( vectorRooms[i]->getDungeon() == NULL )
+        {
+            continue;
+        }
+
+        Dungeon::Room *dungeon = vectorRooms[i]->getDungeon();
+        dungeonCount++;
+    }
 }
 
 DungeonGenerator::~DungeonGenerator()
@@ -55,24 +67,28 @@ void DungeonGenerator::deleteDungeon( Dungeon::Room *room )
 void DungeonGenerator::render(sf::RenderTarget& target)
 {
     sf::RectangleShape rootRect;
-    rootRect.setSize( sf::Vector2f( rootRoom->height, rootRoom->width) );
+    rootRect.setSize( sf::Vector2f( rootRoom->height, rootRoom->width ) );
     rootRect.setPosition(sf::Vector2f( rootRoom->left, rootRoom->top ) );
     rootRect.setFillColor( sf::Color::White );
     rootRect.setOutlineThickness(5);
     rootRect.setOutlineColor( sf::Color::Blue );
     target.draw(rootRect);
 
+
     for ( int i = 0; i < vectorRooms.size(); i++ )
     {
         sf::RectangleShape roomRect;
-        roomRect.setSize( sf::Vector2f( vectorRooms[i]->height, vectorRooms[i]->width ) );
         roomRect.setPosition( sf::Vector2f( vectorRooms[i]->top, vectorRooms[i]->left ) ) ;
+        roomRect.setSize( sf::Vector2f( vectorRooms[i]->height, vectorRooms[i]->width ) );
         //roomRect.setPosition( sf::Vector2f( vectorRooms[i]->top , vectorRooms[i]->left ) );
-        roomRect.setFillColor( sf::Color::Black );
+        roomRect.setFillColor( sf::Color::Green );
         roomRect.setOutlineThickness(5);
-        roomRect.setOutlineColor( sf::Color::Red );
+        roomRect.setOutlineColor( sf::Color::Blue );
         target.draw(roomRect);
     }
+
+    rootRoom->drawRoom(target);
+
 
 
     // for ( int i = 0; i < dungeonID; i++ )

@@ -13,14 +13,33 @@ Dungeon::Room::Room(int id, int top, int left, int width, int height)
     this->rightChild = NULL;
     this->dungeon = NULL;
 
-    this->maximumRoomSize = 128;
-    this->minimumRoomSize = 32;
+    this->minimumRoomSize = 5;
 }
 
 Dungeon::Room::~Room()
 {
     this->leftChild = NULL;
     this->rightChild = NULL;
+}
+
+void Dungeon::Room::drawRoom( sf::RenderTarget& target )
+{
+    if ( this->leftChild != NULL )
+    {
+        this->leftChild->drawRoom( target );
+        this->rightChild->drawRoom( target );
+    }
+    else
+    {
+        sf::RectangleShape roomRect;
+        roomRect.setPosition( sf::Vector2f( this->dungeon->top, this->dungeon->left ) ) ;
+        roomRect.setSize( sf::Vector2f( this->dungeon->height, this->dungeon->width ) );
+        roomRect.setFillColor( sf::Color::Black );
+        roomRect.setOutlineThickness(5);
+        roomRect.setOutlineColor( sf::Color::Red );
+        target.draw(roomRect);
+    }
+
 }
 
 bool Dungeon::Room::splitRoom()
@@ -54,23 +73,19 @@ bool Dungeon::Room::splitRoom()
 
     if ( horizontal )
     {
-        cout << "Left Child: " << roomID << " " << top << " " << left << " " << split << " " << width << endl;
+        cout << "Left Child: " <<  top << " " << left << " " << split << " " << width << endl;
         this->leftChild = new Dungeon::Room( roomID, top, left, split, width );
-        roomID++;
 
-        cout << "Right Child: " << roomID << " " << top + split << " " << left << " " << height - split << " " << width << endl;
+        cout << "Right Child: " << top + split << " " << left << " " << height - split << " " << width << endl;
         this->rightChild = new Dungeon::Room( roomID, top + split, left, height - split, width );
-        roomID++;
     }
     else
     {
-        cout << "Left Child: " << roomID << " " << top << " " << left << " " << height << " " << split << endl;
+        cout << "Left Child: " << top << " " << left << " " << height << " " << split << endl;
         this->leftChild = new Dungeon::Room( roomID, top, left, height, split );
-        roomID++;
 
-        cout << "Right Child: " << roomID << " " << top << " " << left + split << " " << height << " " << width - split << endl;
+        cout << "Right Child: " << top << " " << left + split << " " << height << " " << width - split << endl;
         this->rightChild = new Dungeon::Room( roomID, top, left + split, height, width - split );
-        roomID++;
     }
     
     return true;
