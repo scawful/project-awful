@@ -10,6 +10,7 @@ class DungeonGenerator
 private:
     int allocatedRooms, usedRooms;
     int roomID, dungeonID;
+    int dungeonCount;
 
     Dungeon::Room *rootRoom;
     vector<Dungeon::Room*> vectorRooms;
