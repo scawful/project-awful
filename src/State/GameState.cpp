@@ -75,6 +75,12 @@ void GameState::render(sf::RenderTarget* target)
     if (!target)
         target = this->window;
 
+    target->clear(sf::Color::White);
+
+    sf::View dungeonView( sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT ) );
+    dungeonView.setCenter( this->player->getPosition() );
+    target->setView(dungeonView);
+
     target->draw(this->background);
 
     this->dungeonGenerator->render(*target);
