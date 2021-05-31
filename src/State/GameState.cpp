@@ -24,19 +24,22 @@ void GameState::initPlayers()
 
 GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : State(window, states)
 {
-    this->background.setSize(
-         sf::Vector2f
-         (
-              static_cast<float>(this->window->getSize().x),
-              static_cast<float>(this->window->getSize().y)
-         )
-    );
-    this->background.setFillColor(sf::Color::White);
-
     this->initFonts();
     this->initTextures();
     this->initPlayers();
+
     this->background.setTexture( &floorTileTexture );
+    this->background.setTextureRect( sf::IntRect(0, 0, static_cast<float>(this->window->getSize().x * 4), static_cast<float>(this->window->getSize().y * 4)));
+    this->background.setSize(
+         sf::Vector2f
+         (
+              static_cast<float>(this->window->getSize().x * 4),
+              static_cast<float>(this->window->getSize().y * 4)
+         )
+    );
+    //this->background.setFillColor(sf::Color::White);
+
+
 
     this->dungeonGenerator = new DungeonGenerator();
     cout << "GameState::GameState created\n";
@@ -74,15 +77,24 @@ void GameState::update(const float& dt)
 
 void GameState::render(sf::RenderTarget* target)
 {
+    // tinfoil hat
     if (!target)
         target = this->window;
 
+    // sets background to white for regions without objects being rendered over them
     target->clear(sf::Color::White);
 
+    // the camera of the game, centered on the players position
+    // viewports use the center rather than the top, left coordinates like the player
+    // to compensate for a true center, we divide the players size in half and add that to the view coordinates
     sf::View dungeonView( sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT ) );
-    dungeonView.setCenter( this->player->getPosition() );
+    sf::Vector2f trueCenter( this->player->getPosition() );
+    trueCenter.x += this->player->getSize().x / 2;
+    trueCenter.y += this->player->getSize().y / 2;
+    dungeonView.setCenter( trueCenter );
     target->setView(dungeonView);
 
+    // drawing the sf::Rectangle to the screen, which currently has an sf::Texture in it
     target->draw(this->background);
 
     //this->dungeonGenerator->render(*target);
@@ -90,7 +102,12 @@ void GameState::render(sf::RenderTarget* target)
     // the player class uses a reference argument, so we dereference the pointer to the RenderTarget
     this->player->render(*target);
 
+    // creating a new view for the minimap of the dungeon generation output
+    // currently not exactly sure why the width and height are larger than the object
+    // increasing them seems to decrease the size of the view, which is odd. but okay
     sf::View minimapView ( sf::FloatRect(  0.75f, 0, 2800, 2200 ) );
     target->setView(minimapView);
+
+    // draw the output of dungeonGenerator inside the minimap
     this->dungeonGenerator->render(*target);
 }
