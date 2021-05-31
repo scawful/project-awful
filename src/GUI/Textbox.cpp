@@ -8,10 +8,6 @@ void Textbox::inputLogic (int CharTyped) {
         if (this->text.str().length() > 0) {
             deleteLastChar();
         }
-    } else if (CharTyped == ESCAPE_KEY) {
-        // TODO
-    } else if (CharTyped == ENTER_KEY) {
-        // TODO
     }
 
     this->textbox.setString(text.str() + "_");  // Adds indicator where user is typing
@@ -21,23 +17,26 @@ void Textbox::inputLogic (int CharTyped) {
 void Textbox::deleteLastChar () {
     // Transfer each character except the last one into a new string
     string origText = this->text.str();
+    cout << "ORIG: " << origText << endl;
     string newText = "";
     for (int i = 0; i < origText.length() - 1; i++) {
         newText += origText.at(i);
     }
-    
-    // Replace old string with new string (last character has been deleted)
-    this->text.str() = "";
-    this->text << newText;  // Use the '<<' because 'text' is sstream type not string type
+    cout << "NEW: " << newText << endl;
 
-    // Update Textbox object
-    this->textbox.setString(this->text.str());
+    // Replace old string with new string (last character has been deleted)
+    this->text << newText;
 }
 
 Textbox::Textbox (int size, sf::Color color, bool selected) {
     this->textbox.setCharacterSize(size);
     this->textbox.setColor(color);
     this->isSelected = selected;
+    if (selected) {
+        textbox.setString("_");
+    } else { 
+        textbox.setString("");
+    }
 }
 
 Textbox::~Textbox () {
@@ -59,8 +58,26 @@ void Textbox::setSelected (bool TorF) {
         for (int i = 0; i < origText.length() - 1; i++) {
             newText += origText.at(i);
         }
-        textbox.setString(newText);
+        this->textbox.setString(newText);
     } else {
-        textbox.setString(this->text.str() + "_");
+        this->textbox.setString(this->text.str() + "_");
     }
 }
+
+void Textbox::typedOn (sf::Event input) {
+    if (isSelected) {
+        int CharType = input.text.unicode;
+        if (CharType < 128) {
+            if (this->hasLimit) {
+                if (text.str().length() <= this->limit) {
+                    inputLogic(CharType);
+                } else if (text.str().length() > this->limit && CharType == DELETE_KEY) {
+                    deleteLastChar();
+                }
+            }else {
+                inputLogic(CharType);
+            }
+        }
+    }
+}
+

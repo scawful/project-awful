@@ -2,7 +2,7 @@
 
 void DungeonGenerator::initOriginRoom()
 {
-    rootRoom = new Dungeon::Room( roomID, (SCREEN_WIDTH - 720) / 2, (SCREEN_HEIGHT - 720) / 2, 720, 720 );
+    rootRoom = new Dungeon::Room( roomID, (SCREEN_WIDTH - 600) / 2, (SCREEN_HEIGHT - 600) / 2, 600, 600 );
     //rootRoom = new Dungeon::Room( roomID, 5, 5, SCREEN_WIDTH, SCREEN_HEIGHT );
     roomID++;
     cout << "Origin Room initialized\n";
@@ -12,7 +12,11 @@ DungeonGenerator::DungeonGenerator()
 {
     this->roomID = 0;
     this->dungeonID = 0;
-    this->minimumRoomSize = 100;
+    this->minimumRoomSize = 75;
+
+    // random-number engine used (Mersenne-Twister in this case)
+    // using the std::chrono clock as the random seed engine, since mingw uses a fixed seed for std::random
+    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
 
     // create the source room that the dungeon is based on and put it in the vector of rooms
     this->initOriginRoom();
@@ -20,8 +24,6 @@ DungeonGenerator::DungeonGenerator()
 
     while ( vectorRooms.size() < 42 )
     {
-        random_device rd; 
-        mt19937 rng(rd()); // random-number engine used (Mersenne-Twister in this case)
         uniform_int_distribution<int> splitRand(0, vectorRooms.size() - 1); // guaranteed unbiased
         auto splitID = splitRand(rng);
 
@@ -34,11 +36,20 @@ DungeonGenerator::DungeonGenerator()
     }
 
     this->generateDungeon( rootRoom );
+    this->generateCorridors( rootRoom );
 }
 
 DungeonGenerator::~DungeonGenerator()
 {
     deleteDungeon( rootRoom );
+    for ( int i = 0; i < corridors.size(); i++ )
+    {
+        Dungeon::Room *roomToFree = corridors[i];
+        delete roomToFree;
+        corridors[i] = NULL;
+    }
+    corridors.clear();
+    
     cout << "DungeonGenerator destroyed\n";
 }
 
@@ -55,12 +66,13 @@ void DungeonGenerator::deleteDungeon( Dungeon::Room *room )
 
 bool DungeonGenerator::splitRoom( Dungeon::Room *room )
 {
+    float size_ratio = 0.3;
+
     if ( room->getLeftChild() != NULL )
         return false;
 
     // horizontal
-    random_device rd;     // only used once to initialise (seed) engine
-    mt19937 rng(rd()); // random-number engine used (Mersenne-Twister in this case)
+    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
     uniform_int_distribution<int> horizRand(0,1); // guaranteed unbiased
     auto horizontal = horizRand(rng);
 
@@ -88,38 +100,123 @@ bool DungeonGenerator::splitRoom( Dungeon::Room *room )
     {
         cout << "Left Child: ";
         room->setLeftChild( new Dungeon::Room( roomID, room->top, room->left, room->width, split  ) );
+        room->getLeftChild()->setParent(room);
         roomID++;
 
         cout << "Right Child: ";
         room->setRightChild( new Dungeon::Room( roomID, room->top + split, room->left, room->width , room->height - split ) );
+        room->getRightChild()->setParent(room);
         roomID++;
     }
     else
     {
         cout << "Left Child: ";
         room->setLeftChild( new Dungeon::Room( roomID, room->top, room->left, split, room->height ) );
-        
+        room->getLeftChild()->setParent(room);
         roomID++;
+        
         cout << "Right Child: ";
         room->setRightChild( new Dungeon::Room( roomID, room->top, room->left + split, room->width - split, room->height ) );
+        room->getRightChild()->setParent(room);
         roomID++;
+    }
+
+    // check if room is within size ratio
+    float leftChildRatio = (float)room->getLeftChild()->width / (float)room->getLeftChild()->height;
+    float rightChildRatio = (float)room->getRightChild()->width / (float)room->getRightChild()->height;
+    if ( leftChildRatio < size_ratio || rightChildRatio < size_ratio )
+    {
+        roomID -= 2;
+        Dungeon::Room *cleanup = room->getLeftChild();
+        Dungeon::Room *cleanup2 = room->getRightChild();
+        delete cleanup, cleanup2;
+        room->setLeftChild( NULL );
+        room->setRightChild( NULL );
+        splitRoom( room );
     }
     
     return true;
 }
 
+bool DungeonGenerator::random_split( Dungeon::Room *room )
+{
+    Dungeon::Room *newLeftChild, *newRightChild;
+    float size_ratio = 0.45;
+
+    // horizontal
+    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
+    uniform_int_distribution<int> rand(0, 1); 
+    auto random = rand(rng);
+
+    if ( random == 1 )
+    {
+        // horizontal
+        uniform_int_distribution<int> width(0, room->width - this->minimumRoomSize); 
+        auto randWidth = width(rng);
+
+        cout << "Left Child: ";
+        newLeftChild = new Dungeon::Room( roomID, room->top, room->left, randWidth, room->height );
+        roomID++;
+
+        cout << "Right Child: ";
+        newRightChild = new Dungeon::Room( roomID, room->top + randWidth, room->left, room->width - randWidth , room->height );
+        roomID++;
+
+        float leftChildRatio = (float)newLeftChild->width / (float)newLeftChild->height;
+        float rightChildRatio = (float)newRightChild->width / (float)newRightChild->height;
+        if ( leftChildRatio < size_ratio || rightChildRatio < size_ratio )
+        {
+            roomID -= 2;
+            delete newLeftChild;
+            delete newRightChild;
+            cout << "children aborted by ratio " << endl;
+            random_split( room );
+        }
+    }
+    else
+    {
+        // vertical
+        uniform_int_distribution<int> height(0, room->height - this->minimumRoomSize); 
+        auto randHeight = height(rng);
+        newLeftChild = new Dungeon::Room( roomID, room->top, room->left, room->width, randHeight );
+        newRightChild = new Dungeon::Room( roomID, room->top, room->left + randHeight, room->width, room->height - randHeight );
+
+        float leftChildRatio = newLeftChild->height / newLeftChild->width;
+        float rightChildRatio = newRightChild->height / newRightChild->width;
+        if ( leftChildRatio < size_ratio || rightChildRatio < size_ratio )
+        {
+            roomID -= 2;
+            delete newLeftChild;
+            delete newRightChild;
+            cout << "children aborted by ratio " << endl;
+            random_split( room );
+        }
+    }
+
+    room->setLeftChild( newLeftChild );
+    room->setRightChild ( newRightChild );
+    room->getLeftChild()->setParent(room);
+    room->getRightChild()->setParent(room);
+    return true;
+}
+
 void DungeonGenerator::generateDungeon( Dungeon::Room *room )
 {
-    if( room->getLeftChild() != NULL ) 
+    if ( room->getLeftChild() != NULL ) 
     { 
         // recursively generate 
         this->generateDungeon( room->getLeftChild() );
         this->generateDungeon( room->getRightChild() );
+
+        // if ( room->getLeftChild() != NULL && room->getRightChild() != NULL )
+        // {
+        //     this->generateCorridorBetween( room->getLeftChild(), room->getRightChild() );
+        // }
     } 
     else 
     { 
-        random_device rd;     // only used once to initialise (seed) engine
-        mt19937 rng(rd()); // random-number engine used (Mersenne-Twister in this case)
+        // random-number engine used (Mersenne-Twister in this case)
+        mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
 
         // if leaf node, create a dungeon within the minimum size constraints
         uniform_int_distribution<int> dungeonTopRnd(0, room->height - this->minimumRoomSize );
@@ -140,22 +237,55 @@ void DungeonGenerator::generateDungeon( Dungeon::Room *room )
     }
 }
 
-void DungeonGenerator::generateCorridorBetween( Dungeon::Room *leftRoom, Dungeon::Room *rightRoom )
+void DungeonGenerator::generateCorridors( Dungeon::Room *room )
 {
+    if ( room->getLeftChild() != NULL )
+    {
+        this->generateCorridors( room->getLeftChild() );
+        this->generateCorridors( room->getRightChild() );
+        this->generateCorridorBetween( room->getLeftChild(), room->getRightChild() );
+    }
+
+}
+
+void DungeonGenerator::generateCorridorBetween( Dungeon::Room *left, Dungeon::Room *right )
+{
+    int corridorDepth = 10;
+    Dungeon::Room *leftRoom = left;
+    Dungeon::Room *rightRoom = right;
+
+    if ( leftRoom->getDungeon() == NULL )
+        return;
+
+    if ( rightRoom->getDungeon() == NULL )
+        return;
+
     // get a random point on each room to connect
-    random_device rd;    
-    mt19937 rng(rd()); 
+    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
 
-    uniform_int_distribution<int> leftPointX( leftRoom->top + 1, leftRoom->width - 1 );
-    uniform_int_distribution<int> leftPointY( leftRoom->left + 1, leftRoom->height - 1 );
+    int lx = leftRoom->top + corridorDepth;
+    int lw = leftRoom->top + leftRoom->width - corridorDepth;
+    uniform_int_distribution<int> leftPointX( lx, lw );
+    float leftPointXRand = leftPointX(rng);
 
-    sf::Vector2f leftPoint( leftPointX(rng), leftPointY(rng) );
+    int ly = leftRoom->left + corridorDepth;
+    int lh = leftRoom->left + leftRoom->height - corridorDepth;
+    uniform_int_distribution<int> leftPointY( ly, lh );
+    float leftPointYRand = leftPointY(rng);
 
-    uniform_int_distribution<int> rightPointX( rightRoom->top + 1, rightRoom->width - 1 );
-    uniform_int_distribution<int> rightPointY( rightRoom->left + 1, rightRoom->height - 1 );
+    int rx = rightRoom->top + corridorDepth;
+    int rw = rightRoom->top + rightRoom->width - corridorDepth;
+    uniform_int_distribution<int> rightPointX( rx, rw );
+    float rightPointXRand = rightPointX(rng);
 
-    sf::Vector2f rightPoint( rightPointX(rng), rightPointY(rng) );
+    int ry = rightRoom->left + corridorDepth;
+    int rh = rightRoom->left + rightRoom->height - corridorDepth;
+    uniform_int_distribution<int> rightPointY( ry, rh );
+    float rightPointYRand = rightPointY(rng);
 
+    sf::Vector2f leftPoint( leftPointXRand, leftPointYRand );
+    sf::Vector2f rightPoint( rightPointXRand, rightPointYRand );
+    
     // tinfoil hat
     // ensuring that the left room is actually on the left 
     if ( leftPoint.x > rightPoint.x )
@@ -166,37 +296,42 @@ void DungeonGenerator::generateCorridorBetween( Dungeon::Room *leftRoom, Dungeon
     }
 
     int corridorWidth = leftPoint.x - rightPoint.x;
-    int corridorHeight = rightPoint.y - rightPoint.y;
+    int corridorHeight = leftPoint.y - rightPoint.y;
 
-    if ( corridorWidth != 0 )
+    cout << "leftPoint: (" << leftPoint.x << ", " << leftPoint.y << "), rightPoint: (" << rightPoint.x << ", " << rightPoint.y << "), width: " << corridorWidth << ", height: " << corridorHeight << endl;
+
+    // two points are not aligned horizontally
+    if ( corridorWidth < 0 )
     {
-        uniform_int_distribution<int> boolean(0, 1);
-        if ( boolean(rng) > 2 )
+        // random
+        uniform_int_distribution<int> boolean(0,1); // guaranteed unbiased
+        auto horizontal = boolean(rng);
+        if ( horizontal )
         {
-            corridors.push_back( new Dungeon::Room(-1, leftPoint.x, leftPoint.y, abs(corridorWidth) + 10, 10));
+            // add corridor to the right
+            corridors.push_back( new Dungeon::Room( -1, leftPoint.x, leftPoint.y, abs(corridorWidth) + corridorDepth, corridorDepth));
 
             if ( corridorHeight < 0 )
-            {
-                corridors.push_back( new Dungeon::Room( -1, rightPoint.x, leftPoint.y, 10, abs(corridorHeight)));
-            }
+                corridors.push_back( new Dungeon::Room( -1, rightPoint.x, leftPoint.y, corridorDepth, abs(corridorHeight)));
             else
-            {
-                corridors.push_back( new Dungeon::Room( -1, rightPoint.x, leftPoint.y, 10, -abs(corridorHeight)));
-            }
+                corridors.push_back( new Dungeon::Room( -1, rightPoint.x, leftPoint.y, corridorDepth, -(abs(corridorHeight))));
         }
         else
         {
             if ( corridorHeight < 0 )
-            {
-                corridors.push_back( new Dungeon::Room( -1, leftPoint.x, leftPoint.y, 10, abs(corridorHeight) ));
-            }
+                corridors.push_back( new Dungeon::Room( -1, leftPoint.x, leftPoint.y, corridorDepth, abs(corridorHeight) ));
             else
-            {
-                corridors.push_back( new Dungeon::Room( -1, leftPoint.x, rightPoint.y, 10, abs(corridorHeight) ));
-            }
+                corridors.push_back( new Dungeon::Room( -1, leftPoint.x, rightPoint.y, corridorDepth, abs(corridorHeight) ));
 
-            corridors.push_back( new Dungeon::Room( -1, leftPoint.x, rightPoint.y, abs(corridorWidth) + 10, 10));
+            corridors.push_back( new Dungeon::Room( -1, leftPoint.x, rightPoint.y, abs(corridorWidth) + corridorDepth, corridorDepth));
         }
+    }
+    else
+    {
+        if ( corridorHeight < 0 )
+            corridors.push_back( new Dungeon::Room( -1, leftPoint.x, leftPoint.y, corridorDepth, abs(corridorHeight)));
+        else
+            corridors.push_back( new Dungeon::Room( -1, rightPoint.x, rightPoint.y, corridorDepth, abs(corridorHeight)));
     }
 }
 
@@ -211,6 +346,15 @@ void DungeonGenerator::render(sf::RenderTarget& target)
     target.draw(rootRect);
 
     rootRoom->drawRoom(target);
+
+    for ( int i = 0; i < corridors.size(); i++ )
+    {
+        sf::RectangleShape corridorRect;
+        corridorRect.setSize( sf::Vector2f( corridors[i]->height, corridors[i]->width ) );
+        corridorRect.setPosition( sf::Vector2f( corridors[i]->top, corridors[i]->left) ) ; 
+        corridorRect.setFillColor( sf::Color::Black );
+        target.draw(corridorRect);
+    }
 
     for ( int i = 0; i < vectorRooms.size(); i++ )
     {
