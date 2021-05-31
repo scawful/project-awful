@@ -30,7 +30,7 @@ void Textbox::deleteLastChar () {
 
 Textbox::Textbox (int size, sf::Color color, bool selected) {
     this->textbox.setCharacterSize(size);
-    this->textbox.setColor(color);
+    this->textbox.setFillColor(color);
     this->isSelected = selected;
     if (selected) {
         textbox.setString("_");
