@@ -42,6 +42,11 @@ sf::Vector2f Actor::getPosition()
     return sf::Vector2f( this->sprite.getPosition().x, this->sprite.getPosition().y );
 }
 
+sf::Vector2f Actor::getSize()
+{
+    return sf::Vector2f( this->sprite.getTextureRect().width, this->sprite.getTextureRect().height );
+}
+
 void Actor::move(const float dir_x, const float dir_y, const float& dt)
 {
     if ( this->movementComponent ) 
