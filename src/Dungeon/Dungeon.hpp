@@ -24,9 +24,10 @@ namespace Dungeon
     private:
         int minimumRoomSize;
         Tile *tiles;
+        Room *parent;
         Room *leftChild;
         Room *rightChild;
-        Room *dungeon;        
+        Room *dungeon;
 
     public:
         int id, top, left, width, height;
@@ -70,6 +71,7 @@ namespace Dungeon
             return this->dungeon;
         }
         
+        void setParent( Room *parent );
         void setDungeon( Room *dungeon );
         void setLeftChild( Room *leftChild );
         void setRightChild( Room *rightChild );

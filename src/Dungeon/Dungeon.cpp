@@ -9,6 +9,7 @@ Dungeon::Room::Room(int id, int top, int left, int width, int height)
     this->left = left;
     this->width = width;
     this->height = height;
+    this->parent = NULL;
     this->leftChild = NULL;
     this->rightChild = NULL;
     this->dungeon = NULL;
@@ -19,6 +20,11 @@ Dungeon::Room::Room(int id, int top, int left, int width, int height)
 Dungeon::Room::~Room()
 {
 
+}
+
+void Dungeon::Room::setParent( Room *parent )
+{
+    this->parent = parent;
 }
 
 void Dungeon::Room::setDungeon( Room *dungeon )
@@ -58,7 +64,6 @@ void Dungeon::Room::drawRoom( sf::RenderTarget& target )
 }
 
 // Door
-
 Dungeon::Door::Door()
 {
     
