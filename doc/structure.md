@@ -6,9 +6,25 @@
   - **devs** : individual developer notes
 - **src** : source code of the program
   - **Actor** : 
+    - Actor
+    - Player
   - **Ancilla** : 
   - **Components** : 
+    - AnimationComponent
+    - HitboxComponent
+    - MovementComponent
   - **Dungeon** : 
+    - Dungeon
+      - Room
+      - Door
+    - DungeonGenerator
   - **GUI** : Classes for the GUI assets
+    - Button
+    - Textbox
+    - PauseMenu
   - **State** : State machine and implementation of states
+    - CharacterState
+    - GameState
+    - MainMenuState
+    - State
 - **test** : experimental 
