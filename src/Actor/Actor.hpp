@@ -30,6 +30,8 @@ public:
     // Setters
     void setTexture(sf::Texture& texture);
     virtual void setPosition(const float x, const float y);
+
+    sf::Vector2f getPosition();
         
     // Functions
     virtual void move(const float dir_x, const float dir_y, const float& dt);

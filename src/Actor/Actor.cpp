@@ -37,6 +37,11 @@ void Actor::setPosition(const float x, const float y)
     this->sprite.setPosition(x, y);
 }
 
+sf::Vector2f Actor::getPosition()
+{
+    return sf::Vector2f( this->sprite.getPosition().x, this->sprite.getPosition().y );
+}
+
 void Actor::move(const float dir_x, const float dir_y, const float& dt)
 {
     if ( this->movementComponent ) 
