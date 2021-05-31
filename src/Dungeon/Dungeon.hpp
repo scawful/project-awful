@@ -26,15 +26,35 @@ namespace Dungeon
         Tile *tiles;
         Room *leftChild;
         Room *rightChild;
-        Room *dungeon;
-        sf::RectangleShape roomShape;
-        
+        Room *dungeon;        
 
     public:
+        int id, top, left, width, height;
         Room(int id, int top, int left, int width, int height);
         ~Room();
-        int id, top, left, width, height;
+        
 
+        bool isLeaf()
+        {
+            return this->leftChild == NULL && this->rightChild == NULL;
+        }
+
+        Room* getRoom()
+        {
+            if ( isLeaf() )
+                return this->dungeon;
+
+            if ( this->leftChild != NULL )
+            {
+                return this->leftChild;
+            }
+
+            if ( this->rightChild != NULL )
+            {
+                return this->rightChild;
+            }
+        }
+        
         Room* getLeftChild()
         {
             return this->leftChild;

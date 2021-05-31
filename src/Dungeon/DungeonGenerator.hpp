@@ -20,11 +20,12 @@ public:
     DungeonGenerator();
     ~DungeonGenerator();
 
-    // Functions
+    // Functions    
     void deleteDungeon( Dungeon::Room *room );
     bool splitRoom( Dungeon::Room *room );
     void generateDungeon( Dungeon::Room *room );
-    void generateCorridorBetween( Dungeon::Room *leftRoom, Dungeon::Room *rightRoom );
+    void generateCorridors( Dungeon::Room *room );
+    void generateCorridorBetween( Dungeon::Room *left, Dungeon::Room *right );
 
     void render(sf::RenderTarget& target);
 
