@@ -27,4 +27,5 @@ public:
     void setSelected (bool TorF);
     std::string getText() {return text.str();}
     void drawTo (sf::RenderWindow &window) {window.draw(textbox);}
+    void typedOn (sf::Event input);
 };

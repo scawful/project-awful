@@ -5,5 +5,10 @@
 - **doc** : documentation of code
   - **devs** : individual developer notes
 - **src** : source code of the program
+ - **Actor** : 
+  - **Ancilla** : 
+  - **Components** : 
+  - **Dungeon** : 
+  - **GUI** : Classes for the GUI assets
   - **State** : State machine and implementation of states
 - **test** : experimental 
