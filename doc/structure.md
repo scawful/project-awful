@@ -5,7 +5,7 @@
 - **doc** : documentation of code
   - **devs** : individual developer notes
 - **src** : source code of the program
- - **Actor** : 
+  - **Actor** : 
   - **Ancilla** : 
   - **Components** : 
   - **Dungeon** : 
