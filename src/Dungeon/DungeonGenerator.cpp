@@ -121,15 +121,18 @@ bool DungeonGenerator::splitRoom( Dungeon::Room *room )
         roomID++;
     }
 
-    // check if room is within size ratio
+    // calculate size ratio of the rooms to be created
     float leftChildRatio = (float)room->getLeftChild()->width / (float)room->getLeftChild()->height;
     float rightChildRatio = (float)room->getRightChild()->width / (float)room->getRightChild()->height;
+
+    // if room does not match ratio, cleanup the old rooms and recall the function
     if ( leftChildRatio < size_ratio || rightChildRatio < size_ratio )
     {
         roomID -= 2;
         Dungeon::Room *cleanup = room->getLeftChild();
         Dungeon::Room *cleanup2 = room->getRightChild();
-        delete cleanup, cleanup2;
+        delete cleanup;
+        delete cleanup2;
         room->setLeftChild( NULL );
         room->setRightChild( NULL );
         splitRoom( room );

@@ -19,7 +19,11 @@ Dungeon::Room::Room(int id, int top, int left, int width, int height)
 
 Dungeon::Room::~Room()
 {
-
+    if ( this->dungeon != NULL )
+    {   
+        delete this->dungeon;
+        this->dungeon = NULL;
+    }
 }
 
 void Dungeon::Room::setParent( Room *parent )
