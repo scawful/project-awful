@@ -37,16 +37,6 @@ DungeonGenerator::DungeonGenerator()
 
     this->generateDungeon( rootRoom );
     this->generateCorridors( rootRoom );
-    // for ( int i = 0; i < vectorRooms.size(); i++ )
-    // {
-    //     if ( !vectorRooms[i]->isLeaf() )
-    //     {
-    //         Dungeon::Room *leftRoom = vectorRooms[i]->getLeftChild();
-    //         Dungeon::Room *rightRoom = vectorRooms[i]->getRightChild();
-
-    //         this->generateCorridorBetween( leftRoom, rightRoom );
-    //     }
-    // }
 }
 
 DungeonGenerator::~DungeonGenerator()
@@ -76,6 +66,8 @@ void DungeonGenerator::deleteDungeon( Dungeon::Room *room )
 
 bool DungeonGenerator::splitRoom( Dungeon::Room *room )
 {
+    float size_ratio = 0.3;
+
     if ( room->getLeftChild() != NULL )
         return false;
 
@@ -128,6 +120,20 @@ bool DungeonGenerator::splitRoom( Dungeon::Room *room )
         room->getRightChild()->setParent(room);
         roomID++;
     }
+
+    // check if room is within size ratio
+    float leftChildRatio = (float)room->getLeftChild()->width / (float)room->getLeftChild()->height;
+    float rightChildRatio = (float)room->getRightChild()->width / (float)room->getRightChild()->height;
+    if ( leftChildRatio < size_ratio || rightChildRatio < size_ratio )
+    {
+        roomID -= 2;
+        Dungeon::Room *cleanup = room->getLeftChild();
+        Dungeon::Room *cleanup2 = room->getRightChild();
+        delete cleanup, cleanup2;
+        room->setLeftChild( NULL );
+        room->setRightChild( NULL );
+        splitRoom( room );
+    }
     
     return true;
 }
@@ -145,7 +151,7 @@ bool DungeonGenerator::random_split( Dungeon::Room *room )
     if ( random == 1 )
     {
         // horizontal
-        uniform_int_distribution<int> width(0, room->width); 
+        uniform_int_distribution<int> width(0, room->width - this->minimumRoomSize); 
         auto randWidth = width(rng);
 
         cout << "Left Child: ";
@@ -170,7 +176,7 @@ bool DungeonGenerator::random_split( Dungeon::Room *room )
     else
     {
         // vertical
-        uniform_int_distribution<int> height(0, room->width); 
+        uniform_int_distribution<int> height(0, room->height - this->minimumRoomSize); 
         auto randHeight = height(rng);
         newLeftChild = new Dungeon::Room( roomID, room->top, room->left, room->width, randHeight );
         newRightChild = new Dungeon::Room( roomID, room->top, room->left + randHeight, room->width, room->height - randHeight );
@@ -233,21 +239,10 @@ void DungeonGenerator::generateDungeon( Dungeon::Room *room )
 
 void DungeonGenerator::generateCorridors( Dungeon::Room *room )
 {
-    if ( room->isLeaf() )
-        return;
-
     if ( room->getLeftChild() != NULL )
     {
         this->generateCorridors( room->getLeftChild() );
-    }
-
-    if ( room->getRightChild() != NULL )
-    {
         this->generateCorridors( room->getRightChild() );
-    }
-
-    if ( room->getLeftChild() != NULL && room->getRightChild() != NULL )
-    {
         this->generateCorridorBetween( room->getLeftChild(), room->getRightChild() );
     }
 
@@ -255,6 +250,7 @@ void DungeonGenerator::generateCorridors( Dungeon::Room *room )
 
 void DungeonGenerator::generateCorridorBetween( Dungeon::Room *left, Dungeon::Room *right )
 {
+    int corridorDepth = 10;
     Dungeon::Room *leftRoom = left;
     Dungeon::Room *rightRoom = right;
 
@@ -267,23 +263,23 @@ void DungeonGenerator::generateCorridorBetween( Dungeon::Room *left, Dungeon::Ro
     // get a random point on each room to connect
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
 
-    int lx = leftRoom->top + 1;
-    int lw = leftRoom->top + leftRoom->width - 1;
+    int lx = leftRoom->top + corridorDepth;
+    int lw = leftRoom->top + leftRoom->width - corridorDepth;
     uniform_int_distribution<int> leftPointX( lx, lw );
     float leftPointXRand = leftPointX(rng);
 
-    int ly = leftRoom->left + 1;
-    int lh = leftRoom->left + leftRoom->height - 1;
+    int ly = leftRoom->left + corridorDepth;
+    int lh = leftRoom->left + leftRoom->height - corridorDepth;
     uniform_int_distribution<int> leftPointY( ly, lh );
     float leftPointYRand = leftPointY(rng);
 
-    int rx = rightRoom->top + 1;
-    int rw = rightRoom->top + rightRoom->width - 1;
+    int rx = rightRoom->top + corridorDepth;
+    int rw = rightRoom->top + rightRoom->width - corridorDepth;
     uniform_int_distribution<int> rightPointX( rx, rw );
     float rightPointXRand = rightPointX(rng);
 
-    int ry = rightRoom->left + 1;
-    int rh = rightRoom->left + rightRoom->height - 1;
+    int ry = rightRoom->left + corridorDepth;
+    int rh = rightRoom->left + rightRoom->height - corridorDepth;
     uniform_int_distribution<int> rightPointY( ry, rh );
     float rightPointYRand = rightPointY(rng);
 
@@ -313,29 +309,29 @@ void DungeonGenerator::generateCorridorBetween( Dungeon::Room *left, Dungeon::Ro
         if ( horizontal )
         {
             // add corridor to the right
-            corridors.push_back( new Dungeon::Room(-1, leftPoint.x, leftPoint.y, abs(corridorWidth) + 1, 5));
+            corridors.push_back( new Dungeon::Room( -1, leftPoint.x, leftPoint.y, abs(corridorWidth) + corridorDepth, corridorDepth));
 
             if ( corridorHeight < 0 )
-                corridors.push_back( new Dungeon::Room( -1, rightPoint.x, leftPoint.y, 5, abs(corridorHeight)));
+                corridors.push_back( new Dungeon::Room( -1, rightPoint.x, leftPoint.y, corridorDepth, abs(corridorHeight)));
             else
-                corridors.push_back( new Dungeon::Room( -1, rightPoint.x, leftPoint.y, 5, -(abs(corridorHeight))));
+                corridors.push_back( new Dungeon::Room( -1, rightPoint.x, leftPoint.y, corridorDepth, -(abs(corridorHeight))));
         }
         else
         {
             if ( corridorHeight < 0 )
-                corridors.push_back( new Dungeon::Room( -1, leftPoint.x, leftPoint.y, 5, abs(corridorHeight) ));
+                corridors.push_back( new Dungeon::Room( -1, leftPoint.x, leftPoint.y, corridorDepth, abs(corridorHeight) ));
             else
-                corridors.push_back( new Dungeon::Room( -1, leftPoint.x, rightPoint.y, 5, abs(corridorHeight) ));
+                corridors.push_back( new Dungeon::Room( -1, leftPoint.x, rightPoint.y, corridorDepth, abs(corridorHeight) ));
 
-            corridors.push_back( new Dungeon::Room( -1, leftPoint.x, rightPoint.y, abs(corridorWidth) + 1, 5));
+            corridors.push_back( new Dungeon::Room( -1, leftPoint.x, rightPoint.y, abs(corridorWidth) + corridorDepth, corridorDepth));
         }
     }
     else
     {
         if ( corridorHeight < 0 )
-            corridors.push_back( new Dungeon::Room( -1, leftPoint.x, leftPoint.y, 5, abs(corridorHeight)));
+            corridors.push_back( new Dungeon::Room( -1, leftPoint.x, leftPoint.y, corridorDepth, abs(corridorHeight)));
         else
-            corridors.push_back( new Dungeon::Room( -1, rightPoint.x, rightPoint.y, 5, abs(corridorHeight)));
+            corridors.push_back( new Dungeon::Room( -1, rightPoint.x, rightPoint.y, corridorDepth, abs(corridorHeight)));
     }
 }
 
