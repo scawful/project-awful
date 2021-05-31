@@ -13,6 +13,7 @@ private:
     sf::Font font;
     sf::RectangleShape background;
     sf::Texture playerTexture;
+    sf::Texture floorTileTexture;
     sf::Event sfEvent;
 
     // Functions

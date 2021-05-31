@@ -8,7 +8,8 @@ void GameState::initFonts()
 
 void GameState::initTextures()
 {
-
+    floorTileTexture.loadFromFile("../assets/floortiles.jpg");
+    floorTileTexture.setRepeated( true );
 }
 
 void GameState::initPlayers() 
@@ -17,8 +18,8 @@ void GameState::initPlayers()
     // loading an image from a file to use as the sprite texture for the player
     // super temporary, just the begin
     playerTexture.loadFromFile("../assets/dot.bmp");
-    //this->player = new Player( (SCREEN_WIDTH - playerTexture.getSize().x) / 2, (SCREEN_HEIGHT - playerTexture.getSize().y) / 2, playerTexture );
-    this->player = new Player( 0, 0, playerTexture );
+    this->player = new Player( (SCREEN_WIDTH - playerTexture.getSize().x) / 2, (SCREEN_HEIGHT - playerTexture.getSize().y) / 2, playerTexture );
+    //this->player = new Player( 0, 0, playerTexture );
 }
 
 GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : State(window, states)
@@ -35,6 +36,7 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : Sta
     this->initFonts();
     this->initTextures();
     this->initPlayers();
+    this->background.setTexture( &floorTileTexture );
 
     this->dungeonGenerator = new DungeonGenerator();
     cout << "GameState::GameState created\n";
@@ -83,8 +85,12 @@ void GameState::render(sf::RenderTarget* target)
 
     target->draw(this->background);
 
-    this->dungeonGenerator->render(*target);
+    //this->dungeonGenerator->render(*target);
 
     // the player class uses a reference argument, so we dereference the pointer to the RenderTarget
     this->player->render(*target);
+
+    sf::View minimapView ( sf::FloatRect(  0.75f, 0, 2800, 2200 ) );
+    target->setView(minimapView);
+    this->dungeonGenerator->render(*target);
 }
