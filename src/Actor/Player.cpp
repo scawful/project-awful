@@ -9,7 +9,7 @@ void Player::initComponents()
 {
     // this calls the Actor member function to create a MovementComponent
     // the lifespan of that component is handled entirely by the parent
-    this->createMovementComponent(350.f, 15.f, 5.f);
+    this->createMovementComponent(250.f, 10.f, 6.f);
     this->createHitboxComponent(this->sprite, 0.f, 0.f, 65.f, 86.f);
 }
 
@@ -18,8 +18,6 @@ Player::Player(float x, float y, sf::Texture& texture_sheet)
     this->setPosition(x, y);
     this->setTexture(texture_sheet);
     this->initComponents();
-
-
     this->createAnimatiomComponent(texture_sheet);
     
     //                                                                (x,y)
@@ -29,7 +27,8 @@ Player::Player(float x, float y, sf::Texture& texture_sheet)
     this->animationComponent->addAnimation( "WALK_DOWN",   10.f,   1, 0, 4, 0,  65,   86 );
     this->animationComponent->addAnimation( "WALK_UP",     10.f,   0, 1, 3, 1,  65,   86 );
     this->animationComponent->addAnimation( "WALK_SIDE",   10.f,   1, 2, 3, 2,  65,   86 );
-    this->animationComponent->addAnimation( "ATTACK",      10.f,   1, 3, 5, 3,  65,   86 );
+    
+    this->animationComponent->addAnimation( "ATTACK",      10.f,   1, 3, 3, 3,  65,   86 );
 
 }
 
