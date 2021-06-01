@@ -47,7 +47,7 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : Sta
 
 
 
-    this->dungeonGenerator = new DungeonGenerator();
+    this->dungeonGenerator = new DungeonGenerator( 1, 75, 5, 5, 600, 600 );
     cout << "GameState::GameState created\n";
 }
 

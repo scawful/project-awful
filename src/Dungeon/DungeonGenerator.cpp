@@ -1,25 +1,26 @@
 #include "DungeonGenerator.hpp"
 
-void DungeonGenerator::initOriginRoom()
+void DungeonGenerator::initRootRoom( int x, int y, int width, int height)
 {
     //rootRoom = new Dungeon::Room( roomID, (SCREEN_WIDTH - 600) / 2, (SCREEN_HEIGHT - 600) / 2, 600, 600 );
-    rootRoom =new Dungeon::Room( roomID, 5, 5, 600, 600 );
+    rootRoom = new Dungeon::Room( roomID, x, y, width, height );
     roomID++;
     cout << "Origin Room initialized\n";
 }
 
-DungeonGenerator::DungeonGenerator()
+DungeonGenerator::DungeonGenerator( int difficulty, int minimum, int x, int y, int width, int height )
 {
     this->roomID = 0;
     this->dungeonID = 0;
-    this->minimumRoomSize = 75;
+    this->minimumRoomSize = minimum;
+    this->difficultyLevel = difficulty;
 
     // random-number engine used (Mersenne-Twister in this case)
     // using the std::chrono clock as the random seed engine, since mingw uses a fixed seed for std::random
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
 
     // create the source room that the dungeon is based on and put it in the vector of rooms
-    this->initOriginRoom();
+    this->initRootRoom( x, y, width, height );
     vectorRooms.push_back( rootRoom );
 
     // creates 42 children, so 22 dungeons
