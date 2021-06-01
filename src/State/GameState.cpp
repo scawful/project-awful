@@ -60,6 +60,26 @@ GameState::~GameState()
 
 void GameState::updateInput(const float& dt)
 {
+
+    /* collide with edges of screen */
+    if ( this->player->getPosition().x < 0 ) 
+    {
+        this->player->setPosition( 0.f, this->player->getPosition().y );
+    }
+    else if ( this->player->getPosition().x > this->background.getSize().x - this->player->getSize().x ) 
+    {
+        this->player->setPosition( this->background.getSize().x - this->player->getSize().x, this->player->getPosition().y );
+    }
+    
+    if ( this->player->getPosition().y < 0 ) 
+    {
+        this->player->setPosition( this->player->getPosition().x, 0.f );
+    }
+    else if ( this->player->getPosition().y > this->background.getSize().y - this->player->getSize().y ) 
+    {
+        this->player->setPosition( this->player->getPosition().x, this->background.getSize().y - this->player->getSize().y );
+    }
+
     // dynamically fetch keyboard input in real time to move the player 
     // currently inputs based on velocity rather than unit vectors, gonna change that
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
