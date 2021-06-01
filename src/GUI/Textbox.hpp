@@ -18,13 +18,12 @@ private:
 public:
     Textbox () {}
     Textbox (int size, bool selected);
-    ~Textbox();
+    ~Textbox() {}
     void setLimit (bool TorF) {hasLimit = TorF;}
     void setLimit (bool TorF, int Limit);
     void setSelected (bool TorF);
     std::string retrieveInput() {return this->getText();}
     void drawTextbox (sf::RenderWindow &window) {
-        //cout << "Drawing NOW" << endl;
         this->drawText(window);
     }
     void typedOn (sf::Event input);
