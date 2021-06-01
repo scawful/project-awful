@@ -10,7 +10,7 @@ add_executable(awful awful.cpp Game.cpp
                 Actor/Actor.cpp Actor/Player.cpp 
                 Components/MovementComponent.cpp Components/HitboxComponent.cpp 
                 Dungeon/DungeonGenerator.cpp Dungeon/Dungeon.cpp 
-                GUI/Textbox.cpp GUI/Textbox.hpp GUI/Button.cpp GUI/Button.hpp GUI/PauseMenu.cpp GUI/PauseMenu.hpp)
+                GUI/Text.cpp GUI.Text.hpp GUI/Textbox.cpp GUI/Textbox.hpp GUI/Button.cpp GUI/Button.hpp GUI/PauseMenu.cpp GUI/PauseMenu.hpp)
 include_directories("../assets")
 
 # specify the C++ standard
