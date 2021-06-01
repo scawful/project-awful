@@ -54,6 +54,8 @@ namespace Dungeon
             {
                 return this->rightChild;
             }
+
+            return this;
         }
         
         Room* getLeftChild()

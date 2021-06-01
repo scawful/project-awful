@@ -10,11 +10,11 @@ private:
     // Variables
     DungeonGenerator *dungeonGenerator;
     Player *player;
-    sf::Font font;
     sf::RectangleShape background;
     sf::Texture playerTexture;
     sf::Texture floorTileTexture;
-    sf::Event sfEvent;
+    sf::Event sfEvent; 
+    sf::Font font;
 
     // Functions
     void initFonts();

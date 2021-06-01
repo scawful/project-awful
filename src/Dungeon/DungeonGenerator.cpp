@@ -2,8 +2,8 @@
 
 void DungeonGenerator::initOriginRoom()
 {
-    rootRoom = new Dungeon::Room( roomID, (SCREEN_WIDTH - 600) / 2, (SCREEN_HEIGHT - 600) / 2, 600, 600 );
-    //rootRoom = new Dungeon::Room( roomID, 5, 5, SCREEN_WIDTH, SCREEN_HEIGHT );
+    //rootRoom = new Dungeon::Room( roomID, (SCREEN_WIDTH - 600) / 2, (SCREEN_HEIGHT - 600) / 2, 600, 600 );
+    rootRoom =new Dungeon::Room( roomID, 5, 5, 600, 600 );
     roomID++;
     cout << "Origin Room initialized\n";
 }
@@ -22,6 +22,7 @@ DungeonGenerator::DungeonGenerator()
     this->initOriginRoom();
     vectorRooms.push_back( rootRoom );
 
+    // creates 42 children, so 22 dungeons
     while ( vectorRooms.size() < 42 )
     {
         uniform_int_distribution<int> splitRand(0, vectorRooms.size() - 1); // guaranteed unbiased
@@ -210,11 +211,6 @@ void DungeonGenerator::generateDungeon( Dungeon::Room *room )
         // recursively generate 
         this->generateDungeon( room->getLeftChild() );
         this->generateDungeon( room->getRightChild() );
-
-        // if ( room->getLeftChild() != NULL && room->getRightChild() != NULL )
-        // {
-        //     this->generateCorridorBetween( room->getLeftChild(), room->getRightChild() );
-        // }
     } 
     else 
     { 
@@ -246,7 +242,9 @@ void DungeonGenerator::generateCorridors( Dungeon::Room *room )
     {
         this->generateCorridors( room->getLeftChild() );
         this->generateCorridors( room->getRightChild() );
-        this->generateCorridorBetween( room->getLeftChild(), room->getRightChild() );
+
+        if ( room->getLeftChild()->getDungeon() != NULL && room->getRightChild()->getDungeon() != NULL )
+            this->generateCorridorBetween( room->getLeftChild(), room->getRightChild() );
     }
 
 }
@@ -254,14 +252,8 @@ void DungeonGenerator::generateCorridors( Dungeon::Room *room )
 void DungeonGenerator::generateCorridorBetween( Dungeon::Room *left, Dungeon::Room *right )
 {
     int corridorDepth = 10;
-    Dungeon::Room *leftRoom = left;
-    Dungeon::Room *rightRoom = right;
-
-    if ( leftRoom->getDungeon() == NULL )
-        return;
-
-    if ( rightRoom->getDungeon() == NULL )
-        return;
+    Dungeon::Room *leftRoom = left->getRoom();
+    Dungeon::Room *rightRoom = right->getRoom();
 
     // get a random point on each room to connect
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
@@ -350,14 +342,14 @@ void DungeonGenerator::render(sf::RenderTarget& target)
 
     rootRoom->drawRoom(target);
 
-    for ( int i = 0; i < corridors.size(); i++ )
-    {
-        sf::RectangleShape corridorRect;
-        corridorRect.setSize( sf::Vector2f( corridors[i]->height, corridors[i]->width ) );
-        corridorRect.setPosition( sf::Vector2f( corridors[i]->top, corridors[i]->left) ) ; 
-        corridorRect.setFillColor( sf::Color::Black );
-        target.draw(corridorRect);
-    }
+    // for ( int i = 0; i < corridors.size(); i++ )
+    // {
+    //     sf::RectangleShape corridorRect;
+    //     corridorRect.setSize( sf::Vector2f( corridors[i]->height, corridors[i]->width ) );
+    //     corridorRect.setPosition( sf::Vector2f( corridors[i]->top, corridors[i]->left) ) ; 
+    //     corridorRect.setFillColor( sf::Color::Black );
+    //     target.draw(corridorRect);
+    // }
 
     for ( int i = 0; i < vectorRooms.size(); i++ )
     {
