@@ -3,39 +3,36 @@
 // Logic for when a person types something (exceptions are: 'ESC', 'BACKSPACE', and 'ENTER' Keys)
 void Textbox::inputLogic (int CharTyped) {
     if (CharTyped != ENTER_KEY && CharTyped != ESCAPE_KEY && CharTyped != DELETE_KEY) {
-        this->text << static_cast<char>(CharTyped);
+        this->setText(this->getText() + static_cast<char>(CharTyped));
     } else if (CharTyped == DELETE_KEY) {
-        if (this->text.str().length() > 0) {
+        if (this->getText().length() > 0) {
             deleteLastChar();
         }
     }
 
-    this->textbox.setString(text.str() + "_");  // Adds indicator where user is typing
+    this->setText(this->getText() + "_");  // Adds indicator where user is typing
 }
 
 // Function for the 'BACKSPACE' Key
 void Textbox::deleteLastChar () {
     // Transfer each character except the last one into a new string
-    string origText = this->text.str();
-    cout << "ORIG: " << origText << endl;
+    string origText = this->getText();
     string newText = "";
     for (int i = 0; i < origText.length() - 1; i++) {
         newText += origText.at(i);
     }
-    cout << "NEW: " << newText << endl;
 
     // Replace old string with new string (last character has been deleted)
-    this->text << newText;
+    this->setText(newText);
 }
 
-Textbox::Textbox (int size, sf::Color color, bool selected) {
-    this->textbox.setCharacterSize(size);
-    this->textbox.setFillColor(color);
+Textbox::Textbox (int size, bool selected) {
+    this->setSize(size);
     this->isSelected = selected;
     if (selected) {
-        textbox.setString("_");
+        this->setText("_");
     } else { 
-        textbox.setString("");
+        this->setText("");
     }
 }
 
@@ -53,14 +50,14 @@ void Textbox::setLimit (bool TorF, int Lim) {
 void Textbox::setSelected (bool TorF) {
     this->isSelected = TorF;
     if (!TorF) {
-        string origText = this->text.str();
+        string origText = this->getText();
         string newText = "";
         for (int i = 0; i < origText.length() - 1; i++) {
             newText += origText.at(i);
         }
-        this->textbox.setString(newText);
+        this->setText(newText);
     } else {
-        this->textbox.setString(this->text.str() + "_");
+        this->setText(this->getText() + "_");
     }
 }
 
@@ -69,12 +66,12 @@ void Textbox::typedOn (sf::Event input) {
         int CharType = input.text.unicode;
         if (CharType < 128) {
             if (this->hasLimit) {
-                if (text.str().length() <= this->limit) {
+                if (this->getText().length() <= this->limit) {
                     inputLogic(CharType);
-                } else if (text.str().length() > this->limit && CharType == DELETE_KEY) {
+                } else if (this->getText().length() > this->limit && CharType == DELETE_KEY) {
                     deleteLastChar();
                 }
-            }else {
+            } else {
                 inputLogic(CharType);
             }
         }
