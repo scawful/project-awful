@@ -8,7 +8,7 @@ project(awful VERSION 1.0)
 add_executable(awful awful.cpp Game.cpp 
                 State/State.cpp State/MainMenuState.cpp State/GameState.cpp State/CharacterState.cpp
                 Actor/Actor.cpp Actor/Player.cpp 
-                Components/MovementComponent.cpp Components/HitboxComponent.cpp 
+                Components/MovementComponent.cpp Components/HitboxComponent.cpp Components/AnimationComponent.cpp
                 Dungeon/DungeonGenerator.cpp Dungeon/Dungeon.cpp 
                 GUI/Textbox.cpp GUI/Textbox.hpp GUI/Button.cpp GUI/Button.hpp GUI/PauseMenu.cpp GUI/PauseMenu.hpp)
 include_directories("../assets")
