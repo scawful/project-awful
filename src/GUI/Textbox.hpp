@@ -1,12 +1,12 @@
 #include "../core.hpp"
 #include "Text.hpp"
-#include "Text.cpp"
 
 #define ESCAPE_KEY 27
 #define ENTER_KEY 13
 #define DELETE_KEY 8
 
-class Textbox : Text {
+class Textbox : public Text 
+{
 private:
     bool isSelected = false;
     bool hasLimit = false;
