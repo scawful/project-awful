@@ -8,6 +8,11 @@ void GameState::initFonts()
 
 void GameState::initTextures()
 {
+    sf::Image playerSprite;
+    playerSprite.loadFromFile("../assets/test_spritesheet.png");
+    playerSprite.createMaskFromColor(sf::Color(0, 255, 0, 255));
+    this->textures["PLAYER_SHEET"].loadFromImage(playerSprite);
+
     floorTileTexture.loadFromFile("../assets/floortiles.jpg");
     floorTileTexture.setRepeated( true );
 }
@@ -17,9 +22,10 @@ void GameState::initPlayers()
     // @scawful
     // loading an image from a file to use as the sprite texture for the player
     // super temporary, just the begin
-    playerTexture.loadFromFile("../assets/dot.bmp");
-    this->player = new Player( (SCREEN_WIDTH - playerTexture.getSize().x) / 2, (SCREEN_HEIGHT - playerTexture.getSize().y) / 2, playerTexture );
+    //playerTexture.loadFromFile("../assets/dot.bmp");
     //this->player = new Player( 0, 0, playerTexture );
+
+    this->player = new Player( (SCREEN_WIDTH - playerTexture.getSize().x) / 2, (SCREEN_HEIGHT - playerTexture.getSize().y) / 2, this->textures["PLAYER_SHEET"] );
 }
 
 GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : State(window, states)
