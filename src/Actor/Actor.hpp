@@ -2,6 +2,7 @@
 #define Actor_hpp
 
 #include "../core.hpp"
+#include "../Components/AnimationComponent.hpp"
 #include "../Components/MovementComponent.hpp"
 #include "../Components/HitboxComponent.hpp"
 
@@ -14,6 +15,7 @@ private:
 protected:
     sf::Sprite sprite;
 
+    AnimationComponent* animationComponent;
     MovementComponent* movementComponent;
     HitboxComponent* hitboxComponent;
     
@@ -22,6 +24,7 @@ public:
     virtual ~Actor();
 
     // Components
+    void createAnimatiomComponent(sf::Texture& texture_sheet);
     void createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration);
     void createHitboxComponent(sf::Sprite& sprite,
         float offset_x, float offset_y,

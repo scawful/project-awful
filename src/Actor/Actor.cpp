@@ -2,6 +2,7 @@
 
 void Actor::initVariables() 
 {
+    this->animationComponent = NULL;
     this->movementComponent = NULL;
     this->hitboxComponent = NULL;
 }
@@ -15,7 +16,14 @@ Actor::~Actor()
 {
     delete this->movementComponent;
     delete this->hitboxComponent;
+    delete this->animationComponent;
 }
+
+void Actor::createAnimatiomComponent(sf::Texture & texture_sheet)
+{
+    this->animationComponent = new AnimationComponent(this->sprite, texture_sheet);
+}
+
 
 void Actor::createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration) 
 {
