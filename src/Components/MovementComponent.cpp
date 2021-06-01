@@ -21,7 +21,7 @@ const sf::Vector2f & MovementComponent::getVelocity() const
     return this->velocity;
 }
 
-const bool MovementComponent::getState(const short unsigned state) const 
+const bool MovementComponent::getState(const short unsigned state) 
 {
     switch (state) 
     {
@@ -34,24 +34,33 @@ const bool MovementComponent::getState(const short unsigned state) const
                 return true;
             break;
         case MOVING_LEFT:
+            this->lastDirection = MOVING_LEFT;
             if ( this->velocity.x < 0.f )
                 return true;
             break;
         case MOVING_RIGHT:
+            this->lastDirection = MOVING_RIGHT;
             if ( this->velocity.x > 0.f )
                 return true;
             break;
         case MOVING_UP:
+            this->lastDirection = MOVING_UP;
             if ( this->velocity.y < 0.f )
                 return true;
             break;
         case MOVING_DOWN:
+            this->lastDirection = MOVING_DOWN;
             if ( this->velocity.y > 0.f )
                 return true;
             break;
     }
     
     return false;
+}
+
+const int MovementComponent::getDirection()
+{
+    return this->lastDirection;
 }
 
 void MovementComponent::move(const float dir_x, const float dir_y, const float& dt) 
