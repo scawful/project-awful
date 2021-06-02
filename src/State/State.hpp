@@ -3,6 +3,7 @@
 
 #include "../core.hpp"
 #include "../Actor/Player.hpp"
+#include "../Actor/Enemy.hpp"
 
 class State 
 {

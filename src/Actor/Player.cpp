@@ -2,6 +2,9 @@
 
 void Player::initVariables() 
 {
+    this->level = 1;
+    this->health = 100;
+    this->strength = 5;
     this->attacking = false;
 }
 
@@ -15,6 +18,7 @@ void Player::initComponents()
 
 Player::Player(float x, float y, sf::Texture& texture_sheet) 
 {
+    this->initVariables();
     this->setPosition(x, y);
     this->setTexture(texture_sheet);
     this->initComponents();

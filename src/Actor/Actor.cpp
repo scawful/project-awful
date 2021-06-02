@@ -35,6 +35,14 @@ void Actor::createHitboxComponent(sf::Sprite& sprite, float offset_x, float offs
     this->hitboxComponent = new HitboxComponent(sprite, offset_x, offset_y, width, height);
 }
 
+void Actor::setHealth( float health )
+{
+    if ( this->health > 0 )
+        this->health = health;
+    else
+        this->health = 1;
+}
+
 void Actor::setTexture(sf::Texture& texture) 
 {
     this->sprite.setTexture(texture);
@@ -53,6 +61,11 @@ sf::Vector2f Actor::getPosition()
 sf::Vector2f Actor::getSize()
 {
     return sf::Vector2f( this->sprite.getTextureRect().width, this->sprite.getTextureRect().height );
+}
+
+float Actor::getHealth()
+{
+    return this->health;
 }
 
 void Actor::move(const float dir_x, const float dir_y, const float& dt)

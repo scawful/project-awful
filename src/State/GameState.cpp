@@ -13,6 +13,11 @@ void GameState::initTextures()
     playerSprite.createMaskFromColor(sf::Color(0, 255, 0, 255));
     this->textures["PLAYER_SHEET"].loadFromImage(playerSprite);
 
+    sf::Image enemySprite;
+    enemySprite.loadFromFile("../assets/dot.bmp");
+    enemySprite.createMaskFromColor(sf::Color(0, 255, 0, 255));
+    this->textures["ENEMY_TEXTURE"].loadFromImage(enemySprite);
+
     floorTileTexture.loadFromFile("../assets/floortiles.jpg");
     floorTileTexture.setRepeated( true );
 }
@@ -22,8 +27,8 @@ void GameState::initPlayers()
     // @scawful
     // loading an image from a file to use as the sprite texture for the player
     // super temporary, just the begin
-    //playerTexture.loadFromFile("../assets/dot.bmp");
-    //this->player = new Player( 0, 0, playerTexture );
+    
+    this->enemy = new Enemy( 1200, 500, this->textures["ENEMY_TEXTURE"] );
 
     this->player = new Player( (SCREEN_WIDTH - playerTexture.getSize().x) / 2, (SCREEN_HEIGHT - playerTexture.getSize().y) / 2, this->textures["PLAYER_SHEET"] );
 }
@@ -58,6 +63,39 @@ GameState::~GameState()
     cout << "GameState::~GameState destroyed\n";
 }
 
+void GameState::updateEnemyAI(const float& dt)
+{
+    // get the coordiantes and dimensions for the actors
+    sf::Vector2f playerPosition = this->player->getPosition();
+    sf::Vector2f playerSize = this->player->getSize();
+    sf::Vector2f enemyPosition = this->enemy->getPosition();
+    sf::Vector2f enemySize = this->enemy->getSize();
+
+    sf::Vector2f trueCenter( playerPosition );
+    trueCenter.x += this->player->getSize().x / 2;
+    trueCenter.y += this->player->getSize().y / 2;
+
+    sf::Vector2f enemyTrueCenter( enemyPosition );
+    enemyTrueCenter.x -= (enemySize.x * 3) - enemySize.x / 2;
+    enemyTrueCenter.y -= (enemySize.y * 3) - enemySize.y / 2;
+
+    sf::Vector2f lineOfSightSize( enemySize.x * 6, enemySize.y * 6 );
+    enemyLineOfSight.setPosition( sf::Vector2f( enemyTrueCenter.x, enemyTrueCenter.y ) );
+    enemyLineOfSight.setFillColor( sf::Color( 255, 255, 255, 50 ));
+    enemyLineOfSight.setOutlineThickness(2);
+    enemyLineOfSight.setOutlineColor( sf::Color::Black );
+    enemyLineOfSight.setSize( lineOfSightSize );
+
+    sf::FloatRect playerRect( playerPosition.x, playerPosition.y, playerSize.x, playerSize.y );
+    if ( enemyLineOfSight.getGlobalBounds().intersects( playerRect ) )
+    {
+        sf::Vector2f direction = this->enemy->normalize(trueCenter - enemyPosition);
+
+        this->enemy->move( direction.x, direction.y, dt );
+    }
+
+}
+
 void GameState::updateInput(const float& dt)
 {
 
@@ -89,6 +127,11 @@ void GameState::updateInput(const float& dt)
         this->player->move(0.f, -1.f, dt);
     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::S) )
         this->player->move(0.f, 1.f, dt);
+
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Up) )
+        this->player->setHealth( this->player->getHealth() + 1.f );
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Down) )
+        this->player->setHealth( this->player->getHealth() - 1.f );
 }
 
 void GameState::update(const float& dt)
@@ -96,6 +139,8 @@ void GameState::update(const float& dt)
     // always make sure to call functions of subclasses within the holding class
     // in this case we are calling the players update function inside of GameState
     this->player->update(dt);
+    this->enemy->update(dt);
+    this->updateEnemyAI(dt);
     this->updateInput(dt);
     this->updateKeytime(dt);
 }
@@ -127,6 +172,11 @@ void GameState::render(sf::RenderTarget* target)
     // the player class uses a reference argument, so we dereference the pointer to the RenderTarget
     this->player->render(*target);
 
+    target->draw(this->enemyLineOfSight);
+    this->enemy->render(*target);
+
+    // ====================== //
+
     // creating a new view for the minimap of the dungeon generation output
     // currently not exactly sure why the width and height are larger than the object
     // increasing them seems to decrease the size of the view, which is odd. but okay
@@ -141,4 +191,24 @@ void GameState::render(sf::RenderTarget* target)
     playerRect.setPosition( sf::Vector2f( this->player->getPosition().x / (float)8.1, this->player->getPosition().y / (float)5.3) );
     playerRect.setFillColor( sf::Color::Magenta );
     target->draw(playerRect);
+
+    // ====================== //
+    sf::View guiView( sf::FloatRect(  0.75f, 0, SCREEN_WIDTH, SCREEN_HEIGHT ) );
+    target->setView(guiView);
+
+    sf::RectangleShape healthBar;
+    healthBar.setSize( sf::Vector2f( 300, 25 ) );
+    healthBar.setPosition( sf::Vector2f( SCREEN_WIDTH - 315, 15));
+    healthBar.setFillColor( sf::Color( 255, 255, 255, 0 ) );
+    healthBar.setOutlineThickness(5);
+    healthBar.setOutlineColor( sf::Color::Black );
+
+    sf::RectangleShape healthAmount;
+    healthAmount.setSize( sf::Vector2f( this->player->getHealth() * 3, 25 ) );
+    healthAmount.setPosition( sf::Vector2f( SCREEN_WIDTH - 315, 15 ) );
+    healthAmount.setFillColor( sf::Color::Red );
+
+    target->draw(healthAmount);
+    target->draw(healthBar);
+
 }
