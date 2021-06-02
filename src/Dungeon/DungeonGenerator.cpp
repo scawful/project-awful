@@ -337,8 +337,8 @@ void DungeonGenerator::render(sf::RenderTarget& target)
     rootRect.setSize( sf::Vector2f( rootRoom->height, rootRoom->width ) );
     rootRect.setPosition( sf::Vector2f( rootRoom->top, rootRoom->left ) );
     rootRect.setFillColor( sf::Color::White );
-    rootRect.setOutlineThickness(5);
-    rootRect.setOutlineColor( sf::Color::Blue );
+    // rootRect.setOutlineThickness(5);
+    // rootRect.setOutlineColor( sf::Color::Blue );
     target.draw(rootRect);
 
     rootRoom->drawRoom(target);

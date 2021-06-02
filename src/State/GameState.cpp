@@ -61,7 +61,7 @@ GameState::~GameState()
 void GameState::updateInput(const float& dt)
 {
 
-    /* collide with edges of screen */
+    // collide with edges of screen
     if ( this->player->getPosition().x < 0 ) 
     {
         this->player->setPosition( 0.f, this->player->getPosition().y );
@@ -81,14 +81,13 @@ void GameState::updateInput(const float& dt)
     }
 
     // dynamically fetch keyboard input in real time to move the player 
-    // currently inputs based on velocity rather than unit vectors, gonna change that
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::A) )
         this->player->move(-1.f, 0.f, dt);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::D) )
         this->player->move(1.f, 0.f, dt);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::W) )
         this->player->move(0.f, -1.f, dt);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::S) )
         this->player->move(0.f, 1.f, dt);
 }
 
@@ -131,9 +130,15 @@ void GameState::render(sf::RenderTarget* target)
     // creating a new view for the minimap of the dungeon generation output
     // currently not exactly sure why the width and height are larger than the object
     // increasing them seems to decrease the size of the view, which is odd. but okay
-    sf::View minimapView ( sf::FloatRect(  0.75f, 0, 2800, 2200 ) );
+    sf::View minimapView ( sf::FloatRect(  0.75f, 0, 3000, 2400 ) );
     target->setView(minimapView);
 
     // draw the output of dungeonGenerator inside the minimap
     this->dungeonGenerator->render(*target);
+
+    sf::RectangleShape playerRect;
+    playerRect.setSize( sf::Vector2f( 20, 20 ) );
+    playerRect.setPosition( sf::Vector2f( this->player->getPosition().x / (float)8.1, this->player->getPosition().y / (float)5.3) );
+    playerRect.setFillColor( sf::Color::Magenta );
+    target->draw(playerRect);
 }
