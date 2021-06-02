@@ -36,10 +36,6 @@ Textbox::Textbox (int size, bool selected) {
     }
 }
 
-Textbox::~Textbox () {
-
-}
-
 void Textbox::setLimit (bool TorF, int Lim) {
     this->hasLimit = TorF;
     if (this->hasLimit) {
