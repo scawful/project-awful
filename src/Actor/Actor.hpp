@@ -32,7 +32,7 @@ public:
     
     // Setters
     void setTexture(sf::Texture& texture);
-    virtual void setPosition(const float x, const float y);
+    void setPosition(const float x, const float y);
 
     sf::Vector2f getPosition();
     sf::Vector2f getSize();

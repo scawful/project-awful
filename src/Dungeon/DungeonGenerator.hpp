@@ -6,19 +6,19 @@
 class DungeonGenerator
 {
 private:
+    int rootRoomX, rootRoomY, rootRoomW, rootRoomH;
+    int difficultyLevel;
     int minimumRoomSize;
     int roomID, dungeonID;
-    int dungeonCount;
 
     Dungeon::Room *rootRoom;
     vector<Dungeon::Room*> vectorRooms;
     vector<Dungeon::Room*> corridors;
-    vector<int> connections;
 
 public:
-    void initOriginRoom();
+    void initRootRoom( int x, int y, int width, int height );
 
-    DungeonGenerator();
+    DungeonGenerator( int difficulty, int minimum, int x, int y, int width, int height );
     ~DungeonGenerator();
 
     // Functions    
