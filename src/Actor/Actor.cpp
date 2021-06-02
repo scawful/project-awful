@@ -37,7 +37,9 @@ void Actor::createHitboxComponent(sf::Sprite& sprite, float offset_x, float offs
 
 void Actor::setHealth( float health )
 {
-    if ( this->health > 0 )
+    if ( this->health > this->maxHealth )
+        this->health = maxHealth;
+    else if ( this->health > 0 )
         this->health = health;
     else
         this->health = 1;

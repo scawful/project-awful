@@ -3,7 +3,8 @@
 void Player::initVariables() 
 {
     this->level = 1;
-    this->health = 100;
+    this->maxHealth = 100;
+    this->health = maxHealth;
     this->strength = 5;
     this->attacking = false;
 }
@@ -49,20 +50,20 @@ void Player::update(const float& dt)
     this->movementComponent->update(dt);
 
     // click to attack (?)
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    if ( sf::Mouse::isButtonPressed(sf::Mouse::Left) )
     {
         this->attacking = true;
     }
 
-    if (this->attacking)
+    if ( this->attacking )
     {
-        if (this->animationComponent->play("ATTACK", dt, true))
+        if ( this->animationComponent->play("ATTACK", dt, true) )
             this->attacking = false;
     }
 
-    if (this->movementComponent->getState(IDLE))
+    if ( this->movementComponent->getState(IDLE) )
     {
-        switch (this->movementComponent->getDirection()) 
+        switch ( this->movementComponent->getDirection() ) 
         {
             case MOVING_LEFT:
                 this->animationComponent->play("IDLE_SIDE", dt);
@@ -81,24 +82,23 @@ void Player::update(const float& dt)
                 this->animationComponent->play("IDLE", dt);
                 break;
         }
-        //this->animationComponent->play("IDLE", dt);
     }
-    else if (this->movementComponent->getState(MOVING_DOWN))
+    else if ( this->movementComponent->getState(MOVING_DOWN) )
     {
         this->animationComponent->play("WALK_DOWN", dt, this->movementComponent->getVelocity().y, this->movementComponent->getMaxVelocity());
     }
-    else if (this->movementComponent->getState(MOVING_UP))
+    else if ( this->movementComponent->getState(MOVING_UP) )
     {
         this->animationComponent->play("WALK_UP", dt, this->movementComponent->getVelocity().y, this->movementComponent->getMaxVelocity());
     }
-    else if (this->movementComponent->getState(MOVING_RIGHT))
+    else if ( this->movementComponent->getState(MOVING_RIGHT) )
     {
         this->sprite.setOrigin(63.f, 0.f);
         this->sprite.setScale(-1.f, 1.f);
 
         this->animationComponent->play("WALK_SIDE", dt, this->movementComponent->getVelocity().x, this->movementComponent->getMaxVelocity());
     }
-    else if (this->movementComponent->getState(MOVING_LEFT))
+    else if ( this->movementComponent->getState(MOVING_LEFT) )
     {
         this->sprite.setOrigin(0.f, 0.f);
         this->sprite.setScale(1.f, 1.f);

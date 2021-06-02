@@ -20,7 +20,7 @@ protected:
     HitboxComponent* hitboxComponent;
 
     int level;
-    float health, strength;
+    float health, maxHealth, strength;
     
 public:
     Actor();
