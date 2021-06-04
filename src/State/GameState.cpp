@@ -26,6 +26,11 @@ void GameState::initTextures()
     enemySprite.createMaskFromColor(sf::Color(0, 255, 0, 255));
     this->textures["GHOST3"].loadFromImage(enemySprite);
 
+    sf::Image swordSprite;
+    swordSprite.loadFromFile("../assets/sword.png");
+    swordSprite.createMaskFromColor(sf::Color(0, 255, 0, 255));
+    this->textures["SWORD"].loadFromImage( swordSprite );
+
     floorTileTexture.loadFromFile("../assets/floortiles.jpg");
     floorTileTexture.setRepeated( true );
 }
@@ -34,6 +39,11 @@ void GameState::initPlayers()
 {    
     this->player = new Player( (SCREEN_WIDTH - playerTexture.getSize().x) / 2, (SCREEN_HEIGHT - playerTexture.getSize().y) / 2, this->textures["PLAYER_SHEET"] );
     playerSize = this->player->getSize();
+    playerPosition = this->player->getPosition();
+
+    swordPosition.x = playerPosition.x + 10;
+    swordPosition.y = playerPosition.y + 20;
+    this->playerSword = new Sword( swordPosition.x, swordPosition.y, this->textures["SWORD"] );
 }
 
 void GameState::initEnemies()
@@ -101,6 +111,7 @@ GameState::~GameState()
         delete this->enemies[i];
     
     delete this->player;
+    delete this->playerSword;
     delete this->dungeonGenerator;
     cout << "GameState::~GameState destroyed\n";
 }
@@ -181,12 +192,18 @@ void GameState::updateInput(const float& dt)
 
     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Down) )
         this->player->setHealth( this->player->getHealth() - 1.f );
+
+    // sword
+    swordPosition.x = playerPosition.x + 10;
+    swordPosition.y = playerPosition.y + 20;
+    this->playerSword->move( swordPosition.x, swordPosition.y, dt );
 }
 
 void GameState::update(const float& dt)
 {
     playerPosition = this->player->getPosition();
     this->player->update(dt);
+    this->playerSword->update(dt);
     
     for ( int i = 0; i < 10; i++)
         this->enemies[i]->update(dt);
@@ -222,6 +239,7 @@ void GameState::render( sf::RenderTarget* target )
 
     // the player class uses a reference argument, so we dereference the pointer to the RenderTarget
     this->player->render(*target);
+    this->playerSword->render(*target);
 
     for ( int i = 0; i < 10; i++)
     {

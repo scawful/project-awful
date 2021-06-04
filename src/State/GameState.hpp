@@ -10,13 +10,14 @@ private:
     // Variables
     DungeonGenerator *dungeonGenerator;
     Player *player;
-    Enemy *enemy;
+    Sword *playerSword;
 
     std::vector<Enemy*> enemies;
     sf::RectangleShape enemySights[10];
 
     sf::Vector2f playerPosition;
     sf::Vector2f playerSize;
+    sf::Vector2f swordPosition;
 
     sf::RectangleShape background;
     sf::RectangleShape enemyLineOfSight;
