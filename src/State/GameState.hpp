@@ -11,6 +11,13 @@ private:
     DungeonGenerator *dungeonGenerator;
     Player *player;
     Enemy *enemy;
+
+    std::vector<Enemy*> enemies;
+    sf::RectangleShape enemySights[10];
+
+    sf::Vector2f playerPosition;
+    sf::Vector2f playerSize;
+
     sf::RectangleShape background;
     sf::RectangleShape enemyLineOfSight;
     sf::Texture playerTexture;
@@ -22,6 +29,7 @@ private:
     void initFonts();
     void initTextures();
     void initPlayers();
+    void initEnemies();
     
 public:
     GameState(sf::RenderWindow* window, std::stack<State*>* states);
