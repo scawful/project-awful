@@ -27,7 +27,7 @@ void Textbox::deleteLastChar () {
 }
 
 Textbox::Textbox (int size, bool selected) {
-    this->setSize(size);
+    this->setCharSize(size);
     this->isSelected = selected;
     if (selected) {
         this->setText("_");

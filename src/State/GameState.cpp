@@ -280,6 +280,12 @@ void GameState::render( sf::RenderTarget* target )
     healthAmount.setSize( sf::Vector2f( this->player->getHealth() * 3, 25 ) );
     healthAmount.setPosition( sf::Vector2f( SCREEN_WIDTH - 315, 15 ) );
     healthAmount.setFillColor( sf::Color::Red );
+    
+    // Testing Text
+    sf::Font arcade;
+    std::string Name = "Ja-corn";
+    arcade.loadFromFile("../assets/ARCADECLASSIC.TTF");
+    
 
     target->draw(healthBar);
     target->draw(healthAmount);

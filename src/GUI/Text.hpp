@@ -10,17 +10,17 @@ private:
 
 public:
     Text () {}
-    Text (string newText, sf::Font newFont, int size, const sf::Color &color, sf::Vector2f newPos);
+    Text (string newText, sf::Font newFont, int size, sf::Color &color, sf::Vector2f newPos);
     ~Text() {}
     
     void setText (string newText);
     std::string getText () {return this->text.str();}
-    void setSize (int newSize) {this->textbox.setCharacterSize(newSize);}
+    void setCharSize (int newSize) {this->textbox.setCharacterSize(newSize);}
     void setFont (sf::Font newFont) {this->textbox.setFont(newFont);}
-    void setTextColor (const sf::Color &newColor) {this->textbox.setColor(newColor);}
+    void setTextColor (sf::Color &newColor) {this->textbox.setColor(newColor);}
     void setPosition (sf::Vector2f newPos);
-    void setBackdrop (const sf::Color &color, sf::Vector2f dimensions);
-    void setBackdropColor (const sf::Color &newColor) {this->backdrop.setFillColor(newColor);}
+    void setBackdrop (sf::Color &color, sf::Vector2f dimensions);
+    void setBackdropColor (sf::Color &newColor) {this->backdrop.setFillColor(newColor);}
     void removeBackdrop () {this->hasBackdrop = false;}
-    void drawText (sf::RenderWindow &window);
+    void drawText (sf::RenderTarget &window);
 };
