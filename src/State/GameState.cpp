@@ -281,13 +281,18 @@ void GameState::render( sf::RenderTarget* target )
     healthAmount.setPosition( sf::Vector2f( SCREEN_WIDTH - 315, 15 ) );
     healthAmount.setFillColor( sf::Color::Red );
     
-    // Testing Text
+    // Testing Text Class
     sf::Font arcade;
     std::string Name = "Ja-corn";
     arcade.loadFromFile("../assets/ARCADECLASSIC.TTF");
-    
+    TextBlock HealthIndicator("HEA LTH", arcade, 25);
+    HealthIndicator.setColor(sf::Color::Black);
+    HealthIndicator.setPosition(sf::Vector2f(SCREEN_WIDTH - 420, 10));
+    HealthIndicator.setOutlineColor(sf::Color::Red);
+    HealthIndicator.setOutlineThickness(1.0);
 
     target->draw(healthBar);
     target->draw(healthAmount);
+    target->draw(HealthIndicator);
 
 }

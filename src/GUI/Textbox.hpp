@@ -5,7 +5,7 @@
 #define ENTER_KEY 13
 #define DELETE_KEY 8
 
-class Textbox : public Text 
+class Textbox : public TextBlock
 {
 private:
     bool isSelected = false;
@@ -22,9 +22,9 @@ public:
     void setLimit (bool TorF) {hasLimit = TorF;}
     void setLimit (bool TorF, int Limit);
     void setSelected (bool TorF);
-    std::string retrieveInput() {return this->getText();}
+    std::string retrieveInput() {return this->getString();}
     void drawTextbox (sf::RenderTarget &window) {
-        this->drawText(window);
+        
     }
     void typedOn (sf::Event input);
 };

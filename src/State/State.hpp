@@ -5,7 +5,6 @@
 #include "../Actor/Player.hpp"
 #include "../Actor/Enemy.hpp"
 #include "../Ancilla/Sword.hpp"
-#include "../GUI/Text.hpp"   // DELETE When Finished (included for testing purposes)
 
 class State 
 {

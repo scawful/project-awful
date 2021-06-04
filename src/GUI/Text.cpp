@@ -1,40 +1,21 @@
 #include "Text.hpp"
 
-Text::Text (string newText, sf::Font newFont, int size, sf::Color &color, sf::Vector2f newPos) {
-    this->textbox.setCharacterSize(size);
-    this->textbox.setColor(color);
-    this->textbox.setFont(newFont);
-    this->textbox.setString(newText);
-    this->text << newText;
-    this->pos = newPos;
+TextBlock::TextBlock (string newText, sf::Font &newFont, int size) {
+    this->setCharacterSize(size);
+    this->setFont(newFont);
+    this->setString(newText);
 }
 
-void Text::setText (string newText) {
-    if (this->text.str().length() > 0) {
-        this->text.str("");
-    }
-    this->text << newText;
-    this->textbox.setString(text.str());
-}
-
-void Text::setPosition (sf::Vector2f newPos) {
-    this->pos = newPos;
-    this->textbox.setPosition(newPos);
-    if (this->hasBackdrop) {
-        this->backdrop.setPosition(newPos);
-    }
-}
-
-void Text::setBackdrop(sf::Color &color, sf::Vector2f dimensions) {
+void TextBlock::setBackdrop(sf::Color color, sf::Vector2f dimensions) {
     this->hasBackdrop = true;
-    this->backdrop.setPosition(this->pos);
+    this->backdrop.setPosition(this->getPosition());
     this->backdrop.setFillColor(color);
     this->backdrop.setSize(dimensions);
 }
 
-void Text::drawText (sf::RenderTarget &window) {
-    window.draw(textbox);
+void TextBlock::drawTextBlock (sf::RenderTarget &window) {
+    window.draw(*this);
     if (this->hasBackdrop) {
-        window.draw(backdrop);
+        window.draw(this->backdrop);
     }
 }
