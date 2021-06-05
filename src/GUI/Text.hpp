@@ -12,11 +12,10 @@ public:
     TextBlock (string newText, sf::Font &newFont, int size);
     ~TextBlock() {}
     
-    void setBackdrop (sf::Color color);
-    void setCustomBackdropDims (sf::Vector2f dimensions) {this->backdrop.setSize(dimensions);}
-    void adjustBackdropDims (sf::Vector2f dimensions);
-    void BackdropColor (sf::Color newColor) {this->backdrop.setFillColor(newColor);}
-    void outputDimensions () {cout << backdropDimensions.x << ", " << backdropDimensions.y;}
+    void setDefaultBackdrop (sf::Color color);
+    void setCustomBackdrop (sf::Color color, sf::Vector2f dimensions);
+    void setAdjustedBackdrop (sf::Color color, sf::Vector2f dimensions);
+    void backdropColor (sf::Color newColor) {this->backdrop.setFillColor(newColor);}
     void removeBackdrop () {this->hasBackdrop = false;}
     void drawTextBlock(sf::RenderTarget &window);
 };

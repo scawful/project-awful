@@ -6,7 +6,7 @@ TextBlock::TextBlock (string newText, sf::Font &newFont, int size) {
     this->setString(newText);
 }
 
-void TextBlock::setBackdrop(sf::Color color) {
+void TextBlock::setDefaultBackdrop(sf::Color color) {
     this->hasBackdrop = true;
 
     float xCord = this->getPosition().x - this->getString().getSize();
@@ -20,7 +20,15 @@ void TextBlock::setBackdrop(sf::Color color) {
     this->backdrop.setFillColor(color);
 }
 
-void TextBlock::adjustBackdropDims (sf::Vector2f dimensions) {
+void TextBlock::setCustomBackdrop (sf::Color color, sf::Vector2f dimensions) {
+    this->hasBackdrop = true;
+    this->backdropDimensions = dimensions;
+    this->backdrop.setSize(this->backdropDimensions);
+}
+
+void TextBlock::setAdjustedBackdrop (sf::Color color, sf::Vector2f dimensions) {
+    this->setDefaultBackdrop(color);
+
     this->backdropDimensions.x += dimensions.x;
     this->backdropDimensions.y += dimensions.y;
     this->backdrop.setSize(this->backdropDimensions);

@@ -287,10 +287,10 @@ void GameState::render( sf::RenderTarget* target )
     arcade.loadFromFile("../assets/ARCADECLASSIC.TTF");
     TextBlock HealthIndicator("HEALTH", arcade, 25);
     HealthIndicator.setColor(sf::Color::Black);
-    HealthIndicator.setPosition(sf::Vector2f(SCREEN_WIDTH - 410, 11));
+    HealthIndicator.setPosition(sf::Vector2f(SCREEN_WIDTH - 410, 10));
     HealthIndicator.setOutlineColor(sf::Color::Red);
-    HealthIndicator.setOutlineThickness(1.25);
-    HealthIndicator.setBackdrop(sf::Color::Black);
+    HealthIndicator.setOutlineThickness(1.0);
+    HealthIndicator.setAdjustedBackdrop(sf::Color::Black, sf::Vector2f(0, 2));
 
     target->draw(healthBar);
     target->draw(healthAmount);
