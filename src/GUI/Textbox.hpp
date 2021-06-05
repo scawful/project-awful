@@ -23,8 +23,6 @@ public:
     void setLimit (bool TorF, int Limit);
     void setSelected (bool TorF);
     std::string retrieveInput() {return this->getString();}
-    void drawTextbox (sf::RenderTarget &window) {
-        
-    }
+    void drawTextbox (sf::RenderTarget &window);
     void typedOn (sf::Event input);
 };
