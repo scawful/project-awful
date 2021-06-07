@@ -283,9 +283,8 @@ void GameState::render( sf::RenderTarget* target )
     
     // Testing Text Class
     sf::Font arcade;
-    std::string Name = "Ja-corn";
     arcade.loadFromFile("../assets/ARCADECLASSIC.TTF");
-    TextBlock HealthIndicator("HEALTH", arcade, 25);
+    TextBlock HealthIndicator("HEA LTH", arcade, 25);
     HealthIndicator.setColor(sf::Color::Black);
     HealthIndicator.setPosition(sf::Vector2f(SCREEN_WIDTH - 410, 10));
     HealthIndicator.setOutlineColor(sf::Color::Red);

@@ -1,11 +1,11 @@
 #include "../core.hpp"
-#include "Text.hpp"
+#include "Button.hpp"
 
 #define ESCAPE_KEY 27
 #define ENTER_KEY 13
 #define DELETE_KEY 8
 
-class Textbox : public TextBlock
+class Textbox : public Button
 {
 private:
     bool isSelected = false;
@@ -17,8 +17,9 @@ private:
 
 public:
     Textbox () {}
-    Textbox (int size, bool selected);
+    Textbox (sf::Font &font, int size, bool selected);
     ~Textbox() {}
+
     void setLimit (bool TorF) {hasLimit = TorF;}
     void setLimit (bool TorF, int Limit);
     void setSelected (bool TorF);

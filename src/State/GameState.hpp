@@ -3,7 +3,7 @@
 
 #include "State.hpp"
 #include "../Dungeon/DungeonGenerator.hpp"
-#include "../GUI/Text.hpp"
+#include "../GUI/Textbox.hpp"
 
 class GameState: public State
 {
