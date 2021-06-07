@@ -5,10 +5,13 @@
 #include "../Dungeon/DungeonGenerator.hpp"
 #include "../GUI/Text.hpp"
 
+enum world { UNDERWORLD, OVERWORLD };
+
 class GameState: public State
 {
 private:
     // Variables
+    World *currentWorld;
     DungeonGenerator *dungeonGenerator;
     Player *player;
     Sword *playerSword;
@@ -30,6 +33,7 @@ private:
     // Functions
     void initFonts();
     void initTextures();
+    void initWorld();
     void initPlayers();
     void initEnemies();
     

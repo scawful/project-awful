@@ -2,9 +2,9 @@
 #define State_hpp
 
 #include "../core.hpp"
-#include "../Actor/Player.hpp"
-#include "../Actor/Enemy.hpp"
-#include "../Ancilla/Sword.hpp"
+#include "../World/World.hpp"
+#include "../World/Underworld.hpp"
+#include "../World/Overworld.hpp"
 
 class State 
 {

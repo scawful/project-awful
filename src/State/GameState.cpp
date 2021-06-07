@@ -35,6 +35,19 @@ void GameState::initTextures()
     floorTileTexture.setRepeated( true );
 }
 
+void GameState::initWorld()
+{
+    currentWorld = new Underworld();
+    
+    delete currentWorld;
+    currentWorld = NULL;
+
+    currentWorld = new Overworld();
+    delete currentWorld;
+    currentWorld = NULL;
+
+}
+
 void GameState::initPlayers() 
 {    
     this->player = new Player( (SCREEN_WIDTH - playerTexture.getSize().x) / 2, (SCREEN_HEIGHT - playerTexture.getSize().y) / 2, this->textures["PLAYER_SHEET"] );
@@ -88,6 +101,7 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : Sta
 {
     this->initFonts();
     this->initTextures();
+    this->initWorld();
     this->initPlayers();
     this->initEnemies();
 
