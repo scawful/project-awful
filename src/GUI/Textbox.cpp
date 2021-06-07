@@ -10,7 +10,7 @@ void Textbox::inputLogic (int CharTyped) {
         }
     }
 
-    this->setString(this->getString() + "_");  // Adds indicator where user is typing
+    this->setString(this->getString() + "_");
 }
 
 // Function for the 'BACKSPACE' Key
@@ -26,8 +26,9 @@ void Textbox::deleteLastChar () {
     this->setString(newText);
 }
 
-Textbox::Textbox (int size, bool selected) {
+Textbox::Textbox (sf::Font &font, int size, bool selected) {
     this->setCharacterSize(size);
+    this->setFont(font);
     this->isSelected = selected;
     if (selected) {
         this->setString("_");
@@ -36,10 +37,10 @@ Textbox::Textbox (int size, bool selected) {
     }
 }
 
-void Textbox::setLimit (bool TorF, int Lim) {
+void Textbox::setLimit (bool TorF, int Limit) {
     this->hasLimit = TorF;
     if (this->hasLimit) {
-        this->limit = Lim;
+        this->limit = Limit;
     }
 }
 
