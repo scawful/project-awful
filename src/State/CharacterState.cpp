@@ -1,5 +1,4 @@
 #include "CharacterState.hpp"
-#include "../GUI/Textbox.hpp"
 
 void CharacterState::initFonts() 
 {

@@ -6,13 +6,17 @@
 class Underworld : public World
 {
 private:
+    DungeonGenerator *dungeonGenerator;
+
     void initTextures();
+    void initPlayers();
     void initEnemies();
 
 public:
-    Underworld();
+    Underworld( Player *playerRef, std::map<std::string, sf::Texture> &textureRef );
     ~Underworld();
 
+    void updateInput(const float& dt);
     void update(const float& dt);
     void render(sf::RenderTarget &target);
 };

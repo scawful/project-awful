@@ -6,13 +6,24 @@
 class Overworld : public World
 {
 private:
+    sf::RectangleShape background;
+    sf::Texture floorTileTexture;
+    sf::Font gameFont;
+
+    std::vector<Enemy*> enemies;
+    sf::RectangleShape enemySights[10];
+
+    void initFonts();
     void initTextures();
+    void initPlayers();
     void initEnemies();
 
 public:
-    Overworld();
+    Overworld( Player *playerRef, std::map<std::string, sf::Texture> &textureRef );
     ~Overworld();
 
+    void updateEnemyAI(const float& dt);
+    void updateInput(const float& dt);
     void update(const float& dt);
     void render(sf::RenderTarget &target);
 
