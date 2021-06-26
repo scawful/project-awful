@@ -2,10 +2,11 @@
 #define Gui_hpp
 
 #include "../core.hpp"
+#include "Text.hpp"
 
 enum button { BTN_IDLE = 0, BTN_HOVER, BTN_ACTIVE };
 
-class Button 
+class Button : public TextBlock 
 {
 private:    
     // current state of the button based on the enum
@@ -28,10 +29,11 @@ private:
     sf::Color activeColor;
     
 public:
-    Button( float x, float y, float width, float height,
+    Button() {}
+    Button( sf::Vector2f position, sf::Vector2f dimensions,
             sf::Font* font, std::string text, unsigned character_size,
             sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
-            sf::Color idle_color, sf::Color hover_color, sf::Color active_color);
+            sf::Color idle_color, sf::Color hover_color, sf::Color active_color, short unsigned buttonState);
     ~Button();
     
     // Accessors

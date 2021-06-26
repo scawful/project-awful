@@ -56,13 +56,6 @@ void MainMenuState::updateInput(const float & dt)
 
 void MainMenuState::update(const float& dt) 
 {
-    // @scawful
-    // temporary shit
-    if ( this->changeState == "GameState" )
-    {
-        this->states->push(new GameState(this->window, this->states));
-    }
-
     // updateMousePositions comes from the parent State class, will be useful for GUI buttons 
     this->updateMousePositions();
     this->updateInput(dt); 
@@ -73,6 +66,10 @@ void MainMenuState::render(sf::RenderTarget* target)
     // if the target for whatever reason is invalid, attempt to render to the whole window
     if (!target)
         target = this->window;
+
+    // reset the view 
+    sf::View menuView( sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT ) );
+    target->setView( menuView );
     
     // draw the white background
     target->draw(this->background);

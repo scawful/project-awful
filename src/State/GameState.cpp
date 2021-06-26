@@ -1,85 +1,96 @@
 #include "GameState.hpp"
 #include "MainMenuState.hpp"
 
-void GameState::initFonts() 
-{    
-        
-}
-
 void GameState::initTextures()
 {
+    // load player spritesheet
+    sf::Image playerSprite;
+    playerSprite.loadFromFile("../assets/test_spritesheet.png");
+    playerSprite.createMaskFromColor(sf::Color(0, 255, 0, 255));
+    this->textures["PLAYER_SHEET"].loadFromImage(playerSprite);
 
+    sf::Image swordSprite;
+    swordSprite.loadFromFile("../assets/sword.png");
+    swordSprite.createMaskFromColor(sf::Color(0, 255, 0, 255));
+    this->textures["SWORD"].loadFromImage( swordSprite );
 }
 
-void GameState::initPlayers() 
+void GameState::initPlayers()
 {
-    // @scawful
-    // loading an image from a file to use as the sprite texture for the player
-    // super temporary, just the begin
-    playerTexture.loadFromFile("../assets/dot.bmp");
-    player = new Player( 100, 100, playerTexture );
+    this->player = new Player( (SCREEN_WIDTH - this->textures["PLAYER_SHEET"].getSize().x) / 2, 
+                            (SCREEN_HEIGHT - this->textures["PLAYER_SHEET"].getSize().y) / 2, 
+                            this->textures["PLAYER_SHEET"] );
+}
+
+void GameState::initWorld()
+{
+    currentWorld = new Overworld( this->player, this->textures );
 }
 
 GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : State(window, states)
 {
-    this->background.setSize(
-         sf::Vector2f
-         (
-              static_cast<float>(this->window->getSize().x),
-              static_cast<float>(this->window->getSize().y)
-         )
-    );
-    this->background.setFillColor(sf::Color::White);
-
-    this->initFonts();
     this->initTextures();
     this->initPlayers();
+    this->initWorld();
+
     cout << "GameState::GameState created\n";
 }
 
 GameState::~GameState() 
 {
-    delete player;
+    //delete this->playerSword;
+
+    delete currentWorld;
+    currentWorld = NULL;
+
+    delete this->player;
+    player = NULL;
+
     cout << "GameState::~GameState destroyed\n";
 }
 
 void GameState::updateInput(const float& dt)
 {
-    // dynamically fetch keyboard input in real time to move the player 
-    // currently inputs based on velocity rather than unit vectors, gonna change that
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        this->player->move(-10.f, 0.f, dt);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        this->player->move(10.f, 0.f, dt);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        this->player->move(0.f, -10.f, dt);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        this->player->move(0.f, 10.f, dt);
+    // sword
+    // swordPosition.x = playerPosition.x + 10;
+    // swordPosition.y = playerPosition.y + 20;
+    // this->playerSword->move( swordPosition.x, swordPosition.y, dt );
+
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Enter ) )
+    {
+        delete currentWorld;
+        currentWorld = NULL;
+
+        currentWorld = new Underworld( this->player, this->textures );
+    }
+
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::RShift ) )
+    {
+        delete currentWorld;
+        currentWorld = NULL;
+
+        currentWorld = new Overworld( this->player, this->textures );
+    }
+
 }
 
 void GameState::update(const float& dt)
 {
-    // @scawful
-    // temporary
-    if ( this->changeState == "MainMenuState" )
-    {
-        this->states->push(new MainMenuState(this->window, this->states));
-    }
-
-    // always make sure to call functions of subclasses within the holding class
-    // in this case we are calling the players update function inside of GameState
-    this->player->update(dt);
+    //this->playerSword->update(dt);
+    
     this->updateInput(dt);
     this->updateKeytime(dt);
+    currentWorld->update(dt);
 }
 
-void GameState::render(sf::RenderTarget* target)
+void GameState::render( sf::RenderTarget* target )
 {
-    if (!target)
+    // tinfoil hat
+    if ( !target )
         target = this->window;
 
-    target->draw(this->background);
+    // sets background to white for regions without objects being rendered over them
+    target->clear( sf::Color::White );
 
-    // the player class uses a reference argument, so we dereference the pointer to the RenderTarget
-    player->render(*target);
+    currentWorld->render(*target);
 }

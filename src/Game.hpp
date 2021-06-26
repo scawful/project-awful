@@ -4,6 +4,7 @@
 #include "core.hpp"
 #include "State/MainMenuState.hpp"
 #include "State/GameState.hpp"
+#include "State/CharacterState.hpp"
 
 class Game 
 {

@@ -2,6 +2,9 @@
 #define State_hpp
 
 #include "../core.hpp"
+#include "../World/World.hpp"
+#include "../World/Underworld.hpp"
+#include "../World/Overworld.hpp"
 
 class State 
 {
@@ -45,7 +48,7 @@ public:
     virtual void update(const float& dt) = 0;
     virtual void render(sf::RenderTarget* target = nullptr) = 0;
 
-    string changeState;
+    string currentState;
 };
 
 #endif /* State_hpp */

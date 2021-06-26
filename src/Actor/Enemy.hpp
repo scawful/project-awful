@@ -1,9 +1,9 @@
-#ifndef Player_hpp
-#define Player_hpp
+#ifndef Enemy_hpp
+#define Enemy_hpp
 
 #include "Actor.hpp"
 
-class Player :
+class Enemy :
     public Actor 
 {
 private:
@@ -15,11 +15,12 @@ private:
     void initComponents();
         
 public:
-    Player(float x, float y, sf::Texture& texture_sheet);
-    virtual ~Player();
-
+    Enemy(float x, float y, sf::Texture& texture_sheet);
+    virtual ~Enemy();
+        
     // Functions
+    sf::Vector2f normalize(const sf::Vector2f& source);
     virtual void update(const float& dt);
 };
 
-#endif /* Player_hpp */
+#endif /* Enemy_hpp */

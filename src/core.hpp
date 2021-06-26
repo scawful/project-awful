@@ -10,6 +10,14 @@
 #include <string>
 #include <stack>
 #include <sstream>
+#include <ctime>
+#include <cstdlib>
+#include <fstream>
+#include <map>
+#include <random>
+#include <cmath>
+#include <chrono>
+
 using namespace std;
 
 #include <SFML/System.hpp>
@@ -18,7 +26,7 @@ using namespace std;
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 
-#define SCREEN_WIDTH  800
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH  1200
+#define SCREEN_HEIGHT 800
 
 #endif
