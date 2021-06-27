@@ -14,14 +14,16 @@ Project Lead
 ------------
 - scawful
 
+Top Contributors
+------------
+- Ja-corn on Ja-cob
+
 Contributors
 ------------
-
 - Bryan Zbojna
 - Yusra Ahmed
 - Samu
 - Artem(353)
-- Ja-corn on Ja-cob
 - zachtepper
 - HeySlamDunk
 - Larry
@@ -35,6 +37,5 @@ Contributors
 - rosescript
 - Hollow
 - Andrew Gascon/ the trickster / stickdinner
-- Masacaai
 - Tameem
 - Von Vic

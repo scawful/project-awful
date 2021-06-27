@@ -11,11 +11,14 @@ private:
     sf::Texture backgroundTexture;
     sf::RectangleShape background;
     sf::Font menu_font;
+
+    std::map<std::string, Button*> buttons;
                 
     // Functions
     void initVariables();
     void initBackground();
     void initFonts();
+    void initButtons();
     
 public:
     MainMenuState(sf::RenderWindow* window, std::stack<State*>* states);
@@ -26,6 +29,8 @@ public:
     void updateInput(const float& dt);
     void updateButtons();
     void update(const float& dt);
+
+    void renderButtons(sf::RenderTarget& target);
     void render(sf::RenderTarget* target = nullptr);
 
 };

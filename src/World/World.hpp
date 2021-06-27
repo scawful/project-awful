@@ -7,6 +7,7 @@
 #include "../Ancilla/Sword.hpp"
 #include "../Dungeon/DungeonGenerator.hpp"
 #include "../GUI/Textbox.hpp"
+#include "../GUI/Button.hpp"
 
 class World
 {
