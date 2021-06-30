@@ -1,6 +1,14 @@
 #include "GameState.hpp"
 #include "MainMenuState.hpp"
 
+void GameState::initFonts()
+{
+    if (!this->gameFont.loadFromFile("../assets/ARCADECLASSIC.TTF")) 
+    {
+        std::cout << "Error couldn't load game font" << "\n";
+    }   
+}
+
 void GameState::initTextures()
 {
     // load player spritesheet
@@ -27,11 +35,24 @@ void GameState::initWorld()
     currentWorld = new Overworld( this->player, this->textures );
 }
 
+void GameState::initButtons()
+{
+    this->buttons["MAIN_MENU_BTN"] = new Button(
+                        sf::Vector2f( 10, 10 ),
+                        sf::Vector2f( 250.f, 50.f ),
+                        &this->gameFont, "Return to Main Menu", 24,
+                        sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
+                        sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
+
+}
+
 GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : State(window, states)
 {
+    this->initFonts();
     this->initTextures();
     this->initPlayers();
     this->initWorld();
+    this->initButtons();
 
     cout << "GameState::GameState created\n";
 }
@@ -39,6 +60,12 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : Sta
 GameState::~GameState() 
 {
     //delete this->playerSword;
+
+    auto it = this->buttons.begin();
+    for ( it = this->buttons.begin(); it != this->buttons.end(); ++it ) 
+    {
+        delete it->second;
+    }
 
     delete currentWorld;
     currentWorld = NULL;
@@ -74,13 +101,38 @@ void GameState::updateInput(const float& dt)
 
 }
 
+void GameState::updateButtons()
+{
+    for (auto &it : this->buttons) 
+    {
+        it.second->update(this->mousePosView);
+    }
+    
+    if ( this->buttons["MAIN_MENU_BTN"]->isPressed() ) 
+    {
+        this->endState();
+    }
+
+    // maybe put a pause menu button in here ?
+
+}
+
 void GameState::update(const float& dt)
 {
     //this->playerSword->update(dt);
-    
+    this->updateMousePositions();
     this->updateInput(dt);
+    this->updateButtons();
     this->updateKeytime(dt);
     currentWorld->update(dt);
+}
+
+void GameState::renderButtons( sf::RenderTarget& target )
+{
+    for ( auto &it : this->buttons )
+    {
+        it.second->render(target);
+    }
 }
 
 void GameState::render( sf::RenderTarget* target )
@@ -93,4 +145,6 @@ void GameState::render( sf::RenderTarget* target )
     target->clear( sf::Color::White );
 
     currentWorld->render(*target);
+    
+    this->renderButtons(*target);
 }

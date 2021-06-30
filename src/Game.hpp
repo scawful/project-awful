@@ -3,6 +3,7 @@
 
 #include "core.hpp"
 #include "State/MainMenuState.hpp"
+#include "State/SettingsState.hpp"
 #include "State/GameState.hpp"
 #include "State/CharacterState.hpp"
 

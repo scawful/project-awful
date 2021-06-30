@@ -1,5 +1,6 @@
 #include "MainMenuState.hpp"
 #include "GameState.hpp"
+#include "SettingsState.hpp"
 
 // Initializer functions
 void MainMenuState::initVariables() 
@@ -46,6 +47,14 @@ void MainMenuState::initButtons()
                         // idle                 hover                      active
                         // 0xRRGGBBAA 
                         // RRR, GGG, BBB, AAA
+
+    this->buttons["SETTINGS_STATE_BTN"] = new Button(
+                        sf::Vector2f((SCREEN_WIDTH - 250.f) /2, ((SCREEN_HEIGHT - 75.f) / 2) + 125.f ),
+                        sf::Vector2f(250.f, 75.f),
+                        &this->menu_font, "Settings", 30,
+                        sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
+                        sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
+    
 }
 
 MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* states)
@@ -87,6 +96,11 @@ void MainMenuState::updateButtons()
     if ( this->buttons["GAME_STATE_BTN"]->isPressed() ) 
     {
         this->states->push(new GameState(this->window, this->states));
+    }
+
+    if ( this->buttons["SETTINGS_STATE_BTN"]->isPressed() ) 
+    {
+        this->states->push(new SettingsState(this->window, this->states));
     }
 }
 
@@ -132,14 +146,6 @@ void MainMenuState::render(sf::RenderTarget* target)
     title.setPosition( (SCREEN_WIDTH - title.getLocalBounds().width) / 2 , 30);
     target->draw(title);
 
-    sf::Text prompt;
-    prompt.setString("Press Space to begin");
-    prompt.setFillColor(sf::Color::Black);
-    prompt.setFont(this->menu_font);
-    prompt.setCharacterSize(28);
-    prompt.setPosition( (SCREEN_WIDTH - prompt.getLocalBounds().width) / 2 , 600);
-    target->draw(prompt);
-    
     // Positional coordinates mouse tracing
     sf::Text mouseText;
     mouseText.setFillColor(sf::Color::Black);

@@ -85,29 +85,6 @@ void Game::updateSFMLEvents()
 
         if ( this->sfEvent.type == sf::Event::KeyPressed )
         {
-            // @scawful
-            // temporary state changing code
-            // a little more memory friendly now
-            if ( this->sfEvent.key.code == sf::Keyboard::Space )
-            {
-                if ( this->states.top()->currentState == "MainMenuState")
-                {
-                    this->states.top()->endState();
-                    delete this->states.top();
-                    this->states.pop();
-                    this->states.push(new GameState(this->window, &this->states));
-                    this->states.top()->currentState = "GameState";
-                }
-                else if ( this->states.top()->currentState == "GameState" )
-                {
-                    this->states.top()->endState();
-                    delete this->states.top();
-                    this->states.pop();
-                    this->states.push(new MainMenuState(this->window, &this->states));
-                    this->states.top()->currentState = "MainMenuState";
-                }
-            }
-
             if ( this->sfEvent.key.code == sf::Keyboard::Escape )
             {
                 this->window->close();
