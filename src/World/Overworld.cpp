@@ -219,15 +219,10 @@ void Overworld::render(sf::RenderTarget &target)
     healthAmount.setSize( sf::Vector2f( this->player->getHealth() * 3, 25 ) );
     healthAmount.setPosition( sf::Vector2f( SCREEN_WIDTH - 315, 15 ) );
     healthAmount.setFillColor( sf::Color::Red );
-    
-    TextBlock HealthIndicator("HEA LTH", this->gameFont, 25);
-    HealthIndicator.setFillColor(sf::Color::Black);
-    HealthIndicator.setPosition(sf::Vector2f(SCREEN_WIDTH - 410, 10));
-    HealthIndicator.setOutlineColor(sf::Color::Red);
-    HealthIndicator.setOutlineThickness(1.0);
-    HealthIndicator.setAdjustedBackdrop(sf::Color::Black, sf::Vector2f(0, 2));
 
+    TextBlock HealthIndicator(sf::Vector2f(SCREEN_WIDTH - 430, 8), "HEALTH", gameFont, sf::Color::Red, 30);
+    
+    HealthIndicator.render(target);
     target.draw(healthBar);
     target.draw(healthAmount);
-    HealthIndicator.drawTextBlock(target);
 }

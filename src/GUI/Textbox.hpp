@@ -5,7 +5,7 @@
 #define ENTER_KEY 13
 #define DELETE_KEY 8
 
-class Textbox : public Button
+class Textbox : public Button 
 {
 private:
     bool isSelected = false;
@@ -23,7 +23,7 @@ public:
     void setLimit (bool TorF) {hasLimit = TorF;}
     void setLimit (bool TorF, int Limit);
     void setSelected (bool TorF);
-    std::string retrieveInput() {return this->getString();}
+    std::string retrieveInput() {return this->getText();}
     void drawTextbox (sf::RenderTarget &window);
     void typedOn (sf::Event input);
 };

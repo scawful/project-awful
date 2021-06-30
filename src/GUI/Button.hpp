@@ -6,7 +6,7 @@
 
 enum button { BTN_IDLE = 0, BTN_HOVER, BTN_ACTIVE };
 
-class Button : public TextBlock 
+class Button : public TextBlock
 {
 private:    
     // current state of the button based on the enum
@@ -18,7 +18,7 @@ private:
     // used for putting text on the button
     sf::Font* font;
     sf::Text text;
-    
+
     // fun colors for animation
     sf::Color textIdleColor;
     sf::Color textHoverColor;
