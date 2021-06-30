@@ -13,6 +13,7 @@ private:
         
     std::map<std::string, Button*> buttons;
     std::map<std::string, DropDown*> dropDownLists;
+    std::map<std::string, int>* supportedKeys;
             
     // Functions
     void initVariables();

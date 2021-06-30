@@ -28,17 +28,18 @@ void SettingsState::initFonts()
 
 void SettingsState::initKeybinds()
 {
-    // std::fstream ifs("gamestate_binds.ini");
+    std::fstream ifs("gamestate_binds.ini");
 
-    // if ( ifs.is_open() )
-    // {
-    //     std::string key = "";
-    //     std::string key2 = "";
-    //     while (ifs >> key >> key2) {
-    //         this->keybinds[key] = this->supportedKeys->at(key2);
-    //     }
-    // }
-    // ifs.close();
+    if ( ifs.is_open() )
+    {
+        std::string key = "";
+        std::string key2 = "";
+        while (ifs >> key >> key2) {
+            this->keybinds[key] = this->supportedKeys->at(key2);
+        }
+    }
+    
+    ifs.close();
 }
 
 void SettingsState::initGui() 
@@ -52,7 +53,7 @@ void SettingsState::initGui()
                             sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
     
     std::string li[] = { "1920x1080", "800x600", "640x480"};
-    
+
     this->dropDownLists["RESOLUTION"] = new DropDown(sf::Vector2f((SCREEN_WIDTH - 250.f) / 2, 150), sf::Vector2f(250.f, 75.f), menu_font, li, 3);
 }
 
