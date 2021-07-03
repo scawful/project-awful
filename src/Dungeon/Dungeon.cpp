@@ -36,12 +36,12 @@ void Dungeon::Room::setDungeon( Room *dungeon )
     this->dungeon = dungeon;
 }
 
-void Dungeon::Room::setLeftChild(Room *leftChild)
+void Dungeon::Room::setLeftChild( Room *leftChild )
 {
     this->leftChild = leftChild;
 }
 
-void Dungeon::Room::setRightChild(Room *rightChild)
+void Dungeon::Room::setRightChild( Room *rightChild )
 {
     this->rightChild = rightChild;
 }

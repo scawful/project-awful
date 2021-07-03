@@ -38,7 +38,7 @@ void SettingsState::initKeybinds()
             this->keybinds[key] = this->supportedKeys->at(key2);
         }
     }
-    
+
     ifs.close();
 }
 
@@ -46,13 +46,13 @@ void SettingsState::initGui()
 {
 
     this->buttons["EXIT_STATE"] = new Button(
-                            sf::Vector2f((SCREEN_WIDTH - 250.f) / 2, (SCREEN_HEIGHT - 75.f) / 2), 
+                            sf::Vector2f( (SCREEN_WIDTH - 250.f) / 2, ((SCREEN_HEIGHT - 75.f) / 2) + 250.f ), 
                             sf::Vector2f(250.f, 75.f),
                             &this->menu_font, "Quit", 30,
                             sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
                             sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
     
-    std::string li[] = { "1920x1080", "800x600", "640x480"};
+    std::string li[] = { "1920x1080", "800x600", "640x480" };
 
     this->dropDownLists["RESOLUTION"] = new DropDown(sf::Vector2f((SCREEN_WIDTH - 250.f) / 2, 150), sf::Vector2f(250.f, 75.f), menu_font, li, 3);
 }
@@ -83,7 +83,8 @@ SettingsState::~SettingsState()
 }
 
 // Functions
-void SettingsState::updateInput(const float & dt) {
+void SettingsState::updateInput(const float & dt) 
+{
 
 }
 

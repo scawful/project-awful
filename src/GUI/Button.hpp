@@ -1,5 +1,5 @@
-#ifndef Gui_hpp
-#define Gui_hpp
+#ifndef Button_hpp
+#define Button_hpp
 
 #include "../core.hpp"
 #include "Text.hpp"
