@@ -34,15 +34,11 @@ public:
             sf::Font* font, std::string text, unsigned character_size,
             sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
             sf::Color idle_color, sf::Color hover_color, sf::Color active_color);
-    ~Button();
+    ~Button() {};
     
     // Accessors
     const bool isPressed() const;
-    const std::string getText() const;
-    
-    // Modifiers
-    void setText(const std::string text);
-    
+
     // Functions
     void update(const sf::Vector2f& mousePos);
     void render(sf::RenderTarget& target);

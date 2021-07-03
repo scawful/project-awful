@@ -17,17 +17,19 @@ private:
     sf::Vector2f backdropDimensions;
 
 public:
-    TextBlock () {}
-    TextBlock (sf::Vector2f position, string newText, sf::Font &newFont, const sf::Color newTextColor, unsigned int charSize);
-    TextBlock (sf::Vector2f position, string newText, sf::Font &newFont, const sf::Color newTextColor, unsigned int charSize, sf::Color backdropColor, sf::Vector2f dimensions);
+    TextBlock() {};
+    TextBlock (sf::Vector2f position, string newText, sf::Font &newFont, const sf::Color newTextColor, int charSize);
+    TextBlock (sf::Vector2f position, string newText, sf::Font &newFont, const sf::Color newTextColor, int charSize, sf::Color backdropColor, sf::Vector2f dimensions);
     ~TextBlock() {}
     
     // Accessors
     const string getText() const;
 
-    // Backdrop Operators
-    void setCustomBackdrop (sf::Vector2f dimensions);
-    void setBackdropColor (sf::Color newColor) {this->backdrop.setFillColor(newColor);}
+    // Modifiers
+    void setText(const string newText);
+    void setTextColor(sf::Color newColor);
+    void setBackdrop (sf::Vector2f dimensions, sf::Color newColor, sf::Vector2f position);
+    void setBackdropColor (sf::Color newColor);
     void removeBackdrop () {this->hasBackdrop = false;}
 
     // Functions

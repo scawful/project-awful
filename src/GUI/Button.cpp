@@ -29,10 +29,6 @@ Button::Button( sf::Vector2f position, sf::Vector2f dimensions,
 }
 
 
-Button::~Button() {
-    
-}
-
 const bool Button::isPressed() const 
 {
     if ( this->buttonState == BTN_ACTIVE )
@@ -43,15 +39,6 @@ const bool Button::isPressed() const
     return false;
 }
 
-const std::string Button::getText() const 
-{
-    return this->text.getString();
-}
-
-void Button::setText(const std::string text) 
-{
-    this->text.setString( text );    
-}
 
 void Button::update(const sf::Vector2f& mousePos) 
 {
@@ -88,6 +75,7 @@ void Button::update(const sf::Vector2f& mousePos)
             break;
     }    
 }
+
 
 void Button::render(sf::RenderTarget& target) 
 {

@@ -20,11 +20,18 @@
     - DungeonGenerator
   - **GUI** : Classes for the GUI assets
     - Button
+    - Text
     - Textbox
     - PauseMenu
+    - DropDown
   - **State** : State machine and implementation of states
     - CharacterState
     - GameState
     - MainMenuState
+    - SettingsState
     - State
+  **World** : Classes for the different levels of the game
+    - Overworld
+    - Underworld
+    - World
 - **test** : experimental 

@@ -8,7 +8,6 @@
 class Textbox : public Button 
 {
 private:
-    bool isSelected = false;
     bool hasLimit = false;
     int limit;
 
@@ -17,13 +16,12 @@ private:
 
 public:
     Textbox () {}
-    Textbox (sf::Font &font, int size, bool selected);
+    Textbox (sf::Font &font, int size);
     ~Textbox() {}
 
-    void setLimit (bool TorF) {hasLimit = TorF;}
+    // Modifiers
     void setLimit (bool TorF, int Limit);
-    void setSelected (bool TorF);
-    std::string retrieveInput() {return this->getText();}
-    void drawTextbox (sf::RenderTarget &window);
-    void typedOn (sf::Event input);
+
+    // Functions
+    void update (sf::Event input);
 };
