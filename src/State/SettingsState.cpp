@@ -48,7 +48,7 @@ void SettingsState::initGui()
     this->buttons["EXIT_STATE"] = new Button(
                             sf::Vector2f( (SCREEN_WIDTH - 250.f) / 2, ((SCREEN_HEIGHT - 75.f) / 2) + 250.f ), 
                             sf::Vector2f(250.f, 75.f),
-                            &this->menu_font, "Quit", 30,
+                            &this->menu_font, "Quit", 30, true,
                             sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
                             sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
     

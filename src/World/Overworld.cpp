@@ -220,7 +220,7 @@ void Overworld::render(sf::RenderTarget &target)
     healthAmount.setPosition( sf::Vector2f( SCREEN_WIDTH - 315, 15 ) );
     healthAmount.setFillColor( sf::Color::Red );
 
-    TextBlock HealthIndicator(sf::Vector2f(SCREEN_WIDTH - 430, 8), "health", gameFont, sf::Color::Red, 30);
+    TextBlock HealthIndicator("health", &gameFont, sf::Color::Red, 30, true, sf::Vector2f(SCREEN_WIDTH - 430, 8));
     
     HealthIndicator.render(target);
     target.draw(healthBar);

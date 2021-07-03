@@ -15,9 +15,11 @@ public:
 
     // Constructors & Destructor
     TextBlock () {};
-    TextBlock (sf::Vector2f position, string newText, sf::Font &newFont, const sf::Color newTextColor, int charSize);
-    TextBlock (sf::Vector2f position, string newText, sf::Font &newFont, const sf::Color newTextColor, int charSize, 
-            sf::Color backdropColor, sf::Vector2f dimensions);
+    TextBlock (string newText, sf::Font *newFont, const sf::Color newTextColor, int charSize, bool hasBorder);
+    TextBlock (string newText, sf::Font *newFont, const sf::Color newTextColor, int charSize, bool hasBorder, 
+            sf::Vector2f position);
+    TextBlock (string newText, sf::Font *newFont, const sf::Color newTextColor, int charSize, bool hasBorder, 
+            sf::Vector2f position, sf::Color backdropColor, sf::Vector2f dimensions);
     ~TextBlock () {}
 
     // Accessors

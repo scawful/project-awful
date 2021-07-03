@@ -40,7 +40,7 @@ void GameState::initButtons()
     this->buttons["MAIN_MENU_BTN"] = new Button(
                         sf::Vector2f( 10, 10 ),
                         sf::Vector2f( 250.f, 50.f ),
-                        &this->gameFont, "Return to Main Menu", 24,
+                        &this->gameFont, "Return to Main Menu", 24, true,
                         sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
                         sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
 

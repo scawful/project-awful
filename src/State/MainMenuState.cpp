@@ -1,6 +1,7 @@
 #include "MainMenuState.hpp"
 #include "GameState.hpp"
 #include "SettingsState.hpp"
+#include "../GUI/Text.hpp"
 
 // Initializer functions
 void MainMenuState::initVariables() 
@@ -41,7 +42,7 @@ void MainMenuState::initButtons()
     this->buttons["GAME_STATE_BTN"] = new Button(
                         sf::Vector2f((SCREEN_WIDTH - 250.f) / 2, (SCREEN_HEIGHT - 75.f) / 2), // position
                         sf::Vector2f(250.f, 75.f), // size 
-                        &this->menu_font, "New Game", 30,
+                        &this->menu_font, "New Game", 30, true,
                         sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
                         sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
                         // idle                 hover                      active
@@ -51,7 +52,15 @@ void MainMenuState::initButtons()
     this->buttons["SETTINGS_STATE_BTN"] = new Button(
                         sf::Vector2f((SCREEN_WIDTH - 250.f) /2, ((SCREEN_HEIGHT - 75.f) / 2) + 125.f ),
                         sf::Vector2f(250.f, 75.f),
-                        &this->menu_font, "Settings", 30,
+                        &this->menu_font, "Settings", 30, true, 
+                        sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
+                        sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
+    
+    
+    this->buttons["QUIT_GAME_BTN"] = new Button(
+                        sf::Vector2f((SCREEN_WIDTH - 250.f) / 2, ((SCREEN_HEIGHT - 75.f) / 2) + 250.f),
+                        sf::Vector2f(250.f, 75.f),
+                        &this->menu_font, "Quit Game", 30, true, 
                         sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
                         sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
     
@@ -102,6 +111,11 @@ void MainMenuState::updateButtons()
     {
         this->states->push(new SettingsState(this->window, this->states));
     }
+    
+    if ( this->buttons["QUIT_GAME_BTN"]->isPressed() )
+    {
+        this->endState();
+    }
 }
 
 void MainMenuState::update(const float& dt) 
@@ -138,20 +152,19 @@ void MainMenuState::render(sf::RenderTarget* target)
     this->renderButtons(*target);
         
     // Create the text for the title
-    sf::Text title;
-    title.setString("Project Awful");
-    title.setFillColor(sf::Color::Black);
-    title.setFont(this->menu_font);
-    title.setCharacterSize(60);
+    
+    TextBlock title("Project Awful", &menu_font, sf::Color::Black, 60, true);
     title.setPosition( (SCREEN_WIDTH - title.getLocalBounds().width) / 2 , 30);
-    target->draw(title);
+    title.render(*target);
 
     // Positional coordinates mouse tracing
-    sf::Text mouseText;
-    mouseText.setFillColor(sf::Color::Black);
+    TextBlock mouseText ("", &menu_font, sf::Color::Black, 12, false);
     mouseText.setPosition(this->mousePosView.x, this->mousePosView.y - 20);
+    /*
+    mouseText.setFillColor(sf::Color::Black);
     mouseText.setFont(this->menu_font);
     mouseText.setCharacterSize(12);
+    */
 
     stringstream ss;
     ss << this->mousePosView.x << " " << this->mousePosView.y;

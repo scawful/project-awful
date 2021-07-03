@@ -6,7 +6,7 @@ DropDown::DropDown(sf::Vector2f position, sf::Vector2f size, sf::Font& font, std
     this->activeElement = new Button(
                     sf::Vector2f( position.x, position.y ), 
                     sf::Vector2f( size.x, size.y ),
-                    &this->font, list[default_index], 24,
+                    &this->font, list[default_index], 24, true,
                     sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
                     sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
 
@@ -17,7 +17,7 @@ DropDown::DropDown(sf::Vector2f position, sf::Vector2f size, sf::Font& font, std
             (
                 sf::Vector2f( position.x, position.y + ( ( i + 1 ) * size.y ) ), 
                 sf::Vector2f( size.x, size.y ),
-                &this->font, list[i], 24,
+                &this->font, list[i], 24, true, 
                 sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
                 sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3)
             )

@@ -24,7 +24,7 @@ private:
 public:
     Button() {}
     Button( sf::Vector2f position, sf::Vector2f dimensions,
-            sf::Font* font, std::string text, unsigned character_size,
+            sf::Font* font, std::string text, unsigned character_size, bool hasBorder, 
             sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
             sf::Color idle_color, sf::Color hover_color, sf::Color active_color);
     ~Button() {};
