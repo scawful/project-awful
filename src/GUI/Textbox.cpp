@@ -8,23 +8,23 @@ Textbox::Textbox (sf::Font &font, int size) {
 // Logic for when a person types something (exceptions are: 'ESC', 'BACKSPACE', and 'ENTER' Keys)
 void Textbox::inputLogic (int CharTyped) {
     if (CharTyped != ENTER_KEY && CharTyped != ESCAPE_KEY && CharTyped != DELETE_KEY) {
-        this->setString(this->getText() + static_cast<char>(CharTyped));
+        this->setString(this->getString() + static_cast<char>(CharTyped));
     } else if (CharTyped == DELETE_KEY) {
-        if (this->getText().size() > 0) {
+        if (this->getString().toUtf8().size() > 0) {
             deleteLastChar();
         }
     } else if (CharTyped == ESCAPE_KEY) {
 
     }
 
-    this->setString(this->getText() + "_");
+    this->setString(this->getString() + "_");
 }
 
 
 // Function for the 'BACKSPACE' Key
 void Textbox::deleteLastChar () {
     // Transfer each character except the last one into a new string
-    string origText = this->getText();
+    string origText = this->getString();
     string newText = "";
     for (int i = 0; i < origText.length() - 1; i++) {
         newText += origText.at(i);

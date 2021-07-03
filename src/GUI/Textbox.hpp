@@ -1,3 +1,6 @@
+#ifndef Textbox_hpp
+#define Textbox_hpp
+
 #include "../core.hpp"
 #include "Button.hpp"
 
@@ -25,3 +28,5 @@ public:
     // Functions
     void update (sf::Event input);
 };
+
+#endif

@@ -10,10 +10,6 @@ TextBlock::TextBlock (sf::Vector2f position, string newText, sf::Font &newFont, 
     this->setOutlineThickness(1);
     this->setFont(newFont);
     this->setString(newText);
-
-    // Update Private variables;
-    this->font = newFont;
-    this->textColor = newTextColor;
 }
 
 
@@ -31,39 +27,23 @@ TextBlock::TextBlock (sf::Vector2f position, string newText, sf::Font &newFont, 
     this->backdrop.setPosition(position);
     this->backdrop.setFillColor(newBackdropColor);
 
-    // Update Private Variables
-    this->font = newFont;
-    this->textColor = newTextColor;
+    // Update Private Variable
     this->hasBackdrop = true;
-    this->backdropColor = newBackdropColor;
-    this->backdropDimensions = dimensions;
 }
 
 
-const string TextBlock::getText() const {
-    return this->getString();
+const bool TextBlock::checkBackdrop () const {
+    return this->hasBackdrop;
 }
 
 
-void TextBlock::setText(const string newText) {
-    this->setString(newText);
-}
-
-
-void TextBlock::setBackdrop (sf::Vector2f dimensions, sf::Color newColor, sf::Vector2f position) {
+void TextBlock::setBackdrop (sf::Vector2f dimensions, sf::Color newColor, sf::Vector2f position, sf::Color border, float thickness) {
     this->hasBackdrop = true;
     this->backdrop.setPosition(position);
-    this->backdropDimensions = dimensions;
-    this->backdrop.setSize(this->backdropDimensions);
-
-    this->backdropColor = newColor;
+    this->backdrop.setSize(dimensions);
     this->backdrop.setFillColor(newColor);
-}
-
-
-void TextBlock::setBackdropColor (sf::Color newColor) {
-    this->backdropColor = newColor;
-    this->backdrop.setFillColor(newColor);
+    this->backdrop.setOutlineColor(border);
+    this->backdrop.setOutlineThickness(thickness);
 }
 
 

@@ -78,7 +78,7 @@ void DropDown::update(const sf::Vector2f &mousePos, const float& dt)
             if (i->isPressed() && this->getKeytime())
             {
                 this->showList = false;
-                this->activeElement->setText(i->getText());
+                this->activeElement->setString(i->getString());
             }
         }
     }

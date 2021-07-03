@@ -11,13 +11,6 @@ class Button : public TextBlock
 private:    
     // current state of the button based on the enum
     short unsigned buttonState;
-    
-    // shape will be the actual construct that makes up the button
-    sf::RectangleShape shape;
-    
-    // used for putting text on the button
-    sf::Font* font;
-    sf::Text text;
 
     // fun colors for animation
     sf::Color textIdleColor;
@@ -38,6 +31,10 @@ public:
     
     // Accessors
     const bool isPressed() const;
+
+    // Modifiers
+    void assignColors (sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color, 
+            sf::Color idle_color, sf::Color hover_color, sf::Color active_color);
 
     // Functions
     void update(const sf::Vector2f& mousePos);
