@@ -1,9 +1,30 @@
 #include "Textbox.hpp"
 
 // Constructor
-Textbox::Textbox (sf::Font &font, int size) {
+Textbox::Textbox (sf::Vector2f position, sf::Vector2f dimensions,
+            sf::Font* font, unsigned character_size, unsigned character_limit,
+            sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
+            sf::Color idle_color, sf::Color hover_color, sf::Color active_color, string dfltText = "") {
     
+    // Apply Backdrop Styling
+    this->assignColors(text_idle_color, text_hover_color, text_active_color,
+            idle_color, hover_color, active_color);
+    this->backdrop.setPosition(position);
+    this->backdrop.setSize(dimensions);
+
+
+    // Apply Text Styling
+    this->setString(dfltText);
+    this->setFont(*font);
+    this->setCharacterSize(character_size);
+    this->setPosition(sf::Vector2f(position.x + ((backdrop.getGlobalBounds().width - (character_size * character_limit)) / 2) - 1,
+            position.y + ((this->backdrop.getGlobalBounds().height - character_size) / 2) - 7));
+
+    // Update Class Variables
+    this->limit = character_limit;
 }
+
+
 
 // Logic for when a person types something (exceptions are: 'ESC', 'BACKSPACE', and 'ENTER' Keys)
 void Textbox::inputLogic (int CharTyped) {
@@ -21,6 +42,7 @@ void Textbox::inputLogic (int CharTyped) {
 }
 
 
+
 // Function for the 'BACKSPACE' Key
 void Textbox::deleteLastChar () {
     // Transfer each character except the last one into a new string
@@ -35,26 +57,28 @@ void Textbox::deleteLastChar () {
 }
 
 
-void Textbox::setLimit (bool TorF, int Limit) {
-    this->hasLimit = TorF;
-    if (this->hasLimit) {
-        this->limit = Limit;
-    }
+
+void Textbox::setLimit (unsigned character_limit) {
+    this->limit = character_limit;
 }
+
 
 
 void Textbox::update (sf::Event input) {
     int CharType = input.text.unicode;
     if (CharType < 128) {
-        if (this->hasLimit) {
-            if (this->getString().getSize() <= this->limit) {
+        if (this->getString().getSize() <= this->limit) {
                 inputLogic(CharType);
-            } else if (this->getString().getSize() > this->limit && CharType == DELETE_KEY) {
-                deleteLastChar();
-            }
-        } else {
-            inputLogic(CharType);
+        } else if (this->getString().getSize() > this->limit && CharType == DELETE_KEY) {
+            deleteLastChar();
         }
     }
+}
+
+
+
+void Textbox::render (sf::RenderTarget& target) {
+    target.draw(this->backdrop);
+    target.draw(*this);
 }
 

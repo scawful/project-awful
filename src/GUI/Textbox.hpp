@@ -11,22 +11,25 @@
 class Textbox : public Button 
 {
 private:
-    bool hasLimit = false;
-    int limit;
+    unsigned int limit;
 
     void inputLogic (int CharTyped);
     void deleteLastChar ();
 
 public:
     Textbox () {}
-    Textbox (sf::Font &font, int size);
+    Textbox (sf::Vector2f position, sf::Vector2f dimensions,
+            sf::Font* font, unsigned character_size, unsigned character_limit,
+            sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
+            sf::Color idle_color, sf::Color hover_color, sf::Color active_color, string dfltText);
     ~Textbox() {}
 
     // Modifiers
-    void setLimit (bool TorF, int Limit);
+    void setLimit (unsigned character_limit);
 
     // Functions
     void update (sf::Event input);
+    void render (sf::RenderTarget& target);
 };
 
 #endif
