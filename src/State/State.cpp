@@ -34,13 +34,7 @@ const bool State::getKeytime()
 // Functions 
 void State::endState() 
 {
-    this->quit = true;
-    {
-        sf::Clock t1;
-        while (t1.getElapsedTime().asMilliseconds() <= 150.f) {
-            continue;
-        }
-    }   
+    this->quit = true; 
 }
 
 void State::pauseState() 

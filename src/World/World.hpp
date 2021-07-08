@@ -9,6 +9,7 @@
 #include "../GUI/Textbox.hpp"
 #include "../GUI/DropDown.hpp"
 #include "../GUI/Button.hpp"
+#include "../GUI/Text.hpp"
 
 
 class World

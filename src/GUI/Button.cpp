@@ -24,6 +24,13 @@ Button::Button( sf::Vector2f position, sf::Vector2f dimensions,
 }
 
 
+Button::~Button () {
+    while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        continue;
+    }
+}
+
+
 const bool Button::isPressed() const 
 {
     if ( this->buttonState == BTN_ACTIVE )
@@ -44,6 +51,11 @@ void Button::assignColors (sf::Color text_idle_color, sf::Color text_hover_color
     this->idleColor = idle_color;
     this->hoverColor = hover_color;
     this->activeColor = active_color;
+}
+
+
+void Button::changeColors (sf::Color newColor) {
+    this->backdrop.setFillColor(newColor);
 }
 
 

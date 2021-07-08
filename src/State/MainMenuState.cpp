@@ -1,7 +1,6 @@
 #include "MainMenuState.hpp"
 #include "GameState.hpp"
 #include "SettingsState.hpp"
-#include "../GUI/Text.hpp"
 
 // Initializer functions
 void MainMenuState::initVariables() 

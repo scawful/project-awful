@@ -27,7 +27,7 @@ public:
             sf::Font* font, std::string text, unsigned character_size, bool hasBorder, 
             sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
             sf::Color idle_color, sf::Color hover_color, sf::Color active_color);
-    ~Button() {};
+    ~Button();
     
     // Accessors
     const bool isPressed() const;
@@ -35,6 +35,7 @@ public:
     // Modifiers
     void assignColors (sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color, 
             sf::Color idle_color, sf::Color hover_color, sf::Color active_color);
+    void changeColors (sf::Color newColor);
 
     // Functions
     void update(const sf::Vector2f& mousePos);
