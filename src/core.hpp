@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <map>
+#include <list>
 #include <random>
 #include <cmath>
 #include <chrono>

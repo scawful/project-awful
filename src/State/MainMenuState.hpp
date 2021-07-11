@@ -13,12 +13,14 @@ private:
     sf::Font menu_font;
 
     std::map<std::string, Button*> buttons;
+    std::map<std::string, Textbox*> textboxes;
                 
     // Functions
     void initVariables();
     void initBackground();
     void initFonts();
     void initButtons();
+    void initTextboxes();
     
 public:
     MainMenuState(sf::RenderWindow* window, std::stack<State*>* states);
@@ -28,9 +30,11 @@ public:
     void getQuit();
     void updateInput(const float& dt);
     void updateButtons();
+    void updateTextboxes();
     void update(const float& dt);
 
     void renderButtons(sf::RenderTarget& target);
+    void renderTextbox(sf::RenderTarget& target);
     void render(sf::RenderTarget* target = nullptr);
 
 };

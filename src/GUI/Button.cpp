@@ -5,6 +5,9 @@ Button::Button( sf::Vector2f position, sf::Vector2f dimensions,
             sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
             sf::Color idle_color, sf::Color hover_color, sf::Color active_color)
 {
+    while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        continue;
+    }
     this->buttonState = BTN_IDLE;
     
     this->setBackdrop(sf::Vector2f(dimensions.x, dimensions.y), idle_color, sf::Vector2f(position.x, position.y), active_color, 1);
@@ -15,8 +18,8 @@ Button::Button( sf::Vector2f position, sf::Vector2f dimensions,
     this->setPosition(position.x + ((dimensions.x - this->getGlobalBounds().width) / 2 - 1),
             position.y + ((dimensions.y - character_size) / 2) - 5);
     if (hasBorder) {
+        this->backdrop.setOutlineColor(sf::Color::Black);
         this->setOutlineColor(sf::Color::Black);
-        this->setOutlineThickness(1);
     }
 
     // Update Private Variables
@@ -42,6 +45,23 @@ const bool Button::isPressed() const
 }
 
 
+vector <sf::Color> Button::getStateColors (int state) {
+    vector <sf::Color> colors;
+    if (state == BTN_IDLE) {
+        colors.push_back(this->textIdleColor);
+        colors.push_back(this->idleColor);
+    } else if (state == BTN_HOVER) {
+        colors.push_back(this->textHoverColor);
+        colors.push_back(this->hoverColor);
+    } else {
+        colors.push_back(this->textActiveColor);
+        colors.push_back(this->activeColor);
+    }
+
+    return colors;
+}
+
+
 void Button::assignColors (sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color, 
             sf::Color idle_color, sf::Color hover_color, sf::Color active_color) {
     this->textIdleColor = text_idle_color;
@@ -51,11 +71,6 @@ void Button::assignColors (sf::Color text_idle_color, sf::Color text_hover_color
     this->idleColor = idle_color;
     this->hoverColor = hover_color;
     this->activeColor = active_color;
-}
-
-
-void Button::changeColors (sf::Color newColor) {
-    this->backdrop.setFillColor(newColor);
 }
 
 
@@ -79,14 +94,20 @@ void Button::update(const sf::Vector2f& mousePos)
         case BTN_IDLE:
             this->backdrop.setFillColor(this->idleColor);
             this->setFillColor(this->textIdleColor);
+            this->backdrop.setOutlineThickness(0);
+            this->setOutlineThickness(0);
             break;
         case BTN_HOVER:
             this->backdrop.setFillColor(this->hoverColor);
             this->setFillColor(this->textHoverColor);
+            this->backdrop.setOutlineThickness(1);
+            this->setOutlineThickness(1);
             break;
         case BTN_ACTIVE:
             this->backdrop.setFillColor(this->activeColor);
             this->setFillColor(this->textActiveColor);
+            this->backdrop.setOutlineThickness(1.5);
+            this->setOutlineThickness(0.5);
             break;
         default:
             this->backdrop.setFillColor(sf::Color::Red);

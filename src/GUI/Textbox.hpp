@@ -8,13 +8,14 @@
 #define ENTER_KEY 13
 #define DELETE_KEY 8
 
-class Textbox
+// enum textbox {BTN_IDLE = 0, BTN_IDLE, BTN_ACTIVE};
+
+class Textbox : public Button
 {
 private:
+    unsigned int textboxState;
     unsigned int limit;
-    float keytime;
-    float keytimeMax;
-    Button* box;
+    // Button* box;
     bool isSelected;
 
     void inputLogic (int CharTyped);
@@ -31,10 +32,11 @@ public:
     // Modifiers
     void setLimit (unsigned character_limit);
 
+    // Accessors
+    std::string getInputText ();
+
     // Functions
-    const bool getKeytime();
-    void updateKeytime(const float& dt);
-    void update (const sf::Vector2f &mousePos, const float& dt);
+    void update (const sf::Vector2f &mousePos);
     void render (sf::RenderTarget& target);
 };
 

@@ -31,11 +31,11 @@ public:
     
     // Accessors
     const bool isPressed() const;
+    vector <sf::Color> getStateColors(int state);
 
     // Modifiers
     void assignColors (sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color, 
             sf::Color idle_color, sf::Color hover_color, sf::Color active_color);
-    void changeColors (sf::Color newColor);
 
     // Functions
     void update(const sf::Vector2f& mousePos);

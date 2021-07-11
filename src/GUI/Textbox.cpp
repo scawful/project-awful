@@ -7,39 +7,51 @@ Textbox::Textbox (sf::Vector2f position, sf::Vector2f dimensions,
             sf::Color idle_color, sf::Color hover_color, sf::Color active_color, bool hasBorder, string dfltText = "")
             : limit(character_limit), isSelected(false) {
     
-    this->box = new Button(position, dimensions, font, dfltText, character_size, hasBorder,
-            text_idle_color, text_active_color, text_active_color,
-            idle_color, hover_color, active_color);
+    this->textboxState = BTN_IDLE;
+    
+    this->setBackdrop(sf::Vector2f(dimensions.x, dimensions.y), idle_color, sf::Vector2f(position.x, position.y), active_color, 1);
+    this->setFont(*font);
+    this->setString(dfltText);
+    this->setFillColor(text_idle_color);
+    this->setCharacterSize(character_size);
+    this->setPosition(position.x + ((dimensions.x - this->getGlobalBounds().width) / 2 - 1),
+            position.y + ((dimensions.y - character_size) / 2) - 5);
+    if (hasBorder) {
+        this->setOutlineColor(sf::Color::Black);
+        this->backdrop.setOutlineColor(sf::Color::Black);
+        this->backdrop.setOutlineThickness(1);
+    }
+
+    // Update Private Variables
+    this->assignColors(text_idle_color, text_hover_color, text_active_color, idle_color, hover_color, active_color);
 }
 
 
-// Logic for when a person types something (exceptions are: 'ESC', 'BACKSPACE', and 'ENTER' Keys)
 void Textbox::inputLogic (int CharTyped) {
     if (CharTyped != ENTER_KEY && CharTyped != ESCAPE_KEY && CharTyped != DELETE_KEY) {
-        this->box->setString(this->box->getString() + static_cast<char>(CharTyped));
+        this->setString(this->getString() + static_cast<char>(CharTyped));
     } else if (CharTyped == DELETE_KEY) {
-        if (this->box->getString().toUtf8().size() > 0) {
+        if (this->getString().toUtf8().size() > 0) {
             deleteLastChar();
         }
     } else if (CharTyped == ESCAPE_KEY) {
 
     }
 
-    this->box->setString(this->box->getString() + "_");
+    this->setString(this->getString() + "_");
 }
 
 
-// Function for the 'BACKSPACE' Key
 void Textbox::deleteLastChar () {
     // Transfer each character except the last one into a new string
-    string origText = this->box->getString();
+    string origText = this->getString();
     string newText = "";
     for (int i = 0; i < origText.length() - 1; i++) {
         newText += origText.at(i);
     }
 
     // Replace old string with new string (last character has been deleted)
-    this->box->setString(newText);
+    this->setString(newText);
 }
 
 
@@ -48,29 +60,62 @@ void Textbox::setLimit (unsigned character_limit) {
 }
 
 
-const bool Textbox::getKeytime () {
-    if (this->keytime >= this->keytimeMax) {
-        this->keytime = 0.f;
-        return true;
-    }
-    return false;
+std::string Textbox::getInputText () {
+    return this->getString();
 }
 
 
-void Textbox::updateKeytime (const float& dt) {
-    if ( this->keytime < this->keytimeMax ) {
-        this->keytime += 10.f * dt;
+void Textbox::update (const sf::Vector2f &mousePos) {
+    textboxState = BTN_IDLE;
+    if (this->backdrop.getGlobalBounds().contains(mousePos)) {
+        textboxState = BTN_HOVER;
+        if (this->isSelected) {
+            textboxState = BTN_ACTIVE;
+        } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            textboxState = BTN_ACTIVE;
+            this->isSelected = true;
+            while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                continue;
+            }
+        }
+    } else {
+        if (this->isSelected) {
+            textboxState = BTN_ACTIVE;
+        }
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            textboxState = BTN_IDLE;
+            this->isSelected = false;
+            while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                continue;
+            }
+        }
     }
-}
 
+    vector <sf::Color> colors = this->getStateColors(textboxState);
 
-void Textbox::update (const sf::Vector2f &mousePos, const float& dt) {
-    this->updateKeytime(dt);
-
-
+    switch (textboxState) {
+        case BTN_IDLE:
+            this->setFillColor(colors[0]);
+            this->backdrop.setFillColor(colors[1]);
+            this->backdrop.setOutlineColor(colors[0]);
+            break;
+        case BTN_HOVER:
+            this->setFillColor(colors[0]);
+            this->backdrop.setFillColor(colors[1]);
+            this->backdrop.setOutlineColor(colors[0]);
+            break;
+        case BTN_ACTIVE:
+            this->setFillColor(colors[0]);
+            this->backdrop.setFillColor(colors[1]);
+            this->backdrop.setOutlineColor(colors[0]);
+            break;
+    }
 }
 
 
 void Textbox::render (sf::RenderTarget& target) {
-    target.draw(*this->box);
+    if (this->checkBackdrop()) {
+        target.draw(this->backdrop);
+    }
+    target.draw(*this);
 }

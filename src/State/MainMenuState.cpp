@@ -8,6 +8,7 @@ void MainMenuState::initVariables()
     
 }
 
+
 void MainMenuState::initBackground() 
 {
     // set the size for the white background equal to the size of the window itself
@@ -26,6 +27,7 @@ void MainMenuState::initBackground()
     // this->background.setTexture(&this->backgroundTexture);
 }
 
+
 void MainMenuState::initFonts() 
 {    
     // loading the font to be used for the title and mouse cursor position display
@@ -34,6 +36,7 @@ void MainMenuState::initFonts()
         std::cout << "Error couldn't load menu font" << "\n";
     }       
 }
+
 
 void MainMenuState::initButtons()
 {
@@ -65,6 +68,17 @@ void MainMenuState::initButtons()
     
 }
 
+
+void MainMenuState::initTextboxes () {
+    this->textboxes["CHARACTER_NAME"] = new Textbox (
+                        sf::Vector2f((SCREEN_WIDTH - 450.f) / 2, ((SCREEN_HEIGHT - 50.f) / 2) - 250.f),
+                        sf::Vector2f(450.f, 50.f),
+                        &this->menu_font, 30, 15, 
+                        sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color::Black,
+                        sf::Color(225, 231, 238, 200), sf::Color(244, 244, 244, 200), sf::Color::White, true, "Enter Your Character Name");
+}
+
+
 MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* states)
     : State(window, states)
 {
@@ -72,6 +86,7 @@ MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* state
     this->initBackground();
     this->initFonts();
     this->initButtons();
+    this->initTextboxes();
 
     cout << "MainMenuState::MainMenuState created\n";
 }
@@ -84,6 +99,12 @@ MainMenuState::~MainMenuState()
         delete it->second;
     }
 
+    auto rep = this->textboxes.begin();
+    for (rep = this->textboxes.begin(); rep != this->textboxes.end(); ++rep) 
+    {
+        delete rep->second;
+    }
+
     cout << "MainMenuState::~MainMenuState destroyed\n";
 }
 
@@ -92,6 +113,7 @@ void MainMenuState::updateInput(const float & dt)
 {
     
 }
+
 
 void MainMenuState::updateButtons()
 {
@@ -117,6 +139,16 @@ void MainMenuState::updateButtons()
     }
 }
 
+
+void MainMenuState::updateTextboxes () 
+{
+    for (auto &it : this->textboxes)
+    {
+        it.second->update(this->mousePosView);
+    }
+}
+
+
 void MainMenuState::update(const float& dt) 
 {
     // updateMousePositions comes from the parent State class, will be useful for GUI buttons 
@@ -124,7 +156,9 @@ void MainMenuState::update(const float& dt)
     this->updateInput(dt); 
 
     this->updateButtons();
+    this->updateTextboxes();
 }
+
 
 void MainMenuState::renderButtons(sf::RenderTarget& target)
 {
@@ -133,6 +167,16 @@ void MainMenuState::renderButtons(sf::RenderTarget& target)
         it.second->render(target);
     }
 }
+
+
+void MainMenuState::renderTextbox(sf::RenderTarget& target) 
+{
+    for (auto &it : this->textboxes)
+    {
+        it.second->render(target);
+    }
+}
+
 
 void MainMenuState::render(sf::RenderTarget* target)
 {
@@ -149,9 +193,11 @@ void MainMenuState::render(sf::RenderTarget* target)
 
     // render the buttons
     this->renderButtons(*target);
+
+    // render the textbox
+    this->renderTextbox(*target);
         
     // Create the text for the title
-    
     TextBlock title("Project Awful", &menu_font, sf::Color::Black, 60, true);
     title.setPosition( (SCREEN_WIDTH - title.getLocalBounds().width) / 2 , 30);
     title.render(*target);
@@ -159,12 +205,7 @@ void MainMenuState::render(sf::RenderTarget* target)
     // Positional coordinates mouse tracing
     TextBlock mouseText ("", &menu_font, sf::Color::Black, 12, false);
     mouseText.setPosition(this->mousePosView.x, this->mousePosView.y - 20);
-    /*
-    mouseText.setFillColor(sf::Color::Black);
-    mouseText.setFont(this->menu_font);
-    mouseText.setCharacterSize(12);
-    */
-
+   
     stringstream ss;
     ss << this->mousePosView.x << " " << this->mousePosView.y;
     mouseText.setString(ss.str());
