@@ -144,7 +144,7 @@ void MainMenuState::updateTextboxes ()
 {
     for (auto &it : this->textboxes)
     {
-        it.second->update(this->mousePosView);
+        it.second->update(this->mousePosView, *this->window);
     }
 }
 

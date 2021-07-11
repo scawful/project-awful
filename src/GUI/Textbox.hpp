@@ -15,8 +15,9 @@ class Textbox : public Button
 private:
     unsigned int textboxState;
     unsigned int limit;
-    // Button* box;
     bool isSelected;
+    bool isDefault = true;
+    string dfltText;
 
     void inputLogic (int CharTyped);
     void deleteLastChar ();
@@ -36,7 +37,8 @@ public:
     std::string getInputText ();
 
     // Functions
-    void update (const sf::Vector2f &mousePos);
+    void updateInput (sf::Uint32 event);
+    void update (const sf::Vector2f &mousePos, sf::RenderWindow& window);
     void render (sf::RenderTarget& target);
 };
 

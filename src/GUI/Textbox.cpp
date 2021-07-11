@@ -5,7 +5,7 @@ Textbox::Textbox (sf::Vector2f position, sf::Vector2f dimensions,
             sf::Font* font, unsigned character_size, unsigned character_limit,
             sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
             sf::Color idle_color, sf::Color hover_color, sf::Color active_color, bool hasBorder, string dfltText = "")
-            : limit(character_limit), isSelected(false) {
+            : limit(character_limit), isSelected(false), dfltText(dfltText) {
     
     this->textboxState = BTN_IDLE;
     
@@ -65,7 +65,13 @@ std::string Textbox::getInputText () {
 }
 
 
-void Textbox::update (const sf::Vector2f &mousePos) {
+void Textbox::updateInput (sf::Uint32 event) {
+    this->inputLogic(event);
+}
+
+
+void Textbox::update (const sf::Vector2f &mousePos, sf::RenderWindow& window) {
+    // Set Textbox State
     textboxState = BTN_IDLE;
     if (this->backdrop.getGlobalBounds().contains(mousePos)) {
         textboxState = BTN_HOVER;
@@ -74,6 +80,9 @@ void Textbox::update (const sf::Vector2f &mousePos) {
         } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             textboxState = BTN_ACTIVE;
             this->isSelected = true;
+            if (this->isDefault) {
+                this->setString("_");
+            }
             while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 continue;
             }
@@ -85,6 +94,9 @@ void Textbox::update (const sf::Vector2f &mousePos) {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             textboxState = BTN_IDLE;
             this->isSelected = false;
+            if (this->isDefault) {
+                this->setString(this->dfltText);
+            }
             while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 continue;
             }
@@ -109,6 +121,17 @@ void Textbox::update (const sf::Vector2f &mousePos) {
             this->backdrop.setFillColor(colors[1]);
             this->backdrop.setOutlineColor(colors[0]);
             break;
+    }
+
+    if (this->isSelected) {
+        sf::Event event;
+        window.pollEvent(event);
+        if (event.type == sf::Event::KeyPressed) {
+            cout << "Text Entered: " << static_cast<char>(event.text.unicode) << endl;
+            updateInput(event.text.unicode);
+        } else {
+            cout << "Text not entered" << endl;
+        }
     }
 }
 
