@@ -5,9 +5,11 @@ Button::Button( sf::Vector2f position, sf::Vector2f dimensions,
             sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
             sf::Color idle_color, sf::Color hover_color, sf::Color active_color)
 {
+    /*
     while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         continue;
     }
+    */
     this->buttonState = BTN_IDLE;
     
     this->setBackdrop(sf::Vector2f(dimensions.x, dimensions.y), idle_color, sf::Vector2f(position.x, position.y), active_color, 1);
