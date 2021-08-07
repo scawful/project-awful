@@ -19,7 +19,7 @@ private:
     bool isDefault = true;
     string dfltText;
 
-    void inputLogic (int CharTyped);
+    void inputLogic (char CharTyped);
     void deleteLastChar ();
 
 public:
@@ -37,8 +37,8 @@ public:
     std::string getInputText ();
 
     // Functions
-    void updateInput (sf::Uint32 event);
-    void update (const sf::Vector2f &mousePos, sf::RenderWindow& window);
+    void updateInput (sf::Event &event);
+    void update (const sf::Vector2f &mousePos, sf::Event &event);
     void render (sf::RenderTarget& target);
 };
 

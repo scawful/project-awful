@@ -109,9 +109,9 @@ MainMenuState::~MainMenuState()
 }
 
 
-void MainMenuState::updateInput(const float & dt) 
+void MainMenuState::updateInput(const float &dt) 
 {
-    
+    // this->window->pollEvent(this->sfEvent);
 }
 
 
@@ -144,7 +144,7 @@ void MainMenuState::updateTextboxes ()
 {
     for (auto &it : this->textboxes)
     {
-        it.second->update(this->mousePosView, *this->window);
+        it.second->update(this->mousePosView, this->sfEvent);
     }
 }
 
