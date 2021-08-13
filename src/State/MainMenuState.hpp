@@ -7,7 +7,7 @@ class MainMenuState : public State
 {
 private:
     // Variables
-    sf::Event sfEvent;
+    sf::Event *sfEvent;
     sf::Texture backgroundTexture;
     sf::RectangleShape background;
     sf::Font menu_font;
@@ -23,7 +23,7 @@ private:
     void initTextboxes();
     
 public:
-    MainMenuState(sf::RenderWindow* window, std::stack<State*>* states);
+    MainMenuState(sf::RenderWindow* window, std::stack<State*>* states, sf::Event *Event);
     virtual ~MainMenuState();
         
     // Functions

@@ -39,7 +39,7 @@ void Game::initWindow()
 void Game::initStates() 
 {
     // add the MainMenuState to the stack of States 
-    this->states.push(new MainMenuState(this->window, &this->states));
+    this->states.push(new MainMenuState(this->window, &this->states, &this->sfEvent));
     this->states.top()->currentState = "MainMenuState";
 }
 
@@ -75,7 +75,7 @@ void Game::updateSFMLEvents()
     // polling events from sfml using the sf::Event class
     // handles more universal inputs across the game, such as escape for menus
     // currently escape closes the game, but when we make the PauseMenu it will open that
-    while ( this->window->pollEvent(sfEvent) )
+    while ( this->window->pollEvent(this->sfEvent) )
     {
         // Close window: exit
         if ( this->sfEvent.type == sf::Event::Closed ) 

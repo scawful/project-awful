@@ -5,7 +5,7 @@
 // Initializer functions
 void MainMenuState::initVariables() 
 {
-    
+
 }
 
 
@@ -73,15 +73,16 @@ void MainMenuState::initTextboxes () {
     this->textboxes["CHARACTER_NAME"] = new Textbox (
                         sf::Vector2f((SCREEN_WIDTH - 450.f) / 2, ((SCREEN_HEIGHT - 50.f) / 2) - 250.f),
                         sf::Vector2f(450.f, 50.f),
-                        &this->menu_font, 30, 15, 
+                        &this->menu_font, 30, 23, 
                         sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color::Black,
                         sf::Color(225, 231, 238, 200), sf::Color(244, 244, 244, 200), sf::Color::White, true, "Enter Your Character Name");
 }
 
 
-MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* states)
+MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* states, sf::Event *Event)
     : State(window, states)
 {
+    this->sfEvent = Event;
     this->initVariables();
     this->initBackground();
     this->initFonts();
@@ -111,7 +112,9 @@ MainMenuState::~MainMenuState()
 
 void MainMenuState::updateInput(const float &dt) 
 {
-    // this->window->pollEvent(this->sfEvent);
+    if (!this->getKeytime()) {
+        this->updateKeytime(dt);
+    }
 }
 
 
@@ -144,7 +147,7 @@ void MainMenuState::updateTextboxes ()
 {
     for (auto &it : this->textboxes)
     {
-        it.second->update(this->mousePosView, this->sfEvent);
+        it.second->update(this->mousePosView, *this->sfEvent);
     }
 }
 

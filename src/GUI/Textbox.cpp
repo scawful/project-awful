@@ -29,19 +29,24 @@ Textbox::Textbox (sf::Vector2f position, sf::Vector2f dimensions,
 
 void Textbox::inputLogic (char charTyped) {
     if (charTyped != ENTER_KEY && charTyped != ESCAPE_KEY && charTyped != DELETE_KEY) {
-        this->setString(this->getString() + charTyped);
+        if (this->getString().getSize() < this->limit) {
+            this->deleteLastChar();
+            this->setString(this->getString() + charTyped + "_");
+        }
     } else if (charTyped == DELETE_KEY) {
-        if (this->getString().toUtf8().size() > 0) {
-            deleteLastChar();
+        if (this->getString().getSize() > 1) {
+            this->deleteLastChar();
+            this->deleteLastChar();
+            this->setString(this->getString() + "_");
+        } else if (this->getString().getSize() == 1) {
+            this->setString("_");
         }
     } else if (charTyped == ESCAPE_KEY || charTyped == ENTER_KEY) {
-        if (this->getString().toUtf8().size() > 0) {
+        if (this->getString().getSize() > 0) {
             deleteLastChar();
             this->isSelected = false;
         }
     }
-
-    this->setString(this->getString() + "_");
 }
 
 
@@ -70,6 +75,7 @@ std::string Textbox::getInputText () {
 
 void Textbox::updateInput (sf::Event &event) {
     this->inputLogic(event.text.unicode);
+    this->isDefault = (this->getString() == "_")? true : false;
 }
 
 
@@ -82,10 +88,14 @@ void Textbox::update (const sf::Vector2f &mousePos, sf::Event &event) {
             textboxState = BTN_ACTIVE;
         } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             textboxState = BTN_ACTIVE;
-            this->isSelected = true;
-            if (this->isDefault) {
-                this->setString("_");
+            if (!this->isSelected) {
+                if (this->isDefault) {
+                    this->setString("_");
+                } else {
+                    this->setString(this->getString() + "_");
+                }
             }
+            this->isSelected = true;
             while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 continue;
             }
@@ -96,10 +106,15 @@ void Textbox::update (const sf::Vector2f &mousePos, sf::Event &event) {
         }
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             textboxState = BTN_IDLE;
-            this->isSelected = false;
-            if (this->isDefault) {
-                this->setString(this->dfltText);
+            if (this->isSelected) {
+                if (this->isDefault) {
+                    this->setString(this->dfltText);
+                } else {
+                    this->deleteLastChar();
+                    this->setString(this->getString());
+                }
             }
+            this->isSelected = false;
             while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 continue;
             }
@@ -126,8 +141,8 @@ void Textbox::update (const sf::Vector2f &mousePos, sf::Event &event) {
             break;
     }
     
+    // cout << event.type << endl;
     if (event.type == sf::Event::TextEntered) {
-        cout << "Key has been pressed" << endl;
         if (this->isSelected) {
             this->updateInput(event);
         }
