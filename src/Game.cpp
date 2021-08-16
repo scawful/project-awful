@@ -83,15 +83,15 @@ void Game::updateSFMLEvents()
             this->window->close();
         }
 
-        if ( this->sfEvent.type == sf::Event::KeyPressed )
-        {
-            if ( this->sfEvent.key.code == sf::Keyboard::Escape )
-            {
-                this->window->close();
-            }
-        }
+        // Jacob: Commented out for Textbox testing purposes
+        // if ( this->sfEvent.type == sf::Event::KeyPressed )
+        // {
+        //     if ( this->sfEvent.key.code == sf::Keyboard::Escape )
+        //     {
+        //         this->window->close();
+        //     }
+        // }
     }
-
 }
 
 void Game::update() 

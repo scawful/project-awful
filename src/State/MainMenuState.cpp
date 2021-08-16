@@ -75,7 +75,7 @@ void MainMenuState::initTextboxes () {
                         sf::Vector2f(450.f, 50.f),
                         &this->menu_font, 30, 23, 
                         sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color::Black,
-                        sf::Color(225, 231, 238, 200), sf::Color(244, 244, 244, 200), sf::Color::White, true, "Enter Your Character Name");
+                        sf::Color(225, 231, 238, 200), sf::Color(244, 244, 244, 200), sf::Color::White, true, "Enter Name");
 }
 
 
@@ -128,11 +128,13 @@ void MainMenuState::updateButtons()
     
     if ( this->buttons["GAME_STATE_BTN"]->isPressed() ) 
     {
+        this->neutralizeTextboxes();
         this->states->push(new GameState(this->window, this->states));
     }
 
     if ( this->buttons["SETTINGS_STATE_BTN"]->isPressed() ) 
     {
+        this->neutralizeTextboxes();
         this->states->push(new SettingsState(this->window, this->states));
     }
     
@@ -148,6 +150,15 @@ void MainMenuState::updateTextboxes ()
     for (auto &it : this->textboxes)
     {
         it.second->update(this->mousePosView, *this->sfEvent);
+    }
+}
+
+
+void MainMenuState::neutralizeTextboxes () 
+{
+    for (auto &it : this->textboxes)
+    {
+        it.second->neutralize();
     }
 }
 

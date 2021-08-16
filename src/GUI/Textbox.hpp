@@ -15,7 +15,10 @@ class Textbox : public Button
 private:
     unsigned int textboxState;
     unsigned int limit;
+    unsigned int keyTime = 0.f;
+    unsigned int keyTimeMax = 17.f;
     bool isSelected;
+    char lastChar = ' ';
     bool isDefault = true;
     string dfltText;
 
@@ -37,7 +40,7 @@ public:
     std::string getInputText ();
 
     // Functions
-    void updateInput (sf::Event &event);
+    void neutralize ();
     void update (const sf::Vector2f &mousePos, sf::Event &event);
     void render (sf::RenderTarget& target);
 };

@@ -31,6 +31,7 @@ public:
     void updateInput(const float& dt);
     void updateButtons();
     void updateTextboxes();
+    void neutralizeTextboxes();
     void update(const float& dt);
 
     void renderButtons(sf::RenderTarget& target);
