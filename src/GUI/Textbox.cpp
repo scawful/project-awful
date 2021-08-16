@@ -26,7 +26,6 @@ Textbox::Textbox (sf::Vector2f position, sf::Vector2f dimensions,
     this->assignColors(text_idle_color, text_hover_color, text_active_color, idle_color, hover_color, active_color);
 }
 
-
 void Textbox::inputLogic (char charTyped) {
     if (charTyped != ENTER_KEY && charTyped != ESCAPE_KEY && charTyped != DELETE_KEY) {
         if (this->getString().getSize() < this->limit) {
@@ -61,7 +60,6 @@ void Textbox::inputLogic (char charTyped) {
     }
 }
 
-
 void Textbox::deleteLastChar () {
     string origText = this->getString();
     string newText = "";
@@ -71,16 +69,13 @@ void Textbox::deleteLastChar () {
     this->setString(newText);
 }
 
-
 void Textbox::setLimit (unsigned character_limit) {
     this->limit = character_limit;
 }
 
-
 std::string Textbox::getInputText () {
     return this->getString();
 }
-
 
 void Textbox::neutralize () {
     if (this->isSelected) {
@@ -92,7 +87,6 @@ void Textbox::neutralize () {
         }
     }
 }
-
 
 void Textbox::update (const sf::Vector2f &mousePos, sf::Event &event) {
     // Set Textbox State
@@ -163,7 +157,6 @@ void Textbox::update (const sf::Vector2f &mousePos, sf::Event &event) {
         }
     }
 }
-
 
 void Textbox::render (sf::RenderTarget& target) {
     if (this->checkBackdrop()) {

@@ -17,6 +17,7 @@
 #include <random>
 #include <cmath>
 #include <chrono>
+#include <memory>
 
 using namespace std;
 

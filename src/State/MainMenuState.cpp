@@ -79,7 +79,7 @@ void MainMenuState::initTextboxes () {
 }
 
 
-MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* states, sf::Event *Event)
+MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* states, shared_ptr<sf::Event> Event)
     : State(window, states)
 {
     this->sfEvent = Event;
@@ -149,7 +149,7 @@ void MainMenuState::updateTextboxes ()
 {
     for (auto &it : this->textboxes)
     {
-        it.second->update(this->mousePosView, *this->sfEvent);
+        it.second->update(this->mousePosView, *this->sfEvent.get());
     }
 }
 
