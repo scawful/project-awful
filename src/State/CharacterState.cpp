@@ -45,7 +45,7 @@ CharacterState::CharacterState(sf::RenderWindow* window, std::stack<State*>* sta
     initTextures();
     initButtons();
     initTextboxes();
-
+    cout << "CharacterState created!" << endl;
 }
 
 CharacterState::~CharacterState() 
@@ -103,10 +103,41 @@ void CharacterState::neutralizeTextboxes ()
 
 void CharacterState::update(const float& dt) 
 {
-    this->updateKeytime(dt);
+    this->updateMousePositions();
+    this->updateInput(dt); 
+
+    this->updateButtons();
+    this->updateTextboxes();
 }
+
+void CharacterState::renderButtons(sf::RenderTarget& target)
+{
+    for ( auto &it : this->buttons ) 
+    {
+        it.second->render(target);
+    }
+}
+
+
+void CharacterState::renderTextbox(sf::RenderTarget& target) 
+{
+    for (auto &it : this->textboxes)
+    {
+        it.second->render(target);
+    }
+}
+
 
 void CharacterState::render(sf::RenderTarget* target) 
 {
+    if (!target)
+        target = this->window;
+        
+    // render the buttons
+    this->renderButtons(*target);
+
+    // render the textbox
+    this->renderTextbox(*target);
+
     target->clear(sf::Color(100, 100, 100, 0));
 }

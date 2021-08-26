@@ -29,6 +29,8 @@ public:
 
     // Functions    
     void update(const float& dt);
+    void renderButtons(sf::RenderTarget& target);
+    void renderTextbox(sf::RenderTarget& target);
     void render(sf::RenderTarget* target = nullptr);
 };
 

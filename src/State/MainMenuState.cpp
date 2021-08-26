@@ -1,6 +1,7 @@
 #include "MainMenuState.hpp"
 #include "GameState.hpp"
 #include "SettingsState.hpp"
+#include "CharacterState.hpp"
 
 // Initializer functions
 void MainMenuState::initVariables() 
@@ -40,6 +41,7 @@ void MainMenuState::initFonts()
 
 void MainMenuState::initButtons()
 {
+
     
     this->buttons["GAME_STATE_BTN"] = new Button(
                         sf::Vector2f((SCREEN_WIDTH - 250.f) / 2, (SCREEN_HEIGHT - 75.f) / 2), // position
@@ -55,6 +57,13 @@ void MainMenuState::initButtons()
                         sf::Vector2f((SCREEN_WIDTH - 250.f) /2, ((SCREEN_HEIGHT - 75.f) / 2) + 125.f ),
                         sf::Vector2f(250.f, 75.f),
                         &this->menu_font, "Settings", 30, true, 
+                        sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
+                        sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
+
+    this->buttons["CHARACTER_STATE_BTN"] = new Button(
+                        sf::Vector2f((SCREEN_WIDTH - 850.f) /2, ((SCREEN_HEIGHT - 75.f) / 2) + 125.f ),
+                        sf::Vector2f(275.f, 75.f),
+                        &this->menu_font, "Create Character", 30, true, 
                         sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
                         sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
     
@@ -138,6 +147,12 @@ void MainMenuState::updateButtons()
         this->states->push(new SettingsState(this->window, this->states));
     }
     
+    if ( this->buttons["CHARACTER_STATE_BTN"]->isPressed() ) 
+    {
+        this->neutralizeTextboxes();
+        this->states->push(new CharacterState(this->window, this->states, sfEvent));
+    }
+
     if ( this->buttons["QUIT_GAME_BTN"]->isPressed() )
     {
         this->endState();
