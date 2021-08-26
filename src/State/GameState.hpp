@@ -11,28 +11,31 @@ class GameState: public State
 private:
     // Variables
     World *currentWorld;
-    DungeonGenerator *dungeonGenerator;
     Player *player;
     Sword *playerSword;
+    DungeonGenerator *dungeonGenerator;
 
     std::vector<Enemy*> enemies;
-    sf::RectangleShape enemySights[10];
+    std::map<std::string, Button*> buttons;
 
     sf::Vector2f playerPosition;
     sf::Vector2f playerSize;
     sf::Vector2f swordPosition;
 
+    sf::RectangleShape enemySights[10];
     sf::RectangleShape background;
     sf::RectangleShape enemyLineOfSight;
     sf::Texture playerTexture;
     sf::Texture floorTileTexture;
     sf::Event sfEvent; 
-    sf::Font font;
+    sf::Font gameFont;
 
     // Functions
+    void initFonts();
     void initTextures();
     void initPlayers();
     void initWorld();
+    void initButtons();
     
 public:
     GameState(sf::RenderWindow* window, std::stack<State*>* states);
@@ -42,7 +45,9 @@ public:
     void getQuit();
     
     void updateInput(const float& dt);
+    void updateButtons();
     void update(const float& dt);
+    void renderButtons(sf::RenderTarget& target);
     void render(sf::RenderTarget* target = nullptr);
 };
 

@@ -1,21 +1,37 @@
+#ifndef TextBlock_hpp
+#define TextBlock_hpp
+
 #include "../core.hpp"
 
 class TextBlock : public sf::Text 
 {
 private:
+    // Backdrop Determiner
     bool hasBackdrop = false;
-    sf::RectangleShape backdrop;
-    sf::Vector2f backdropDimensions;
-
 public:
-    TextBlock () {}
-    TextBlock (string newText, sf::Font &newFont, int size);
-    ~TextBlock() {}
+    // Actual Backdrop
+    sf::RectangleShape backdrop;
+
+
+    // Constructors & Destructor
+    TextBlock () {};
+    TextBlock (string newText, sf::Font *newFont, const sf::Color newTextColor, int charSize, bool hasBorder);
+    TextBlock (string newText, sf::Font *newFont, const sf::Color newTextColor, int charSize, bool hasBorder, 
+            sf::Vector2f position);
+    TextBlock (string newText, sf::Font *newFont, const sf::Color newTextColor, int charSize, bool hasBorder, 
+            sf::Vector2f position, sf::Color backdropColor, sf::Vector2f dimensions);
+    ~TextBlock () {}
+
+    // Accessors
+    const bool checkBackdrop () const;
     
-    void setDefaultBackdrop (sf::Color color);
-    void setCustomBackdrop (sf::Color color, sf::Vector2f dimensions);
-    void setAdjustedBackdrop (sf::Color color, sf::Vector2f dimensions);
-    void backdropColor (sf::Color newColor) {this->backdrop.setFillColor(newColor);}
+    // Modifiers
+    void setBackdrop (sf::Vector2f dimensions, sf::Color newColor, sf::Vector2f position, sf::Color border = sf::Color::Black, 
+            float thickness = 0.f);
     void removeBackdrop () {this->hasBackdrop = false;}
-    void drawTextBlock(sf::RenderTarget &window);
+
+    // Functions
+    void render (sf::RenderTarget &window);
 };
+
+#endif

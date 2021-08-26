@@ -1,11 +1,13 @@
 #include "MainMenuState.hpp"
 #include "GameState.hpp"
+#include "SettingsState.hpp"
 
 // Initializer functions
 void MainMenuState::initVariables() 
 {
-    
+
 }
+
 
 void MainMenuState::initBackground() 
 {
@@ -25,6 +27,7 @@ void MainMenuState::initBackground()
     // this->background.setTexture(&this->backgroundTexture);
 }
 
+
 void MainMenuState::initFonts() 
 {    
     // loading the font to be used for the title and mouse cursor position display
@@ -34,32 +37,160 @@ void MainMenuState::initFonts()
     }       
 }
 
-MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* states)
+
+void MainMenuState::initButtons()
+{
+    
+    this->buttons["GAME_STATE_BTN"] = new Button(
+                        sf::Vector2f((SCREEN_WIDTH - 250.f) / 2, (SCREEN_HEIGHT - 75.f) / 2), // position
+                        sf::Vector2f(250.f, 75.f), // size 
+                        &this->menu_font, "New Game", 30, true,
+                        sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
+                        sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
+                        // idle                 hover                      active
+                        // 0xRRGGBBAA 
+                        // RRR, GGG, BBB, AAA
+
+    this->buttons["SETTINGS_STATE_BTN"] = new Button(
+                        sf::Vector2f((SCREEN_WIDTH - 250.f) /2, ((SCREEN_HEIGHT - 75.f) / 2) + 125.f ),
+                        sf::Vector2f(250.f, 75.f),
+                        &this->menu_font, "Settings", 30, true, 
+                        sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
+                        sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
+    
+    
+    this->buttons["QUIT_GAME_BTN"] = new Button(
+                        sf::Vector2f((SCREEN_WIDTH - 250.f) / 2, ((SCREEN_HEIGHT - 75.f) / 2) + 250.f),
+                        sf::Vector2f(250.f, 75.f),
+                        &this->menu_font, "Quit Game", 30, true, 
+                        sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
+                        sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
+    
+}
+
+
+void MainMenuState::initTextboxes () {
+    this->textboxes["CHARACTER_NAME"] = new Textbox (
+                        sf::Vector2f((SCREEN_WIDTH - 450.f) / 2, ((SCREEN_HEIGHT - 50.f) / 2) - 250.f),
+                        sf::Vector2f(450.f, 50.f),
+                        &this->menu_font, 30, 23, 
+                        sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color::Black,
+                        sf::Color(225, 231, 238, 200), sf::Color(244, 244, 244, 200), sf::Color::White, true, "Enter Name");
+}
+
+
+MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* states, shared_ptr<sf::Event> Event)
     : State(window, states)
 {
+    this->sfEvent = Event;
     this->initVariables();
     this->initBackground();
     this->initFonts();
+    this->initButtons();
+    this->initTextboxes();
+
     cout << "MainMenuState::MainMenuState created\n";
 }
 
 MainMenuState::~MainMenuState()
 {
+    auto it = this->buttons.begin();
+    for ( it = this->buttons.begin(); it != this->buttons.end(); ++it ) 
+    {
+        delete it->second;
+    }
+
+    auto rep = this->textboxes.begin();
+    for (rep = this->textboxes.begin(); rep != this->textboxes.end(); ++rep) 
+    {
+        delete rep->second;
+    }
+
     cout << "MainMenuState::~MainMenuState destroyed\n";
 }
 
 
-void MainMenuState::updateInput(const float & dt) 
+void MainMenuState::updateInput(const float &dt) 
 {
-    
+    if (!this->getKeytime()) {
+        this->updateKeytime(dt);
+    }
 }
+
+
+void MainMenuState::updateButtons()
+{
+    // Update all buttons in state and handles functionalty
+    for (auto &it : this->buttons) 
+    {
+        it.second->update(this->mousePosView);
+    }
+    
+    if ( this->buttons["GAME_STATE_BTN"]->isPressed() ) 
+    {
+        this->neutralizeTextboxes();
+        this->states->push(new GameState(this->window, this->states));
+    }
+
+    if ( this->buttons["SETTINGS_STATE_BTN"]->isPressed() ) 
+    {
+        this->neutralizeTextboxes();
+        this->states->push(new SettingsState(this->window, this->states));
+    }
+    
+    if ( this->buttons["QUIT_GAME_BTN"]->isPressed() )
+    {
+        this->endState();
+    }
+}
+
+
+void MainMenuState::updateTextboxes () 
+{
+    for (auto &it : this->textboxes)
+    {
+        it.second->update(this->mousePosView, *this->sfEvent.get());
+    }
+}
+
+
+void MainMenuState::neutralizeTextboxes () 
+{
+    for (auto &it : this->textboxes)
+    {
+        it.second->neutralize();
+    }
+}
+
 
 void MainMenuState::update(const float& dt) 
 {
     // updateMousePositions comes from the parent State class, will be useful for GUI buttons 
     this->updateMousePositions();
     this->updateInput(dt); 
+
+    this->updateButtons();
+    this->updateTextboxes();
 }
+
+
+void MainMenuState::renderButtons(sf::RenderTarget& target)
+{
+    for ( auto &it : this->buttons ) 
+    {
+        it.second->render(target);
+    }
+}
+
+
+void MainMenuState::renderTextbox(sf::RenderTarget& target) 
+{
+    for (auto &it : this->textboxes)
+    {
+        it.second->render(target);
+    }
+}
+
 
 void MainMenuState::render(sf::RenderTarget* target)
 {
@@ -73,31 +204,22 @@ void MainMenuState::render(sf::RenderTarget* target)
     
     // draw the white background
     target->draw(this->background);
+
+    // render the buttons
+    this->renderButtons(*target);
+
+    // render the textbox
+    this->renderTextbox(*target);
         
     // Create the text for the title
-    sf::Text title;
-    title.setString("Project Awful");
-    title.setFillColor(sf::Color::Black);
-    title.setFont(this->menu_font);
-    title.setCharacterSize(60);
+    TextBlock title("Project Awful", &menu_font, sf::Color::Black, 60, true);
     title.setPosition( (SCREEN_WIDTH - title.getLocalBounds().width) / 2 , 30);
-    target->draw(title);
+    title.render(*target);
 
-    sf::Text prompt;
-    prompt.setString("Press Space to begin");
-    prompt.setFillColor(sf::Color::Black);
-    prompt.setFont(this->menu_font);
-    prompt.setCharacterSize(28);
-    prompt.setPosition( (SCREEN_WIDTH - prompt.getLocalBounds().width) / 2 , 400);
-    target->draw(prompt);
-    
     // Positional coordinates mouse tracing
-    sf::Text mouseText;
-    mouseText.setFillColor(sf::Color::Black);
+    TextBlock mouseText ("", &menu_font, sf::Color::Black, 12, false);
     mouseText.setPosition(this->mousePosView.x, this->mousePosView.y - 20);
-    mouseText.setFont(this->menu_font);
-    mouseText.setCharacterSize(12);
-
+   
     stringstream ss;
     ss << this->mousePosView.x << " " << this->mousePosView.y;
     mouseText.setString(ss.str());

@@ -6,12 +6,12 @@
 class Overworld : public World
 {
 private:
+    std::vector<Enemy*> enemies;
+
+    sf::RectangleShape enemySights[10];
     sf::RectangleShape background;
     sf::Texture floorTileTexture;
     sf::Font gameFont;
-
-    std::vector<Enemy*> enemies;
-    sf::RectangleShape enemySights[10];
 
     void initFonts();
     void initTextures();

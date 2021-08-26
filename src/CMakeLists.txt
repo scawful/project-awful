@@ -11,13 +11,13 @@ project(awful VERSION 1.0)
 
 # add the executable
 add_executable(awful awful.cpp Game.cpp 
-                State/State.cpp State/MainMenuState.cpp State/GameState.cpp State/CharacterState.cpp
+                State/State.cpp State/MainMenuState.cpp State/GameState.cpp State/CharacterState.cpp State/SettingsState.cpp
                 Actor/Actor.cpp Actor/Player.cpp Actor/Enemy.cpp
                 Ancilla/Ancilla.cpp Ancilla/Sword.cpp
                 Components/MovementComponent.cpp Components/HitboxComponent.cpp Components/AnimationComponent.cpp
                 World/World.cpp World/Overworld.cpp World/Underworld.cpp
                 Dungeon/DungeonGenerator.cpp Dungeon/Dungeon.cpp 
-                GUI/Text.cpp GUI/Textbox.cpp  GUI/Button.cpp  GUI/PauseMenu.cpp )
+                GUI/Text.cpp GUI/Textbox.cpp  GUI/Button.cpp  GUI/PauseMenu.cpp GUI/DropDown.cpp )
 include_directories("../assets")
 
 # find the sfml library 

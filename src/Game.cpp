@@ -39,7 +39,7 @@ void Game::initWindow()
 void Game::initStates() 
 {
     // add the MainMenuState to the stack of States 
-    this->states.push(new MainMenuState(this->window, &this->states));
+    this->states.push(new MainMenuState(this->window, &this->states, this->sfEvent));
     this->states.top()->currentState = "MainMenuState";
 }
 
@@ -48,6 +48,7 @@ void Game::initStates()
 Game::Game() 
 {
     cout << "Game::constructor - dev test" << endl;
+    this->sfEvent = make_shared<sf::Event>();
     this->initWindow();
     this->initStates();
 }
@@ -75,46 +76,23 @@ void Game::updateSFMLEvents()
     // polling events from sfml using the sf::Event class
     // handles more universal inputs across the game, such as escape for menus
     // currently escape closes the game, but when we make the PauseMenu it will open that
-    while ( this->window->pollEvent(sfEvent) )
+    while ( this->window->pollEvent(*this->sfEvent.get()) )
     {
         // Close window: exit
-        if ( this->sfEvent.type == sf::Event::Closed ) 
+        if (this->sfEvent.get()->type == sf::Event::Closed ) 
         {
             this->window->close();
         }
 
-        if ( this->sfEvent.type == sf::Event::KeyPressed )
-        {
-            // @scawful
-            // temporary state changing code
-            // a little more memory friendly now
-            if ( this->sfEvent.key.code == sf::Keyboard::Space )
-            {
-                if ( this->states.top()->currentState == "MainMenuState")
-                {
-                    this->states.top()->endState();
-                    delete this->states.top();
-                    this->states.pop();
-                    this->states.push(new GameState(this->window, &this->states));
-                    this->states.top()->currentState = "GameState";
-                }
-                else if ( this->states.top()->currentState == "GameState" )
-                {
-                    this->states.top()->endState();
-                    delete this->states.top();
-                    this->states.pop();
-                    this->states.push(new MainMenuState(this->window, &this->states));
-                    this->states.top()->currentState = "MainMenuState";
-                }
-            }
-
-            if ( this->sfEvent.key.code == sf::Keyboard::Escape )
-            {
-                this->window->close();
-            }
-        }
+        // Jacob: Commented out for Textbox testing purposes
+        // if ( this->sfEvent.type == sf::Event::KeyPressed )
+        // {
+        //     if ( this->sfEvent.key.code == sf::Keyboard::Escape )
+        //     {
+        //         this->window->close();
+        //     }
+        // }
     }
-
 }
 
 void Game::update() 
