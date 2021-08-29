@@ -8,7 +8,7 @@ DropDown::DropDown(sf::Vector2f position, sf::Vector2f size, sf::Font& font, std
                     sf::Vector2f( size.x, size.y ),
                     &this->font, list[default_index], 24, true,
                     sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
-                    sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3));
+                    sf::Color(0x42dd22cc), sf::Color(0x4af626cc), sf::Color(0x4af626cc));
 
     for (size_t i = 0; i < numElements; i++)
     {
@@ -19,7 +19,7 @@ DropDown::DropDown(sf::Vector2f position, sf::Vector2f size, sf::Font& font, std
                 sf::Vector2f( size.x, size.y ),
                 &this->font, list[i], 24, true, 
                 sf::Color(245, 245, 245, 200), sf::Color(255, 255, 255, 250), sf::Color(240, 240, 240, 100),
-                sf::Color(0x56A5ECcc), sf::Color(0x56A5ECbf), sf::Color(0x56A5ECb3)
+                sf::Color(0x42dd22cc), sf::Color(0x4af626cc), sf::Color(0x4af626cc)
             )
          );
     }
@@ -34,6 +34,11 @@ DropDown::~DropDown()
     {
         delete this->list[i];
     }
+}
+
+void DropDown::setColors( sf::Color text_idle, sf::Color text_hover, sf::Color text_active, sf::Color active, sf::Color idle, sf::Color hover )
+{
+
 }
 
 const bool DropDown::getKeytime()
