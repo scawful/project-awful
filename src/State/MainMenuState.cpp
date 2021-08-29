@@ -150,7 +150,7 @@ void MainMenuState::updateButtons()
     if ( this->buttons["CHARACTER_STATE_BTN"]->isPressed() ) 
     {
         this->neutralizeTextboxes();
-        this->states->push(new CharacterState(this->window, this->states, sfEvent));
+        this->states->push(new CharacterState(this->window, this->states, this->sfEvent));
     }
 
     if ( this->buttons["QUIT_GAME_BTN"]->isPressed() )
