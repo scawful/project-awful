@@ -135,7 +135,7 @@ void SettingsState::render(sf::RenderTarget* target)
     if (!target)
         target = this->window;
     
-    target->draw(this->background);
+    target->clear(sf::Color::Black);
     
     this->renderGui(*target);
     
