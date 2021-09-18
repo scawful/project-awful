@@ -9,7 +9,8 @@ HitboxComponent::HitboxComponent(sf::Sprite& sprite,
     this->hitbox.setSize(sf::Vector2f(width, height));
     this->hitbox.setFillColor(sf::Color::Transparent);
     this->hitbox.setOutlineThickness(1.f);
-    this->hitbox.setOutlineColor(sf::Color::Red);    
+    this->hitbox.setOutlineColor(sf::Color::Red);
+    this->active = true;
 }
 
 HitboxComponent::~HitboxComponent() 
@@ -19,6 +20,21 @@ HitboxComponent::~HitboxComponent()
 bool HitboxComponent::checkIntersect(const sf::FloatRect& frect) 
 {
     return this->hitbox.getGlobalBounds().intersects(frect);
+}
+
+void HitboxComponent::activate()
+{
+    this->active = true;
+}
+
+void HitboxComponent::deactivate()
+{
+    this->active = false;
+}
+
+bool HitboxComponent::isActive()
+{
+    return this->active;
 }
 
 void HitboxComponent::update() 

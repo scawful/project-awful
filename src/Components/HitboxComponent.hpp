@@ -10,7 +10,7 @@ private:
     sf::RectangleShape hitbox;
     float offsetX;
     float offsetY;
-    
+    bool active;
 public:
     HitboxComponent(sf::Sprite& sprite,
                     float offset_x, float offset_y,
@@ -19,10 +19,11 @@ public:
     
     // Functions
     bool checkIntersect(const sf::FloatRect& frect);
-    
+    void activate();
+    void deactivate();
+    bool isActive();
     void update();
     void render(sf::RenderTarget& target);
-
 };
 
 #endif /* HitboxComponent_hpp */

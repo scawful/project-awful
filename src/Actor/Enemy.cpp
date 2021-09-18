@@ -13,11 +13,11 @@ void Enemy::initComponents()
     this->createHitboxComponent(this->sprite, 0.f, 0.f, 80.f, 80.f);
 }
 
-Enemy::Enemy(float x, float y, sf::Texture& texture_sheet) 
+Enemy::Enemy(float x, float y, sf::Texture& texture_sheet, float damage) 
 {
     this->setPosition(x, y);
     this->setTexture(texture_sheet);
-
+    this->damage = damage;
     this->initComponents();
     this->createAnimatiomComponent(texture_sheet);
     this->animationComponent->addAnimation( "IDLE", 11.f, 0, 0, 0, 0, 80, 80 );
@@ -26,6 +26,11 @@ Enemy::Enemy(float x, float y, sf::Texture& texture_sheet)
 Enemy::~Enemy() 
 {
 
+}
+
+float Enemy::getDamage()
+{
+    return this->damage;
 }
 
 sf::Vector2f Enemy::normalize(const sf::Vector2f& source)

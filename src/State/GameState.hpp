@@ -15,7 +15,7 @@ private:
     Sword *playerSword;
     DungeonGenerator *dungeonGenerator;
 
-    std::vector<Enemy*> enemies;
+    // std::vector<Enemy*> enemies;
     std::map<std::string, Button*> buttons;
 
     sf::Vector2f playerPosition;

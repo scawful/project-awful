@@ -17,11 +17,12 @@ private:
     void initTextures();
     void initPlayers();
     void initEnemies();
-
+    float calculatePlayerDamage();
 public:
     Overworld( Player *playerRef, std::map<std::string, sf::Texture> &textureRef );
     ~Overworld();
 
+    void updateHitboxes();
     void updateEnemyAI(const float& dt);
     void updateInput(const float& dt);
     void update(const float& dt);

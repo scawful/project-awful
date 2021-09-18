@@ -38,6 +38,7 @@ public:
     void setTexture(sf::Texture& texture);
     void setPosition(const float x, const float y);
 
+    // Getters
     sf::Vector2f getPosition();
     sf::Vector2f getSize();
     float getHealth();

@@ -52,22 +52,33 @@ void Overworld::initEnemies()
         switch (random_enemy)
         {
             case 1:
-                newEnemy = new Enemy( new_x, new_y, this->textures["ENEMY_TEXTURE"] );
+                newEnemy = new Enemy( new_x, new_y, this->textures["ENEMY_TEXTURE"], 5.f );
                 break;
             case 2:
-                newEnemy = new Enemy( new_x, new_y, this->textures["GHOST2"] );
+                newEnemy = new Enemy( new_x, new_y, this->textures["GHOST2"], 5.f );
                 break;
             case 3:
-                newEnemy = new Enemy( new_x, new_y, this->textures["GHOST3"] );
+                newEnemy = new Enemy( new_x, new_y, this->textures["GHOST3"], 5.f );
                 break;
             default:
-                newEnemy = new Enemy( new_x, new_y, this->textures["ENEMY_TEXTURE"] );
+                newEnemy = new Enemy( new_x, new_y, this->textures["ENEMY_TEXTURE"], 5.f );
                 break;
         }
 
         this->enemies.push_back( newEnemy );
     }
 
+}
+
+float Overworld::calculatePlayerDamage()
+{
+    float damage = 0.0;
+    for (auto &enemy : this->enemies) {
+        if (true) {
+            damage += 1.0;
+        }
+    }
+    return damage;
 }
 
 Overworld::Overworld( Player *playerRef, std::map<std::string, sf::Texture> &textureRef ) : World( playerRef, textureRef )
@@ -100,6 +111,10 @@ Overworld::~Overworld()
     cout << "Overworld destroyed" << endl;
 }
 
+void Overworld::updateHitboxes()
+{
+    this->player->setHealth(this->player->getHealth() - this->calculatePlayerDamage());
+}
 
 void Overworld::updateEnemyAI(const float& dt)
 {

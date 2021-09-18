@@ -98,7 +98,6 @@ void GameState::updateInput(const float& dt)
 
         currentWorld = new Overworld( this->player, this->textures );
     }
-
 }
 
 void GameState::updateButtons()
