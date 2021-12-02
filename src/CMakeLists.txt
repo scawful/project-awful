@@ -16,7 +16,7 @@ add_executable(awful awful.cpp Game.cpp
                 Ancilla/Ancilla.cpp Ancilla/Sword.cpp
                 Components/MovementComponent.cpp Components/HitboxComponent.cpp Components/AnimationComponent.cpp
                 World/World.cpp World/Overworld.cpp World/Underworld.cpp
-                Dungeon/DungeonGenerator.cpp Dungeon/Dungeon.cpp 
+                Dungeon/DungeonGenerator.cpp Dungeon/Dungeon.cpp Dungeon/Subdungeon.cpp
                 GUI/Text.cpp GUI/Textbox.cpp  GUI/Button.cpp  GUI/PauseMenu.cpp GUI/DropDown.cpp )
 include_directories("../assets")
 
