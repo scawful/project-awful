@@ -3,7 +3,8 @@
 void DungeonGenerator::initRootRoom( int x, int y, int width, int height)
 {
     //rootRoom = new Dungeon::Room( roomID, (SCREEN_WIDTH - 600) / 2, (SCREEN_HEIGHT - 600) / 2, 600, 600 );
-    rootRoom = new Dungeon::Room( roomID, x, y, width, height );
+    //rootRoom = new Dungeon::Room( roomID, x, y, width, height );
+    root = new Subdungeon( roomID, x, y, width, height );
     roomID++;
     cout << "Origin Room initialized\n";
 }
@@ -21,29 +22,29 @@ DungeonGenerator::DungeonGenerator( int difficulty, int minimum, int x, int y, i
 
     // create the source room that the dungeon is based on and put it in the vector of rooms
     this->initRootRoom( x, y, width, height );
-    vectorRooms.push_back( rootRoom );
+    subdungeon_vector.push_back( root );
 
     // creates 42 children, so 22 dungeons
-    while ( vectorRooms.size() < 42 )
+    while ( subdungeon_vector.size() < 42 )
     {
-        uniform_int_distribution<int> splitRand(0, vectorRooms.size() - 1); // guaranteed unbiased
+        uniform_int_distribution<int> splitRand(0, subdungeon_vector.size() - 1); // guaranteed unbiased
         auto splitID = splitRand(rng);
 
-        Dungeon::Room *roomToSplit = vectorRooms[splitID];
+        Subdungeon *roomToSplit = subdungeon_vector[splitID];
         if ( this->splitRoom( roomToSplit ) )
         {
-            vectorRooms.push_back( roomToSplit->getLeftChild() );
-            vectorRooms.push_back( roomToSplit->getRightChild() );
+            subdungeon_vector.push_back( roomToSplit->getLeftChild() );
+            subdungeon_vector.push_back( roomToSplit->getRightChild() );
         }
     }
 
-    this->generateDungeon( rootRoom );
-    this->generateCorridors( rootRoom );
+    this->generateDungeon( root );
+    this->generateCorridors( root );
 }
 
 DungeonGenerator::~DungeonGenerator()
 {
-    deleteDungeon( rootRoom );
+    deleteDungeon( root );
     for ( int i = 0; i < corridors.size(); i++ )
     {
         Dungeon::Room *roomToFree = corridors[i];
@@ -55,22 +56,23 @@ DungeonGenerator::~DungeonGenerator()
     cout << "DungeonGenerator destroyed\n";
 }
 
-void DungeonGenerator::deleteDungeon( Dungeon::Room *room )
+void DungeonGenerator::deleteDungeon( Subdungeon *sub )
 {
-    if ( room == NULL ) 
+    if ( sub == NULL ) 
         return;
     
-    this->deleteDungeon( room->getLeftChild() );
-    this->deleteDungeon( room->getRightChild() );
+    this->deleteDungeon( sub->getLeftChild() );
+    this->deleteDungeon( sub->getRightChild() );
 
-    delete room;
+    delete sub;
 }
 
-bool DungeonGenerator::splitRoom( Dungeon::Room *room )
+//bool DungeonGenerator::splitRoom( Dungeon::Room *room )
+bool DungeonGenerator::splitRoom( Subdungeon *sub )
 {
     float size_ratio = 0.3;
 
-    if ( room->getLeftChild() != NULL )
+    if ( sub->getLeftChild() != NULL )
         return false;
 
     // horizontal
@@ -80,9 +82,9 @@ bool DungeonGenerator::splitRoom( Dungeon::Room *room )
 
     int maximum = 0;
     if ( horizontal )
-        maximum = room->height;
+        maximum = sub->height;
     else
-        maximum = room->width;
+        maximum = sub->width;
 
     maximum -= this->minimumRoomSize;
 
@@ -101,51 +103,47 @@ bool DungeonGenerator::splitRoom( Dungeon::Room *room )
     if ( horizontal )
     {
         cout << "Left Child: ";
-        room->setLeftChild( new Dungeon::Room( roomID, room->top, room->left, room->width, split  ) );
-        room->getLeftChild()->setParent(room);
+        sub->setLeftChild( new Subdungeon( roomID, sub->top, sub->left, sub->width, split  ) );
         roomID++;
 
         cout << "Right Child: ";
-        room->setRightChild( new Dungeon::Room( roomID, room->top + split, room->left, room->width , room->height - split ) );
-        room->getRightChild()->setParent(room);
+        sub->setRightChild( new Subdungeon( roomID, sub->top + split, sub->left, sub->width , sub->height - split ) );
         roomID++;
     }
     else
     {
         cout << "Left Child: ";
-        room->setLeftChild( new Dungeon::Room( roomID, room->top, room->left, split, room->height ) );
-        room->getLeftChild()->setParent(room);
+        sub->setLeftChild( new Subdungeon( roomID, sub->top, sub->left, split, sub->height ) );
         roomID++;
         
         cout << "Right Child: ";
-        room->setRightChild( new Dungeon::Room( roomID, room->top, room->left + split, room->width - split, room->height ) );
-        room->getRightChild()->setParent(room);
+        sub->setRightChild( new Subdungeon( roomID, sub->top, sub->left + split, sub->width - split, sub->height ) );
         roomID++;
     }
 
     // calculate size ratio of the rooms to be created
-    float leftChildRatio = (float)room->getLeftChild()->width / (float)room->getLeftChild()->height;
-    float rightChildRatio = (float)room->getRightChild()->width / (float)room->getRightChild()->height;
+    float leftChildRatio = (float)sub->getLeftChild()->width / (float)sub->getLeftChild()->height;
+    float rightChildRatio = (float)sub->getRightChild()->width / (float)sub->getRightChild()->height;
 
     // if room does not match ratio, cleanup the old rooms and recall the function
     if ( leftChildRatio < size_ratio || rightChildRatio < size_ratio )
     {
         roomID -= 2;
-        Dungeon::Room *cleanup = room->getLeftChild();
-        Dungeon::Room *cleanup2 = room->getRightChild();
+        Subdungeon *cleanup = sub->getLeftChild();
+        Subdungeon *cleanup2 = sub->getRightChild();
         delete cleanup;
         delete cleanup2;
-        room->setLeftChild( NULL );
-        room->setRightChild( NULL );
-        splitRoom( room );
+        sub->setLeftChild( NULL );
+        sub->setRightChild( NULL );
+        splitRoom( sub );
     }
     
     return true;
 }
 
-bool DungeonGenerator::random_split( Dungeon::Room *room )
+bool DungeonGenerator::random_split( Subdungeon *sub )
 {
-    Dungeon::Room *newLeftChild, *newRightChild;
+    Subdungeon *newLeftChild, *newRightChild;
     float size_ratio = 0.45;
 
     // horizontal
@@ -156,15 +154,15 @@ bool DungeonGenerator::random_split( Dungeon::Room *room )
     if ( random == 1 )
     {
         // horizontal
-        uniform_int_distribution<int> width(0, room->width - this->minimumRoomSize); 
+        uniform_int_distribution<int> width(0, sub->width - this->minimumRoomSize); 
         auto randWidth = width(rng);
 
         cout << "Left Child: ";
-        newLeftChild = new Dungeon::Room( roomID, room->top, room->left, randWidth, room->height );
+        newLeftChild = new Subdungeon( roomID, sub->top, sub->left, randWidth, sub->height );
         roomID++;
 
         cout << "Right Child: ";
-        newRightChild = new Dungeon::Room( roomID, room->top + randWidth, room->left, room->width - randWidth , room->height );
+        newRightChild = new Subdungeon( roomID, sub->top + randWidth, sub->left, sub->width - randWidth , sub->height );
         roomID++;
 
         float leftChildRatio = (float)newLeftChild->width / (float)newLeftChild->height;
@@ -175,16 +173,16 @@ bool DungeonGenerator::random_split( Dungeon::Room *room )
             delete newLeftChild;
             delete newRightChild;
             cout << "children aborted by ratio " << endl;
-            random_split( room );
+            random_split( sub );
         }
     }
     else
     {
         // vertical
-        uniform_int_distribution<int> height(0, room->height - this->minimumRoomSize); 
+        uniform_int_distribution<int> height(0, sub->height - this->minimumRoomSize); 
         auto randHeight = height(rng);
-        newLeftChild = new Dungeon::Room( roomID, room->top, room->left, room->width, randHeight );
-        newRightChild = new Dungeon::Room( roomID, room->top, room->left + randHeight, room->width, room->height - randHeight );
+        newLeftChild = new Subdungeon( roomID, sub->top, sub->left, sub->width, randHeight );
+        newRightChild = new Subdungeon( roomID, sub->top, sub->left + randHeight, sub->width, sub->height - randHeight );
 
         float leftChildRatio = newLeftChild->height / newLeftChild->width;
         float rightChildRatio = newRightChild->height / newRightChild->width;
@@ -194,24 +192,24 @@ bool DungeonGenerator::random_split( Dungeon::Room *room )
             delete newLeftChild;
             delete newRightChild;
             cout << "children aborted by ratio " << endl;
-            random_split( room );
+            random_split( sub );
         }
     }
 
-    room->setLeftChild( newLeftChild );
-    room->setRightChild ( newRightChild );
-    room->getLeftChild()->setParent(room);
-    room->getRightChild()->setParent(room);
+    sub->setLeftChild( newLeftChild );
+    sub->setRightChild( newRightChild );
+    newLeftChild->setSibling(newRightChild);
+    newRightChild->setSibling(newLeftChild);
     return true;
 }
 
-void DungeonGenerator::generateDungeon( Dungeon::Room *room )
+void DungeonGenerator::generateDungeon( Subdungeon *sub )
 {
-    if ( room->getLeftChild() != NULL ) 
+    if ( sub->getLeftChild() != NULL ) 
     { 
         // recursively generate 
-        this->generateDungeon( room->getLeftChild() );
-        this->generateDungeon( room->getRightChild() );
+        this->generateDungeon( sub->getLeftChild() );
+        this->generateDungeon( sub->getRightChild() );
     } 
     else 
     { 
@@ -219,42 +217,42 @@ void DungeonGenerator::generateDungeon( Dungeon::Room *room )
         mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
 
         // if leaf node, create a dungeon within the minimum size constraints
-        uniform_int_distribution<int> dungeonTopRnd(0, room->height - this->minimumRoomSize );
-        uniform_int_distribution<int> dungeonLeftRnd(0, room->width - this->minimumRoomSize );
+        uniform_int_distribution<int> dungeonTopRnd(0, sub->height - this->minimumRoomSize );
+        uniform_int_distribution<int> dungeonLeftRnd(0, sub->width - this->minimumRoomSize );
 
-        int dungeonTop = ( room->height - this->minimumRoomSize <= 0 ) ? 0 : dungeonTopRnd(rng);
-        int dungeonLeft =  ( room->width - this->minimumRoomSize <= 0 ) ? 0 : dungeonLeftRnd(rng);
+        int dungeonTop = ( sub->height - this->minimumRoomSize <= 0 ) ? 0 : dungeonTopRnd(rng);
+        int dungeonLeft =  ( sub->width - this->minimumRoomSize <= 0 ) ? 0 : dungeonLeftRnd(rng);
 
-        uniform_int_distribution<int> dungeonHeightRnd(0, room->height - dungeonTop );
-        uniform_int_distribution<int> dungeonWidthRnd(0, room->width - dungeonLeft );
+        uniform_int_distribution<int> dungeonHeightRnd(0, sub->height - dungeonTop );
+        uniform_int_distribution<int> dungeonWidthRnd(0, sub->width - dungeonLeft );
 
         int dungeonHeight = max( dungeonHeightRnd(rng), this->minimumRoomSize );
         int dungeonWidth = max( dungeonWidthRnd(rng), this->minimumRoomSize );
 
         cout << "Dungeon: ";
-        room->setDungeon( new Dungeon::Room( roomID, room->top + dungeonTop, room->left + dungeonLeft, dungeonWidth, dungeonHeight ) );
+        sub->addRoom( new Room( roomID, sub->top + dungeonTop, sub->left + dungeonLeft, dungeonWidth, dungeonHeight ) );
         roomID++;
     }
 }
 
-void DungeonGenerator::generateCorridors( Dungeon::Room *room )
+void DungeonGenerator::generateCorridors( Subdungeon *sub )
 {
-    if ( room->getLeftChild() != NULL )
+    if ( sub->isLeaf() )
     {
-        this->generateCorridors( room->getLeftChild() );
-        this->generateCorridors( room->getRightChild() );
-
-        if ( room->getLeftChild()->getDungeon() != NULL && room->getRightChild()->getDungeon() != NULL )
-            this->generateCorridorBetween( room->getLeftChild(), room->getRightChild() );
+        this->generateCorridorBetween( sub, sub->getSibling() );
+        return;
     }
+
+    this->generateCorridors( sub->getLeftChild() );
+    this->generateCorridors( sub->getRightChild() );
 
 }
 
-void DungeonGenerator::generateCorridorBetween( Dungeon::Room *left, Dungeon::Room *right )
+void DungeonGenerator::generateCorridorBetween( Subdungeon *left, Subdungeon *right )
 {
     int corridorDepth = 10;
-    Dungeon::Room *leftRoom = left->getRoom();
-    Dungeon::Room *rightRoom = right->getRoom();
+    Room *leftRoom = left->getRoom();
+    Room *rightRoom = right->getRoom();
 
     // get a random point on each room to connect
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
@@ -343,14 +341,14 @@ void DungeonGenerator::render(sf::RenderTarget& target)
 
     rootRoom->drawRoom(target);
 
-    // for ( int i = 0; i < corridors.size(); i++ )
-    // {
-    //     sf::RectangleShape corridorRect;
-    //     corridorRect.setSize( sf::Vector2f( corridors[i]->height, corridors[i]->width ) );
-    //     corridorRect.setPosition( sf::Vector2f( corridors[i]->top, corridors[i]->left) ) ; 
-    //     corridorRect.setFillColor( sf::Color::Black );
-    //     target.draw(corridorRect);
-    // }
+    for ( int i = 0; i < corridors.size(); i++ )
+    {
+        sf::RectangleShape corridorRect;
+        corridorRect.setSize( sf::Vector2f( corridors[i]->height, corridors[i]->width ) );
+        corridorRect.setPosition( sf::Vector2f( corridors[i]->top, corridors[i]->left) ) ; 
+        corridorRect.setFillColor( sf::Color::Black );
+        target.draw(corridorRect);
+    }
 
     for ( int i = 0; i < vectorRooms.size(); i++ )
     {
