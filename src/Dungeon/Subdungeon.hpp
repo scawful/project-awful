@@ -17,10 +17,10 @@ public:
     Subdungeon(int id, int top, int left, int width, int height);
     ~Subdungeon();
 
-    void Subdungeon::setLeftChild( Subdungeon *leftChild );
-    void Subdungeon::setRightChild( Subdungeon *rightChild );
-    void Subdungeon::setSibling( Subdungeon *sibling );
-    void Subdungeon::addRoom( Room *new_room );
+    void setLeftChild( Subdungeon *leftChild );
+    void setRightChild( Subdungeon *rightChild );
+    void setSibling( Subdungeon *sibling );
+    void addRoom( Room *new_room );
 
     Subdungeon* getLeftChild()
     {
