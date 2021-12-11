@@ -18,6 +18,8 @@ public:
     DropDown(sf::Vector2f position, sf::Vector2f size, sf::Font& font, std::string list[], unsigned numElements, const unsigned default_index = 0);
     ~DropDown();
     
+    void setColors( sf::Color text_idle, sf::Color text_hover, sf::Color text_active, sf::Color active, sf::Color idle, sf::Color hover );
+
     // Functions
     const bool getKeytime();
     void updateKeytime(const float& dt);
