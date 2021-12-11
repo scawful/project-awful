@@ -87,8 +87,9 @@ Overworld::Overworld( Player *playerRef, std::map<std::string, sf::Texture> &tex
               static_cast<float>( SCREEN_HEIGHT * 4 )
          )
     );
-
-    cout << "Overworld created" << endl;
+    
+    // @scawful: commenting out debug lines for the master branch 
+    // cout << "Overworld created" << endl;
     
 }
 
@@ -97,7 +98,8 @@ Overworld::~Overworld()
     for ( int i = 0; i < 10; i++ )
         delete this->enemies[i];
     
-    cout << "Overworld destroyed" << endl;
+    // @scawful: commenting out debug lines for the master branch 
+    // cout << "Overworld destroyed" << endl;
 }
 
 

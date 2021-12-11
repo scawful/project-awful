@@ -20,7 +20,8 @@ Underworld::Underworld( Player *playerRef, std::map<std::string, sf::Texture> &t
 {
     this->dungeonGenerator = new DungeonGenerator( 1, 75, 5, 5, 600, 600 );
 
-    cout << "Underworld created" << endl;
+    // @scawful: commenting out debug lines for the master branch 
+    // cout << "Underworld created" << endl;
 }
 
 Underworld::~Underworld() 
@@ -28,7 +29,8 @@ Underworld::~Underworld()
     delete this->dungeonGenerator;
     dungeonGenerator = NULL;
 
-    cout << "Underworld destroyed" << endl;
+    // @scawful: commenting out debug lines for the master branch 
+    // cout << "Underworld destroyed" << endl;
 }
 
 void Underworld::updateInput(const float& dt)

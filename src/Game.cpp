@@ -1,6 +1,7 @@
 #include "Game.hpp"
 
-//Initializer Functions
+// @scawful
+// @brief: set default variables for game runtime 
 void Game::initVariables() 
 {
     this->window = NULL;
@@ -8,10 +9,13 @@ void Game::initVariables()
     this->dt = 0.f;
 }
 
+// @scawful
+// @brief: initialization of game window 
+// @todo: add a config file with saved settings to import from 
 void Game::initWindow() 
 {    
-    string title = "Project Awful";
     sf::VideoMode window_bounds = sf::VideoMode::getDesktopMode();
+    string title = "Project Awful";
     bool fullscreen = false;
     unsigned framerate_limit = 120;
     bool vertical_sync_enabled = false;
@@ -36,6 +40,8 @@ void Game::initWindow()
 
 }
 
+// @scawful
+// @brief: push the initial state of the game to the stack 
 void Game::initStates() 
 {
     // add the MainMenuState to the stack of States 
@@ -44,15 +50,19 @@ void Game::initStates()
 }
 
 
-//Constructors / Destructors
+// @scawful
+// Constructor
 Game::Game() 
 {
-    cout << "Game::constructor - dev test" << endl;
+    // @scawful: commenting out debug lines for the master branch 
+    // cout << "Game::constructor - dev test" << endl;
     this->sfEvent = make_shared<sf::Event>();
     this->initWindow();
     this->initStates();
 }
 
+// @scawful
+// Destructor
 Game::~Game()
 {
     // dispose of the sfml window instance and pop any remaining states off the stack
@@ -64,17 +74,20 @@ Game::~Game()
     }
 }
 
-// Functions
+// @scawful
+// @brief: handles delta time clock refresh 
 void Game::updateDt() 
 {
     // Updates delta time variable with update/render time for one frame
     this->dt = this->dtClock.restart().asSeconds();
 }
 
+// @scawful
+// @brief: universal event handling 
 void Game::updateSFMLEvents() 
 {
     // polling events from sfml using the sf::Event class
-    // handles more universal inputs across the game, such as escape for menus
+    // handles inputs across the entire game, such as escape for menus
     // currently escape closes the game, but when we make the PauseMenu it will open that
     while ( this->window->pollEvent(*this->sfEvent.get()) )
     {
@@ -95,6 +108,8 @@ void Game::updateSFMLEvents()
     }
 }
 
+// @scawful
+// @brief: primary update function which handles the current state on the stack
 void Game::update() 
 {
     this->updateSFMLEvents();
@@ -118,6 +133,8 @@ void Game::update()
     }
 }
 
+// @scawful
+// @brief: primary render function for top of stack state 
 void Game::render() 
 {
     // Clear screen
@@ -131,9 +148,10 @@ void Game::render()
     this->window->display();
 }
 
+// @scawful
+// @brief: main game loop
 void Game::run() 
 {
-    // Start the game loop
     while ( this->window->isOpen() )
     {
         this->updateDt();

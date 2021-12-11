@@ -1,5 +1,10 @@
 #include "State.hpp"
 
+// @scawful
+// @brief: sets all the state variables
+//         maybe make an init function? idk. seems fine for now.
+//
+// @todo: change states stack to a shared or smart pointer + thoroughly test
 State::State(sf::RenderWindow* window, std::stack<State*>* states) 
 {
     this->window = window;

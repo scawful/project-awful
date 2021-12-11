@@ -41,8 +41,7 @@ void MainMenuState::initFonts()
 
 void MainMenuState::initButtons()
 {
-
-    
+    // @scawful: see Gui/Button.cpp for more details on how this object works. 
     this->buttons["GAME_STATE_BTN"] = new Button(
                         sf::Vector2f((SCREEN_WIDTH - 250.f) / 2, (SCREEN_HEIGHT - 75.f) / 2), // position
                         sf::Vector2f(250.f, 75.f), // size 
@@ -78,7 +77,8 @@ void MainMenuState::initButtons()
 }
 
 
-void MainMenuState::initTextboxes () {
+void MainMenuState::initTextboxes () 
+{
     this->textboxes["CHARACTER_NAME"] = new Textbox (
                         sf::Vector2f((SCREEN_WIDTH - 450.f) / 2, ((SCREEN_HEIGHT - 50.f) / 2) - 250.f),
                         sf::Vector2f(450.f, 50.f),
@@ -98,7 +98,8 @@ MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* state
     this->initButtons();
     this->initTextboxes();
 
-    cout << "MainMenuState::MainMenuState created\n";
+    // @scawful: commenting out debug lines for the master branch 
+    // cout << "MainMenuState::MainMenuState created\n";
 }
 
 MainMenuState::~MainMenuState()
@@ -115,7 +116,8 @@ MainMenuState::~MainMenuState()
         delete rep->second;
     }
 
-    cout << "MainMenuState::~MainMenuState destroyed\n";
+    // @scawful: commenting out debug lines for the master branch 
+    // cout << "MainMenuState::~MainMenuState destroyed\n";
 }
 
 

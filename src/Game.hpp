@@ -12,7 +12,6 @@ class Game
 private:
     // Variables
     sf::RenderWindow *window;
-    // sf::Event sfEvent;
     shared_ptr<sf::Event> sfEvent;
     sf::Image icon;
     std::vector<sf::VideoMode> videoModes;
