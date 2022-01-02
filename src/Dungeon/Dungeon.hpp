@@ -12,13 +12,45 @@ namespace Dungeon
     enum RoomType {
         EMPTY,
         SPARSE,
-        ORIGIN,
         TREASURE,
         MERCHANT,
+        ORIGIN,
         MINI_BOSS,
         BOSS  
     };
-    int nRoomTypes = 4;
+
+    enum TileType {
+        FLOOR, 
+        WALL
+    };
+
+    class Tile
+    {
+    private:
+        TileType tileType;
+        sf::Texture tileTexture;
+        sf::RectangleShape tileRect;
+
+    public:
+        Tile();
+        ~Tile();
+
+        void setTileType( TileType type );
+        void setTileRectCoords( int top, int left );
+        void setTileRectSize( int width, int height );
+        void render( sf::RenderTarget& target );
+    };
+
+    class Door
+    {
+    private:
+        sf::Texture graphics;
+
+    public:
+        Door();
+        ~Door();
+    };
+
 
     /**
      * @brief Object representing any room in a dungeon
@@ -28,48 +60,30 @@ namespace Dungeon
     {
     private:
         // Base Values 
+        int roomId;
         int numDoors;
         int numEnemies;
         int numItems;
-        RoomType roomType;   
-        vector<Door> doors;
 
+        // Special Values 
+        RoomType roomType;
+
+        // Data Structures    
+        vector<Dungeon::Door> doors;
+        Tile **tilesMatrix;
+
+        // Initializers
+        void initTiles();
 
     public:
-        int id, width, height;
+        int width, height;
         Room(int id);
         ~Room();
         
-        Room* getDungeon() {
-            return this->dungeon;
-        }
+        void createRoom();
         void setRoomType( RoomType type );
-        void setDungeon( Room *dungeon );
         void drawRoom( sf::RenderTarget& target );
     };
-
-
-    class Door
-    {
-    private:
-        sf::Texture graphics;
-
-    public:
-        Door();
-        virtual ~Door();
-    };
-
-    class Tile
-    {
-    private:
-        sf::Texture tileTexture;
-        sf::RectangleShape tileRect;
-
-    public:
-        Tile();
-        bool canWalk;
-    };
-
 }
 
 #endif
