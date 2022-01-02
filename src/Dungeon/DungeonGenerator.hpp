@@ -2,7 +2,6 @@
 #define DungeonGenerator_hpp
 
 #include "Dungeon.hpp"
-#include "Subdungeon.hpp"
 
 class DungeonGenerator
 {
@@ -16,9 +15,6 @@ private:
     vector<Dungeon::Room*> vectorRooms;
     vector<Dungeon::Room*> corridors;
 
-    Subdungeon *root;
-    vector<Subdungeon*> subdungeon_vector;
-
 public:
     void initRootRoom( int x, int y, int width, int height );
 
@@ -26,14 +22,14 @@ public:
     ~DungeonGenerator();
 
     // Functions    
-    void deleteDungeon( Subdungeon *sub );
-    bool splitRoom( Subdungeon *sub );
+    void deleteDungeon( Dungeon::Room *room );
+    bool splitRoom( Dungeon::Room *room );
 
-    bool random_split( Subdungeon *sub );
+    bool random_split( Dungeon::Room *room );
 
-    void generateDungeon( Subdungeon *sub );
-    void generateCorridors( Subdungeon *sub );
-    void generateCorridorBetween( Subdungeon *left, Subdungeon *right );
+    void generateDungeon( Dungeon::Room *room );
+    void generateCorridors( Dungeon::Room *room );
+    void generateCorridorBetween( Dungeon::Room *left, Dungeon::Room *right );
 
     void render(sf::RenderTarget& target);
 
