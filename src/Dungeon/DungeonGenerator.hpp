@@ -6,31 +6,33 @@
 class DungeonGenerator
 {
 private:
-    int rootRoomX, rootRoomY, rootRoomW, rootRoomH;
-    int difficultyLevel;
-    int minimumRoomSize;
-    int roomID, dungeonID;
 
-    Dungeon::Room *rootRoom;
-    vector<Dungeon::Room*> vectorRooms;
-    vector<Dungeon::Room*> corridors;
+    enum DungeonType {
+        BASIC,
+        INFESTED,
+    };
+
+    // Base Values 
+    int difficultyLevel;
+    int numRooms;
+    DungeonType dungeonType;    
+    
+    // Modifiers
+    double numRoomsModifier;
+
+    // Data Structures 
+    std::unordered_map<int, Dungeon::Room> rooms;
+    std::set<int> roomTypesAssigned;
+
+    // Helper
+    int getRandomUnusedRoomID();
 
 public:
-    void initRootRoom( int x, int y, int width, int height );
-
     DungeonGenerator( int difficulty, int minimum, int x, int y, int width, int height );
     ~DungeonGenerator();
 
     // Functions    
-    void deleteDungeon( Dungeon::Room *room );
-    bool splitRoom( Dungeon::Room *room );
-
-    bool random_split( Dungeon::Room *room );
-
-    void generateDungeon( Dungeon::Room *room );
-    void generateCorridors( Dungeon::Room *room );
-    void generateCorridorBetween( Dungeon::Room *left, Dungeon::Room *right );
-
+    void generateDungeon();
     void render(sf::RenderTarget& target);
 
 };

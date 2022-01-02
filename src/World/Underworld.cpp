@@ -73,21 +73,4 @@ void Underworld::render(sf::RenderTarget &target)
     this->dungeonGenerator->render(target);
     this->player->render(target);
 
-    // ====================== //
-
-    // creating a new view for the minimap of the dungeon generation output
-    // currently not exactly sure why the width and height are larger than the object
-    // increasing them seems to decrease the size of the view, which is odd. but okay
-    sf::View minimapView ( sf::FloatRect(  0.75f, 0, 3000, 2400 ) );
-    target.setView(minimapView);
-
-    // draw the output of dungeonGenerator inside the minimap
-    this->dungeonGenerator->render(target);
-
-    sf::RectangleShape playerRect;
-    playerRect.setSize( sf::Vector2f( 20, 20 ) );
-    playerRect.setPosition( sf::Vector2f( playerPosition.x / (float)8.1, playerPosition.y / (float)5.3) );
-    playerRect.setFillColor( sf::Color::Magenta );
-    target.draw(playerRect);
-
 }

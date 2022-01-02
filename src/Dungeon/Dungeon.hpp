@@ -5,79 +5,46 @@
 
 namespace Dungeon
 {
-    class Tile
-    {
-    private:
-        sf::Texture tileTexture;
-        sf::RectangleShape tileRect;
-
-    public:
-        Tile();
-        bool canWalk;
-
+    /**
+     * @brief Enum Bing Bong 
+     * 
+     */
+    enum RoomType {
+        EMPTY,
+        SPARSE,
+        ORIGIN,
+        TREASURE,
+        MERCHANT,
+        MINI_BOSS,
+        BOSS  
     };
+    int nRoomTypes = 4;
 
-    //
-    // 
+    /**
+     * @brief Object representing any room in a dungeon
+     * 
+     */
     class Room
     {
     private:
-        int minimumRoomSize;
-        Tile *tiles;
-        Room *parent;
-        Room *leftChild;
-        Room *rightChild;
-        Room *dungeon;
+        // Base Values 
+        int numDoors;
+        int numEnemies;
+        int numItems;
+        RoomType roomType;   
+        vector<Door> doors;
+
 
     public:
-        int id, top, left, width, height;
-        Room(int id, int top, int left, int width, int height);
+        int id, width, height;
+        Room(int id);
         ~Room();
         
-
-        bool isLeaf()
-        {
-            return this->leftChild == NULL && this->rightChild == NULL;
-        }
-
-        Room* getRoom()
-        {
-            if ( isLeaf() )
-                return this->dungeon;
-
-            if ( this->leftChild != NULL )
-            {
-                return this->leftChild;
-            }
-
-            if ( this->rightChild != NULL )
-            {
-                return this->rightChild;
-            }
-
-            return this;
-        }
-        
-        Room* getLeftChild()
-        {
-            return this->leftChild;
-        }
-
-        Room* getRightChild()
-        {
-            return this->rightChild;
-        }
-
-        Room* getDungeon()
-        {
+        Room* getDungeon() {
             return this->dungeon;
         }
-        
-        void setParent( Room *parent );
+        void setRoomType( RoomType type );
         void setDungeon( Room *dungeon );
-        void setLeftChild( Room *leftChild );
-        void setRightChild( Room *rightChild );
-
         void drawRoom( sf::RenderTarget& target );
     };
 
@@ -90,7 +57,17 @@ namespace Dungeon
     public:
         Door();
         virtual ~Door();
+    };
 
+    class Tile
+    {
+    private:
+        sf::Texture tileTexture;
+        sf::RectangleShape tileRect;
+
+    public:
+        Tile();
+        bool canWalk;
     };
 
 }
