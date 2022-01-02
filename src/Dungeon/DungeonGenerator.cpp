@@ -343,14 +343,14 @@ void DungeonGenerator::render(sf::RenderTarget& target)
 
     rootRoom->drawRoom(target);
 
-    // for ( int i = 0; i < corridors.size(); i++ )
-    // {
-    //     sf::RectangleShape corridorRect;
-    //     corridorRect.setSize( sf::Vector2f( corridors[i]->height, corridors[i]->width ) );
-    //     corridorRect.setPosition( sf::Vector2f( corridors[i]->top, corridors[i]->left) ) ; 
-    //     corridorRect.setFillColor( sf::Color::Black );
-    //     target.draw(corridorRect);
-    // }
+    for ( int i = 0; i < corridors.size(); i++ )
+    {
+        sf::RectangleShape corridorRect;
+        corridorRect.setSize( sf::Vector2f( corridors[i]->height, corridors[i]->width ) );
+        corridorRect.setPosition( sf::Vector2f( corridors[i]->top, corridors[i]->left) ) ; 
+        corridorRect.setFillColor( sf::Color::Black );
+        target.draw(corridorRect);
+    }
 
     for ( int i = 0; i < vectorRooms.size(); i++ )
     {
