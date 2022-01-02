@@ -13,22 +13,26 @@ private:
     };
 
     // Base Values 
-    int difficultyLevel;
     int numRooms;
+    int difficultyLevel;
+    int currentRoomNumber;
     DungeonType dungeonType;    
     
     // Modifiers
     double numRoomsModifier;
 
     // Data Structures 
-    std::unordered_map<int, Dungeon::Room> rooms;
+    std::unordered_map<int, Dungeon::Room*> rooms;
     std::set<int> roomTypesAssigned;
+
+    // sfml 
+    sf::Text debugText;
 
     // Helper
     int getRandomUnusedRoomID();
 
 public:
-    DungeonGenerator( int difficulty, int minimum, int x, int y, int width, int height );
+    DungeonGenerator( int difficulty );
     ~DungeonGenerator();
 
     // Functions    

@@ -3,13 +3,13 @@
 int DungeonGenerator::getRandomUnusedRoomID()
 {
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
-    uniform_int_distribution<int> randomRoom(0, numRooms);
+    uniform_int_distribution<int> randomRoom(0, numRooms - 1);
     int newID = randomRoom(rng);
     bool diffRoom = false;
     size_t n = roomTypesAssigned.size();
 
     while(!diffRoom) {
-        if ( roomTypesAssigned.contains(newID) ) {
+        if ( roomTypesAssigned.count(newID) != 0 ) {
             newID = randomRoom(rng);
         } else {
             diffRoom = true;
@@ -19,17 +19,18 @@ int DungeonGenerator::getRandomUnusedRoomID()
     return newID;
 }
 
-DungeonGenerator::DungeonGenerator( int difficulty, int minimum, int x, int y, int width, int height )
+DungeonGenerator::DungeonGenerator( int difficulty )
 {
-    this->roomID = 0;
-    this->dungeonID = 0;
-    this->minimumRoomSize = minimum;
     this->difficultyLevel = difficulty;
     this->numRoomsModifier = difficulty % 10;
+    generateDungeon();
 }
 
 DungeonGenerator::~DungeonGenerator()
 {
+    for ( auto & eachRoom : rooms ) {
+        delete eachRoom.second;
+    }
     cout << "DungeonGenerator destroyed\n";
 }
 
@@ -39,38 +40,58 @@ void DungeonGenerator::generateDungeon()
     // using the std::chrono clock as the random seed engine, since mingw uses a fixed seed for std::random
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
 
-    uniform_int_distribution<int> randomNumRooms(0, difficultyLevel * 5); // guaranteed unbiased
+    uniform_int_distribution<int> randomNumRooms(4, difficultyLevel * 10); // guaranteed unbiased
     this->numRooms = randomNumRooms(rng);
+    cout << "Creating " << numRooms << " rooms" << endl;
 
     // initialize all the rooms 
     for ( int i = 0; i < numRooms; i++ ) {
-        rooms.put(i, new Dungeon::Room(i));
+        rooms.emplace(i, new Dungeon::Room(i));
     }
 
     int bossRoom = getRandomUnusedRoomID();
-    rooms.at(bossRoom).setRoomType(Dungeon::RoomType::BOSS);
+    try {
+        rooms.at(bossRoom)->setRoomType(Dungeon::RoomType::BOSS);
+    } catch ( const exception & e ) {
+        cout << "Boss Room Exception: " << e.what() << endl;
+    }
 
     int originRoom = getRandomUnusedRoomID();
-    rooms.at(originRoom).setRoomType(Dungeon::RoomType::Origin);
+    try {
+        rooms.at(originRoom)->setRoomType(Dungeon::RoomType::ORIGIN);
+    } catch ( const exception & e ) {
+        cout << "Origin Room Exception: " << e.what() << endl;
+    }
+    this->currentRoomNumber = originRoom;
 
     uniform_int_distribution<int> randomBinary(0,1);
     int hasMiniBoss = randomBinary(rng);
     
     if (hasMiniBoss) {
         int miniBossRoom = getRandomUnusedRoomID();
-        rooms.at(miniBossRoom).setRoomType(Dungeon::RoomType::MINI_BOSS);
+        try {
+            rooms.at(miniBossRoom)->setRoomType(Dungeon::RoomType::MINI_BOSS);
+        } catch ( const exception & e ) {
+            cout << "Mini Boss Room Exception: " << e.what() << endl;
+        }
     }
 
     // randomize remaining rooms with nonspecial types 
-    while ( roomTypesAssigned.size() != numRooms ) {
-        uniform_int_distribution<int> randomRoomType(0, Dungeon::nRoomTypes);
+    while ( roomTypesAssigned.size() != numRooms - 1 ) {
+        uniform_int_distribution<int> randomRoomType(0, 4);
         int newID = getRandomUnusedRoomID();
-        rooms.at(newID).setRoomType(RoomType(randomRoomType(rng)));
+        rooms.at(newID)->setRoomType(Dungeon::RoomType(randomRoomType(rng)));
     }
 
+    cout << "Creating Origin Room #" << currentRoomNumber << endl;
+    rooms.at(currentRoomNumber)->createRoom();
 }
 
 void DungeonGenerator::render(sf::RenderTarget& target)
 {
-
+    try {
+        rooms.at(currentRoomNumber)->drawRoom(target);
+    } catch ( const std::out_of_range & e ) {
+        cout << e.what() << endl;
+    }
 }
