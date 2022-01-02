@@ -7,10 +7,11 @@ class Underworld : public World
 {
 private:
     DungeonGenerator *dungeonGenerator;
+    sf::Font gameFont;
 
     void initTextures();
+    void initFonts();
     void initPlayers();
-    void initEnemies();
 
 public:
     Underworld( Player *playerRef, std::map<std::string, sf::Texture> &textureRef );

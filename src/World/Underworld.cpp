@@ -5,20 +5,22 @@ void Underworld::initTextures()
     
 }
 
+void Underworld::initFonts()
+{
+    this->gameFont.loadFromFile("../assets/ARCADECLASSIC.TTF");
+}
+
 void Underworld::initPlayers()
 {
     this->playerSize = this->player->getSize();
     this->playerPosition = this->player->getPosition();
 }
 
-void Underworld::initEnemies() 
-{
-    
-}
-
 Underworld::Underworld( Player *playerRef, std::map<std::string, sf::Texture> &textureRef ) : World( playerRef, textureRef )
 {
-    this->dungeonGenerator = new DungeonGenerator( 1, 150, 5, 5, SCREEN_HEIGHT, SCREEN_HEIGHT);
+    this->initFonts();
+    this->initPlayers();
+    this->dungeonGenerator = new DungeonGenerator( 1 );
 
     // @scawful: commenting out debug lines for the master branch 
     // cout << "Underworld created" << endl;
@@ -59,7 +61,8 @@ void Underworld::update(const float& dt)
 
 void Underworld::render(sf::RenderTarget &target) 
 {
-    target.clear( sf::Color::Red );
+    // target.clear( sf::Color::Red );
+    
     // the camera of the game, centered on the players position
     // viewports use the center rather than the top, left coordinates like the player
     // to compensate for a true center, we divide the players size in half and add that to the view coordinates
@@ -72,5 +75,28 @@ void Underworld::render(sf::RenderTarget &target)
 
     this->dungeonGenerator->render(target);
     this->player->render(target);
+
+    // ====================== //
+
+    sf::View guiView( sf::FloatRect(  0.75f, 0, SCREEN_WIDTH, SCREEN_HEIGHT ) );
+    target.setView(guiView);
+
+    sf::RectangleShape healthBar;
+    healthBar.setSize( sf::Vector2f( 300, 25 ) );
+    healthBar.setPosition( sf::Vector2f( SCREEN_WIDTH - 315, 15));
+    healthBar.setFillColor( sf::Color::White );
+    healthBar.setOutlineThickness(5);
+    healthBar.setOutlineColor( sf::Color::Black );
+
+    sf::RectangleShape healthAmount;
+    healthAmount.setSize( sf::Vector2f( this->player->getHealth() * 3, 25 ) );
+    healthAmount.setPosition( sf::Vector2f( SCREEN_WIDTH - 315, 15 ) );
+    healthAmount.setFillColor( sf::Color::Red );
+
+    TextBlock HealthIndicator("health", &gameFont, sf::Color::Red, 30, true, sf::Vector2f(SCREEN_WIDTH - 430, 8));
+    
+    HealthIndicator.render(target);
+    target.draw(healthBar);
+    target.draw(healthAmount);
 
 }
