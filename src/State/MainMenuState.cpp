@@ -21,11 +21,11 @@ void MainMenuState::initBackground()
          )
     );
     
-    // if (!this->backgroundTexture.loadFromFile("background.jpg")) 
-    // {
-    //     throw "ERROR::MAINMENUSTATE::FAILED_TO_LOAD_BACKGROUND_TEXTURE";
-    // }
-    // this->background.setTexture(&this->backgroundTexture);
+    if (!this->backgroundTexture.loadFromFile("../assets/menu_background.png")) 
+    {
+        throw "ERROR::MAINMENUSTATE::FAILED_TO_LOAD_BACKGROUND_TEXTURE";
+    }
+    this->background.setTexture(&this->backgroundTexture);
 }
 
 
@@ -229,7 +229,7 @@ void MainMenuState::render(sf::RenderTarget* target)
     this->renderTextbox(*target);
         
     // Create the text for the title
-    TextBlock title("Project Awful", &menu_font, sf::Color::Black, 60, true);
+    TextBlock title("Project Awful", &menu_font, sf::Color::White, 60, true);
     title.setPosition( (SCREEN_WIDTH - title.getLocalBounds().width) / 2 , 30);
     title.render(*target);
 
