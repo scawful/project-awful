@@ -27,7 +27,7 @@ using namespace std;
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 
-#define SCREEN_WIDTH  1920  
-#define SCREEN_HEIGHT 1080
+#define SCREEN_WIDTH  1080  
+#define SCREEN_HEIGHT 720
 
 #endif

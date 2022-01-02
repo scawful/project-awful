@@ -23,8 +23,7 @@ DungeonGenerator::DungeonGenerator( int difficulty, int minimum, int x, int y, i
     this->initRootRoom( x, y, width, height );
     vectorRooms.push_back( rootRoom );
 
-    // creates 42 children, so 22 dungeons
-    while ( vectorRooms.size() < 42 )
+    while ( vectorRooms.size() < 22 )
     {
         uniform_int_distribution<int> splitRand(0, vectorRooms.size() - 1); // guaranteed unbiased
         auto splitID = splitRand(rng);
@@ -252,7 +251,7 @@ void DungeonGenerator::generateCorridors( Dungeon::Room *room )
 
 void DungeonGenerator::generateCorridorBetween( Dungeon::Room *left, Dungeon::Room *right )
 {
-    int corridorDepth = 10;
+    int corridorDepth = 50;
     Dungeon::Room *leftRoom = left->getRoom();
     Dungeon::Room *rightRoom = right->getRoom();
 
@@ -337,8 +336,6 @@ void DungeonGenerator::render(sf::RenderTarget& target)
     rootRect.setSize( sf::Vector2f( rootRoom->height, rootRoom->width ) );
     rootRect.setPosition( sf::Vector2f( rootRoom->top, rootRoom->left ) );
     rootRect.setFillColor( sf::Color::White );
-    // rootRect.setOutlineThickness(5);
-    // rootRect.setOutlineColor( sf::Color::Blue );
     target.draw(rootRect);
 
     rootRoom->drawRoom(target);

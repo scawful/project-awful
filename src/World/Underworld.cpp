@@ -18,7 +18,7 @@ void Underworld::initEnemies()
 
 Underworld::Underworld( Player *playerRef, std::map<std::string, sf::Texture> &textureRef ) : World( playerRef, textureRef )
 {
-    this->dungeonGenerator = new DungeonGenerator( 1, 75, 5, 5, 600, 600 );
+    this->dungeonGenerator = new DungeonGenerator( 1, 150, 5, 5, SCREEN_HEIGHT, SCREEN_HEIGHT);
 
     // @scawful: commenting out debug lines for the master branch 
     // cout << "Underworld created" << endl;
