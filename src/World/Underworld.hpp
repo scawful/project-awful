@@ -6,11 +6,13 @@
 class Underworld : public World
 {
 private:
+    int wallWidth;
     DungeonGenerator *dungeonGenerator;
     sf::Font gameFont;
 
     void initTextures();
     void initFonts();
+    void initDungeon();
     void initPlayers();
 
 public:

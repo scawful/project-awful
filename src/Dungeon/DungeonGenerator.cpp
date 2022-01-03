@@ -34,6 +34,16 @@ DungeonGenerator::~DungeonGenerator()
     cout << "DungeonGenerator destroyed\n";
 }
 
+sf::Vector2f DungeonGenerator::getDungeonDimensions()
+{
+    return sf::Vector2f( rooms.at(currentRoomNumber)->width * 100, rooms.at(currentRoomNumber)->height * 100 );
+}
+
+void DungeonGenerator::setPlayerPositionInDungeon( sf::Vector2f position, sf::Vector2f size )
+{
+    rooms.at(currentRoomNumber)->setPlayerPosition( position, size );
+}
+
 void DungeonGenerator::generateDungeon()
 {
     // random-number engine used (Mersenne-Twister in this case)
@@ -85,6 +95,11 @@ void DungeonGenerator::generateDungeon()
 
     cout << "Creating Origin Room #" << currentRoomNumber << endl;
     rooms.at(currentRoomNumber)->createRoom();
+}
+
+void DungeonGenerator::updateDungeon() 
+{
+    rooms.at(currentRoomNumber)->updateRoom();
 }
 
 void DungeonGenerator::render(sf::RenderTarget& target)

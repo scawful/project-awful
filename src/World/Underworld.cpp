@@ -10,17 +10,24 @@ void Underworld::initFonts()
     this->gameFont.loadFromFile("../assets/ARCADECLASSIC.TTF");
 }
 
+void Underworld::initDungeon()
+{
+    this->dungeonGenerator = new DungeonGenerator(1);
+    this->wallWidth = 100;
+}
+
 void Underworld::initPlayers()
 {
     this->playerSize = this->player->getSize();
-    this->playerPosition = this->player->getPosition();
+    //this->playerPosition = this->player->getPosition();
+    this->playerPosition = sf::Vector2f( this->dungeonGenerator->getDungeonDimensions().x / 2, this->dungeonGenerator->getDungeonDimensions().y / 2 );
 }
 
 Underworld::Underworld( Player *playerRef, std::map<std::string, sf::Texture> &textureRef ) : World( playerRef, textureRef )
 {
     this->initFonts();
+    this->initDungeon();
     this->initPlayers();
-    this->dungeonGenerator = new DungeonGenerator( 1 );
 
     // @scawful: commenting out debug lines for the master branch 
     // cout << "Underworld created" << endl;
@@ -37,6 +44,19 @@ Underworld::~Underworld()
 
 void Underworld::updateInput(const float& dt)
 {
+
+    // collide with edges of screen
+    if ( playerPosition.x < wallWidth ) 
+        this->player->setPosition( wallWidth, playerPosition.y );
+    else if ( playerPosition.x > this->dungeonGenerator->getDungeonDimensions().x - (playerSize.x + wallWidth) ) 
+        this->player->setPosition( this->dungeonGenerator->getDungeonDimensions().x - (playerSize.x + wallWidth), playerPosition.y );
+
+    if ( playerPosition.y < wallWidth - 60 ) 
+        this->player->setPosition( playerPosition.x, wallWidth - 60 );
+    else if ( playerPosition.y > this->dungeonGenerator->getDungeonDimensions().y - (playerSize.y + wallWidth) ) 
+        this->player->setPosition( playerPosition.x, this->dungeonGenerator->getDungeonDimensions().y - (playerSize.y + wallWidth) );
+
+    
     // dynamically fetch keyboard input in real time to move the player 
     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::A) )
         this->player->move(-1.f, 0.f, dt);
@@ -56,13 +76,14 @@ void Underworld::update(const float& dt)
     playerPosition = this->player->getPosition();
     this->player->update(dt);
 
+    this->dungeonGenerator->setPlayerPositionInDungeon( playerPosition, this->player->getSize() );
+    this->dungeonGenerator->updateDungeon();
+
     this->updateInput(dt);
 }
 
 void Underworld::render(sf::RenderTarget &target) 
-{
-    // target.clear( sf::Color::Red );
-    
+{    
     // the camera of the game, centered on the players position
     // viewports use the center rather than the top, left coordinates like the player
     // to compensate for a true center, we divide the players size in half and add that to the view coordinates

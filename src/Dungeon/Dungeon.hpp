@@ -21,7 +21,16 @@ namespace Dungeon
 
     enum TileType {
         FLOOR, 
-        WALL
+        WALL_TOP,
+        WALL_BOTTOM,
+        WALL_LEFT,
+        WALL_RIGHT,
+        WALL_UPPER_LEFT_CORNER,
+        WALL_UPPER_RIGHT_CORNER,
+        WALL_LOWER_LEFT_CORNER,
+        WALL_LOWER_RIGHT_CORNER,
+        DOOR_CLOSED,
+        DOOR_OPEN
     };
 
     class Tile
@@ -35,6 +44,7 @@ namespace Dungeon
         Tile();
         ~Tile();
 
+        sf::RectangleShape getTileRectangle();
         void setTileType( TileType type );
         void setTileRectCoords( int top, int left );
         void setTileRectSize( int width, int height );
@@ -44,11 +54,18 @@ namespace Dungeon
     class Door
     {
     private:
+        int x, y;
+        bool isClosed;
         sf::Texture graphics;
 
     public:
-        Door();
+        Door(int x, int y);
         ~Door();
+
+        sf::Vector2i getPosition();
+        bool getIsClosed();
+        void setOpen();
+        void setClosed();
     };
 
 
@@ -65,11 +82,16 @@ namespace Dungeon
         int numEnemies;
         int numItems;
 
+        // Positions 
+        sf::Vector2f playerPosition;
+        sf::Vector2f playerSize;
+
         // Special Values 
         RoomType roomType;
 
         // Data Structures    
         vector<Dungeon::Door> doors;
+        
         Tile **tilesMatrix;
 
         // Initializers
@@ -82,6 +104,9 @@ namespace Dungeon
         
         void createRoom();
         void setRoomType( RoomType type );
+        void setPlayerPosition( sf::Vector2f position, sf::Vector2f size );
+
+        void updateRoom();
         void drawRoom( sf::RenderTarget& target );
     };
 }

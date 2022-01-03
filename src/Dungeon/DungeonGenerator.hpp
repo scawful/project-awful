@@ -36,7 +36,11 @@ public:
     ~DungeonGenerator();
 
     // Functions    
+    sf::Vector2f getDungeonDimensions();
+    void setPlayerPositionInDungeon( sf::Vector2f position, sf::Vector2f size );
     void generateDungeon();
+
+    void updateDungeon();
     void render(sf::RenderTarget& target);
 
 };
