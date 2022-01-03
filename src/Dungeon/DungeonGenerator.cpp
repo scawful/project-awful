@@ -1,5 +1,11 @@
 #include "DungeonGenerator.hpp"
 
+/**
+ * @brief Randomly chooses a room id that hasn't yet been used as a specific room type
+ *        Prevents duplicate boss, mini-boss, origin, etc 
+ * 
+ * @return int 
+ */
 int DungeonGenerator::getRandomUnusedRoomID()
 {
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
@@ -19,6 +25,11 @@ int DungeonGenerator::getRandomUnusedRoomID()
     return newID;
 }
 
+/**
+ * @brief Construct a new Dungeon Generator:: Dungeon Generator object
+ * 
+ * @param difficulty 
+ */
 DungeonGenerator::DungeonGenerator( int difficulty )
 {
     this->difficultyLevel = difficulty;
@@ -26,9 +37,14 @@ DungeonGenerator::DungeonGenerator( int difficulty )
     generateDungeon();
 }
 
+/**
+ * @brief Destroy the Dungeon Generator:: Dungeon Generator object
+ * 
+ */
 DungeonGenerator::~DungeonGenerator()
 {
     for ( auto & eachRoom : rooms ) {
+        eachRoom.second->destroyRoom();
         delete eachRoom.second;
     }
     cout << "DungeonGenerator destroyed\n";

@@ -44,7 +44,6 @@ Underworld::~Underworld()
 
 void Underworld::updateInput(const float& dt)
 {
-
     // collide with edges of screen
     if ( playerPosition.x < wallWidth ) 
         this->player->setPosition( wallWidth, playerPosition.y );
