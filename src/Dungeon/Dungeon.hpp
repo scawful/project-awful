@@ -55,13 +55,15 @@ namespace Dungeon
     {
     private:
         int x, y;
+        int destinationRoom;
         bool isClosed;
         sf::Texture graphics;
 
     public:
-        Door(int x, int y);
+        Door(int x, int y, int dest);
         ~Door();
 
+        int getDestinationRoom();
         sf::Vector2i getPosition();
         bool getIsClosed();
         void setOpen();
@@ -81,6 +83,9 @@ namespace Dungeon
         int numDoors;
         int numEnemies;
         int numItems;
+        int nextRoomNumber;
+        int numSiblings;
+        bool isChangingRoom;
 
         // Positions 
         sf::Vector2f playerPosition;
@@ -99,13 +104,17 @@ namespace Dungeon
 
     public:
         int width, height;
-        Room(int id);
+        Room(int id, int width, int height, int numDoors, int numSiblings);
         ~Room();
         
         void createRoom();
+        int getNextRoomNumber();
+
         void setRoomType( RoomType type );
         void setPlayerPosition( sf::Vector2f position, sf::Vector2f size );
+        void setRoomChangeHandshake();
 
+        bool changeRoom();
         void updateRoom();
         void drawRoom( sf::RenderTarget& target );
     };

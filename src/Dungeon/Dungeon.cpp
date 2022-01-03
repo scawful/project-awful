@@ -49,8 +49,9 @@ void Dungeon::Room::initTiles()
 
     while ( numDoors != 0 ) {
         int x = randDoorLocation(rng);
+        uniform_int_distribution<int> randomRoom(0, numSiblings - 1);
         tilesMatrix[x][0].setTileType(TileType::DOOR_CLOSED);
-        doors.push_back(Door(x, 0));
+        doors.push_back( Door(x, 0, randomRoom(rng)) );
         numDoors--;
     }
 
@@ -61,12 +62,14 @@ void Dungeon::Room::initTiles()
  * 
  * @param id 
  */
-Dungeon::Room::Room(int id)
+Dungeon::Room::Room(int id, int width, int height, int numDoors, int numSiblings)
 {
     this->roomId = id;
-    this->height = 5;
-    this->width = 10;
-    this->numDoors = 2;
+    this->height = height;
+    this->width = width;
+    this->numDoors = numDoors;
+    this->numSiblings = numSiblings;
+    isChangingRoom = false;
     cout << "Room #" << id << " initialized\n"; 
 }
 
@@ -88,6 +91,15 @@ void Dungeon::Room::createRoom() {
 }
 
 /**
+ * @brief Next Room Number to transition to as reported by update 
+ * 
+ * @return int 
+ */
+int Dungeon::Room::getNextRoomNumber() {
+    return nextRoomNumber;
+}
+
+/**
  * @brief Set the Room Type which determines rooms random content set 
  * 
  * @param type 
@@ -97,12 +109,41 @@ void Dungeon::Room::setRoomType( RoomType type )
     this->roomType = type;
 }
 
+/**
+ * @brief get the players position and size from the outer layer for collission detection
+ * 
+ * @param position 
+ * @param size 
+ */
 void Dungeon::Room::setPlayerPosition( sf::Vector2f position, sf::Vector2f size )
 {
     this->playerPosition = position;
     this->playerSize = size;
 }
 
+/**
+ * @brief tell the room we're done changing rooms 
+ * 
+ */
+void Dungeon::Room::setRoomChangeHandshake()
+{
+    isChangingRoom = false;
+}
+
+/**
+ * @brief reports if player is changing rooms or not 
+ * 
+ * @return true 
+ * @return false 
+ */
+bool Dungeon::Room::changeRoom() {
+    return isChangingRoom;
+}
+
+/**
+ * @brief update the contents of the Dungeon room 
+ * 
+ */
 void Dungeon::Room::updateRoom()
 {
     for ( int i = 0; i < doors.size(); i++ ) {
@@ -116,6 +157,8 @@ void Dungeon::Room::updateRoom()
         {
             tilesMatrix[doors[i].getPosition().x][doors[i].getPosition().y].setTileType(TileType::DOOR_OPEN);
             doors[i].setOpen();
+            isChangingRoom = true;
+            nextRoomNumber = doors[i].getDestinationRoom();
         } else {
             if (!doors[i].getIsClosed()) {
                 tilesMatrix[doors[i].getPosition().x][doors[i].getPosition().y].setTileType(TileType::DOOR_CLOSED);
@@ -125,6 +168,11 @@ void Dungeon::Room::updateRoom()
     }    
 }
 
+/**
+ * @brief Render the non state entities of the room (tiles)
+ * 
+ * @param target 
+ */
 void Dungeon::Room::drawRoom( sf::RenderTarget& target )
 {
     for ( int i = 0; i < width; i++ ) {
@@ -132,33 +180,33 @@ void Dungeon::Room::drawRoom( sf::RenderTarget& target )
             tilesMatrix[i][j].render(target);
         }
     }
-
-    // sf::RectangleShape roomRect;
-    // roomRect.setPosition( sf::Vector2f( 0, 0 ) ) ;
-    // roomRect.setSize( sf::Vector2f( this->height, this->width ) );
-    // roomRect.setFillColor( sf::Color::Black );
-    // roomRect.setFillColor( sf::Color( 200, 200, 200, 150 ) );
-    // roomRect.setOutlineThickness(3);
-    // roomRect.setOutlineColor( sf::Color::Red );
-    // target.draw(roomRect);
 }
 
+// =====================================================================
+// 
+// DOOR OBJECT DEFINITION 
+//
 // =====================================================================
 
 /**
  * @brief Construct a new Dungeon:: Door:: Door object
  * 
  */
-Dungeon::Door::Door(int x, int y)
+Dungeon::Door::Door(int x, int y, int dest)
 {
     this->x = x;
     this->y = y;
+    this->destinationRoom = dest;
     this->isClosed = true;
 }
 
 Dungeon::Door::~Door()
 {
     
+}
+
+int Dungeon::Door::getDestinationRoom() {
+    return destinationRoom;
 }
 
 sf::Vector2i Dungeon::Door::getPosition() {
@@ -180,6 +228,10 @@ void Dungeon::Door::setClosed()
 }
 
 
+// =====================================================================
+//
+// TILE OBJECT DEFINITION 
+//
 // =====================================================================
 
 Dungeon::Tile::Tile()

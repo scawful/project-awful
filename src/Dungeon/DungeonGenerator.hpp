@@ -18,6 +18,9 @@ private:
     int currentRoomNumber;
     DungeonType dungeonType;    
     
+    // Boolean 
+    bool isTransitioning;
+
     // Modifiers
     double numRoomsModifier;
 
@@ -27,6 +30,7 @@ private:
 
     // sfml 
     sf::Text debugText;
+    sf::Vector2f playerPosition;
 
     // Helper
     int getRandomUnusedRoomID();

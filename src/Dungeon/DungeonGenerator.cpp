@@ -56,7 +56,9 @@ void DungeonGenerator::generateDungeon()
 
     // initialize all the rooms 
     for ( int i = 0; i < numRooms; i++ ) {
-        rooms.emplace(i, new Dungeon::Room(i));
+        uniform_int_distribution<int> randomDimension(5, difficultyLevel * 10); // guaranteed unbiased
+        uniform_int_distribution<int> randomNumDoors(1,3);
+        rooms.emplace(i, new Dungeon::Room(i, randomDimension(rng), randomDimension(rng), randomNumDoors(rng), numRooms) );
     }
 
     int bossRoom = getRandomUnusedRoomID();
@@ -100,6 +102,13 @@ void DungeonGenerator::generateDungeon()
 void DungeonGenerator::updateDungeon() 
 {
     rooms.at(currentRoomNumber)->updateRoom();
+    
+    // player is at a door and can move to the next room 
+    if ( rooms.at(currentRoomNumber)->changeRoom() ) {
+        rooms.at(currentRoomNumber)->setRoomChangeHandshake();
+        rooms.at(rooms.at(currentRoomNumber)->getNextRoomNumber())->createRoom();
+        currentRoomNumber = rooms.at(currentRoomNumber)->getNextRoomNumber();
+    }
 }
 
 void DungeonGenerator::render(sf::RenderTarget& target)
