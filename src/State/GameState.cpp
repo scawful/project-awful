@@ -32,7 +32,7 @@ void GameState::initPlayers()
 
 void GameState::initWorld()
 {
-    currentWorld = new Overworld( this->player, this->textures );
+    currentWorld = new Underworld( this->player, this->textures );
 }
 
 void GameState::initButtons()
@@ -142,7 +142,7 @@ void GameState::render( sf::RenderTarget* target )
         target = this->window;
 
     // sets background to white for regions without objects being rendered over them
-    target->clear( sf::Color::White );
+    target->clear( sf::Color::Black );
 
     currentWorld->render(*target);
     
