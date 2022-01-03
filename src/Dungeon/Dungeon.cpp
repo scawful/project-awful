@@ -1,5 +1,141 @@
 #include "Dungeon.hpp"
 
+// DUNGEON NAMESPACE
+// TABLE OF CONTENTS 
+// 1. TILE 
+// 2. DOOR 
+// 3. 
+
+
+// ==============================================================================================================
+//
+//                                            TILE OBJECT DEFINITION 
+//
+// ==============================================================================================================
+
+Dungeon::Tile::Tile()
+{
+
+}
+
+Dungeon::Tile::~Tile()
+{
+
+}
+
+sf::RectangleShape Dungeon::Tile::getTileRectangle()
+{
+    return this->tileRect;
+}
+
+void Dungeon::Tile::setTileType( TileType type )
+{
+    this->tileType = type;
+    sf::Image textureImage;
+    if ( type == TileType::FLOOR ) {
+        textureImage.loadFromFile("../assets/floor_gray.png");
+        tileTexture.loadFromImage(textureImage);
+    } else if ( type == TileType::WALL_TOP || type == TileType::WALL_BOTTOM ) {
+        textureImage.loadFromFile("../assets/wall_top.png");
+        tileTexture.loadFromImage(textureImage);
+    } else if ( type == TileType::WALL_UPPER_LEFT_CORNER ) {
+        textureImage.loadFromFile("../assets/wall_top_left_corner.png");
+        tileTexture.loadFromImage(textureImage);
+    } else if ( type == TileType::WALL_UPPER_RIGHT_CORNER ) {
+        textureImage.loadFromFile("../assets/wall_top_right_corner.png");
+        tileTexture.loadFromImage(textureImage);
+    } else if ( type == TileType::WALL_LOWER_LEFT_CORNER ) {
+        textureImage.loadFromFile("../assets/wall_bottom_left_corner.png");
+        tileTexture.loadFromImage(textureImage);
+    } else if ( type == TileType::WALL_LOWER_RIGHT_CORNER ) {
+        textureImage.loadFromFile("../assets/wall_bottom_right_corner.png");
+        tileTexture.loadFromImage(textureImage);
+    } else if ( type == TileType::WALL_LEFT ) {
+        textureImage.loadFromFile("../assets/wall_left.png");
+        tileTexture.loadFromImage(textureImage);
+    } else if ( type == TileType::WALL_RIGHT ) {
+        textureImage.loadFromFile("../assets/wall_right.png");
+        tileTexture.loadFromImage(textureImage);
+    } else if ( type == TileType::DOOR_CLOSED ) {
+        textureImage.loadFromFile("../assets/door_closed.png");
+        tileTexture.loadFromImage(textureImage);
+    } else if ( type == TileType::DOOR_OPEN ) {
+        textureImage.loadFromFile("../assets/door_open.png");
+        tileTexture.loadFromImage(textureImage);
+    }
+}
+
+void Dungeon::Tile::setTileRectCoords( int top, int left )
+{
+    tileRect.setPosition( sf::Vector2f( top, left ) );
+}
+
+void Dungeon::Tile::setTileRectSize( int width, int height ) 
+{
+    tileRect.setSize( sf::Vector2f(width, height) );
+}
+
+void Dungeon::Tile::render( sf::RenderTarget& target )
+{
+    tileRect.setTexture(&tileTexture);
+    target.draw(tileRect);
+}
+
+// ==============================================================================================================
+// 
+//                                          DOOR OBJECT DEFINITION 
+//
+// ==============================================================================================================
+
+/**
+ * @brief Construct a new Dungeon:: Door:: Door object
+ * 
+ */
+Dungeon::Door::Door(int x, int y, int dest)
+{
+    this->x = x;
+    this->y = y;
+    this->destinationRoom = dest;
+    this->isClosed = true;
+}
+
+Dungeon::Door::~Door()
+{
+    
+}
+
+int Dungeon::Door::getDestinationRoom() {
+    return destinationRoom;
+}
+
+sf::Vector2i Dungeon::Door::getPosition() {
+    return sf::Vector2i(x,y);
+}
+
+bool Dungeon::Door::getIsClosed() {
+    return isClosed;
+}
+
+void Dungeon::Door::setOpen()
+{
+    isClosed = false;
+}
+
+void Dungeon::Door::setClosed()
+{
+    isClosed = true;
+}
+
+// ==============================================================================================================
+//
+//                                          ROOM OBJECT DEFINITION 
+//
+// ==============================================================================================================
+
+/**
+ * @brief Assign the different tile types to the matrix 
+ * 
+ */
 void Dungeon::Room::initTiles() 
 {
     try {
@@ -69,6 +205,7 @@ Dungeon::Room::Room(int id, int width, int height, int numDoors, int numSiblings
     this->width = width;
     this->numDoors = numDoors;
     this->numSiblings = numSiblings;
+    this->tilesMatrix = nullptr;
     isChangingRoom = false;
     cout << "Room #" << id << " initialized\n"; 
 }
@@ -79,13 +216,28 @@ Dungeon::Room::Room(int id, int width, int height, int numDoors, int numSiblings
  */
 Dungeon::Room::~Room()
 {
-    for(int i = 0; i < height; ++i) {
-        delete [] tilesMatrix[i];
-    }
-    delete [] tilesMatrix;
-    tilesMatrix = nullptr;
+    destroyRoom();
 }
 
+/**
+ * @brief Publicly available routine to clear the tiles matrix 
+ * 
+ */
+void Dungeon::Room::destroyRoom()
+{
+    if ( tilesMatrix != nullptr ) {
+        for(int i = 0; i < width; i++) {
+            delete [] tilesMatrix[i];
+        }
+        delete [] tilesMatrix;
+        tilesMatrix = nullptr;
+    }
+}
+
+/**
+ * @brief Publicly available function for building the Room 
+ * 
+ */
 void Dungeon::Room::createRoom() {
     initTiles();
 }
@@ -182,122 +334,4 @@ void Dungeon::Room::drawRoom( sf::RenderTarget& target )
     }
 }
 
-// =====================================================================
-// 
-// DOOR OBJECT DEFINITION 
-//
-// =====================================================================
 
-/**
- * @brief Construct a new Dungeon:: Door:: Door object
- * 
- */
-Dungeon::Door::Door(int x, int y, int dest)
-{
-    this->x = x;
-    this->y = y;
-    this->destinationRoom = dest;
-    this->isClosed = true;
-}
-
-Dungeon::Door::~Door()
-{
-    
-}
-
-int Dungeon::Door::getDestinationRoom() {
-    return destinationRoom;
-}
-
-sf::Vector2i Dungeon::Door::getPosition() {
-    return sf::Vector2i(x,y);
-}
-
-bool Dungeon::Door::getIsClosed() {
-    return isClosed;
-}
-
-void Dungeon::Door::setOpen()
-{
-    isClosed = false;
-}
-
-void Dungeon::Door::setClosed()
-{
-    isClosed = true;
-}
-
-
-// =====================================================================
-//
-// TILE OBJECT DEFINITION 
-//
-// =====================================================================
-
-Dungeon::Tile::Tile()
-{
-
-}
-
-Dungeon::Tile::~Tile()
-{
-
-}
-
-sf::RectangleShape Dungeon::Tile::getTileRectangle()
-{
-    return this->tileRect;
-}
-
-void Dungeon::Tile::setTileType( TileType type )
-{
-    this->tileType = type;
-    sf::Image textureImage;
-    if ( type == TileType::FLOOR ) {
-        textureImage.loadFromFile("../assets/floor_gray.png");
-        tileTexture.loadFromImage(textureImage);
-    } else if ( type == TileType::WALL_TOP || type == TileType::WALL_BOTTOM ) {
-        textureImage.loadFromFile("../assets/wall_top.png");
-        tileTexture.loadFromImage(textureImage);
-    } else if ( type == TileType::WALL_UPPER_LEFT_CORNER ) {
-        textureImage.loadFromFile("../assets/wall_top_left_corner.png");
-        tileTexture.loadFromImage(textureImage);
-    } else if ( type == TileType::WALL_UPPER_RIGHT_CORNER ) {
-        textureImage.loadFromFile("../assets/wall_top_right_corner.png");
-        tileTexture.loadFromImage(textureImage);
-    } else if ( type == TileType::WALL_LOWER_LEFT_CORNER ) {
-        textureImage.loadFromFile("../assets/wall_bottom_left_corner.png");
-        tileTexture.loadFromImage(textureImage);
-    } else if ( type == TileType::WALL_LOWER_RIGHT_CORNER ) {
-        textureImage.loadFromFile("../assets/wall_bottom_right_corner.png");
-        tileTexture.loadFromImage(textureImage);
-    } else if ( type == TileType::WALL_LEFT ) {
-        textureImage.loadFromFile("../assets/wall_left.png");
-        tileTexture.loadFromImage(textureImage);
-    } else if ( type == TileType::WALL_RIGHT ) {
-        textureImage.loadFromFile("../assets/wall_right.png");
-        tileTexture.loadFromImage(textureImage);
-    } else if ( type == TileType::DOOR_CLOSED ) {
-        textureImage.loadFromFile("../assets/door_closed.png");
-        tileTexture.loadFromImage(textureImage);
-    } else if ( type == TileType::DOOR_OPEN ) {
-        textureImage.loadFromFile("../assets/door_open.png");
-        tileTexture.loadFromImage(textureImage);
-    }
-}
-
-void Dungeon::Tile::setTileRectCoords( int top, int left )
-{
-    tileRect.setPosition( sf::Vector2f( top, left ) );
-}
-
-void Dungeon::Tile::setTileRectSize( int width, int height ) 
-{
-    tileRect.setSize( sf::Vector2f(width, height) );
-}
-
-void Dungeon::Tile::render( sf::RenderTarget& target )
-{
-    tileRect.setTexture(&tileTexture);
-    target.draw(tileRect);
-}

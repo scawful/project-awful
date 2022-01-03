@@ -33,6 +33,10 @@ namespace Dungeon
         DOOR_OPEN
     };
 
+    /**
+     * @brief Tile Object Declaration 
+     * 
+     */
     class Tile
     {
     private:
@@ -51,6 +55,10 @@ namespace Dungeon
         void render( sf::RenderTarget& target );
     };
 
+    /**
+     * @brief Door Object Declaration 
+     * 
+     */
     class Door
     {
     private:
@@ -72,7 +80,7 @@ namespace Dungeon
 
 
     /**
-     * @brief Object representing any room in a dungeon
+     * @brief Room Object Declaration
      * 
      */
     class Room
@@ -107,6 +115,8 @@ namespace Dungeon
         Room(int id, int width, int height, int numDoors, int numSiblings);
         ~Room();
         
+        void destroyRoom();
+
         void createRoom();
         int getNextRoomNumber();
 
