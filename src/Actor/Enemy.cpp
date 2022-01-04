@@ -1,10 +1,20 @@
 #include "Enemy.hpp"
 
+/**
+ * @brief Initialize enemy variables
+ * @author @scawful
+ * 
+ */
 void Enemy::initVariables() 
 {
     this->attacking = false;
 }
 
+/**
+ * @brief Initialize components from parent class
+ * @author @scawful
+ * 
+ */
 void Enemy::initComponents() 
 {
     // this calls the Actor member function to create a MovementComponent
@@ -13,6 +23,14 @@ void Enemy::initComponents()
     this->createHitboxComponent(this->sprite, 0.f, 0.f, 80.f, 80.f);
 }
 
+/**
+ * @brief Construct a new Enemy:: Enemy object
+ * @author @scawful
+ * 
+ * @param x 
+ * @param y 
+ * @param texture_sheet 
+ */
 Enemy::Enemy(float x, float y, sf::Texture& texture_sheet) 
 {
     this->setPosition(x, y);
@@ -23,11 +41,22 @@ Enemy::Enemy(float x, float y, sf::Texture& texture_sheet)
     this->animationComponent->addAnimation( "IDLE", 11.f, 0, 0, 0, 0, 80, 80 );
 }
 
+/**
+ * @brief Destroy the Enemy:: Enemy object
+ * 
+ */
 Enemy::~Enemy() 
 {
-
+    // justify this being empty 
 }
 
+/**
+ * @brief basic normalization ai to attract enemy towards a source position
+ * @author @scawful
+ * 
+ * @param source 
+ * @return sf::Vector2f 
+ */
 sf::Vector2f Enemy::normalize(const sf::Vector2f& source)
 {
     float length = sqrt( ( source.x * source.x ) + ( source.y * source.y ) );
@@ -37,6 +66,12 @@ sf::Vector2f Enemy::normalize(const sf::Vector2f& source)
         return source;
 }
 
+/**
+ * @brief Cumulative update routine for the Enemy class using its Actor components
+ * @author @scawful
+ * 
+ * @param dt 
+ */
 void Enemy::update(const float& dt) 
 {
     this->movementComponent->update(dt);
