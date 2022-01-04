@@ -1,5 +1,12 @@
 #include "Player.hpp"
 
+/**
+ * @brief Initialize player default stats
+ * @author @scawful
+ * 
+ * @todo Separate this into functions for the character creation
+ * 
+ */
 void Player::initVariables() 
 {
     this->level = 1;
@@ -9,6 +16,11 @@ void Player::initVariables()
     this->attacking = false;
 }
 
+/**
+ * @brief Initialize actor components
+ * @author @scawful
+ * 
+ */
 void Player::initComponents() 
 {
     // this calls the Actor member function to create a MovementComponent
@@ -17,6 +29,16 @@ void Player::initComponents()
     this->createHitboxComponent(this->sprite, 0.f, 0.f, 62.f, 83.f);
 }
 
+/**
+ * @brief Construct a new Player:: Player object
+ * @author @scawful
+ * 
+ * @todo Separate animation creation into its own function
+ * 
+ * @param x 
+ * @param y 
+ * @param texture_sheet 
+ */
 Player::Player(float x, float y, sf::Texture& texture_sheet) 
 {
     this->initVariables();
@@ -40,11 +62,23 @@ Player::Player(float x, float y, sf::Texture& texture_sheet)
 
 }
 
+/**
+ * @brief Destroy the Player:: Player object
+ * @author @scawful
+ * 
+ */
 Player::~Player() 
 {
     
 }
 
+/**
+ * @brief Cumulative update routine for the components
+ *        Handles Player interactions (attacking)
+ * @author @scawful
+ * 
+ * @param dt 
+ */
 void Player::update(const float& dt) 
 {
     this->movementComponent->update(dt);
@@ -106,5 +140,4 @@ void Player::update(const float& dt)
     }
 
     this->hitboxComponent->update();
-
 }
