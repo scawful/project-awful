@@ -13,12 +13,15 @@ private:
     void initVariables();
 
 protected:
+    // sfml Sprite
     sf::Sprite sprite;
 
+    // Components
     AnimationComponent* animationComponent;
     MovementComponent* movementComponent;
     HitboxComponent* hitboxComponent;
 
+    // Actor Stats
     int level;
     float health, maxHealth, strength;
     
@@ -33,11 +36,12 @@ public:
                                float offset_x, float offset_y,
                                float width, float height);
     
-    // Setters
+    // Modifiers
     void setHealth( float health );
     void setTexture(sf::Texture& texture);
     void setPosition(const float x, const float y);
 
+    // Accessors
     sf::Vector2f getPosition();
     sf::Vector2f getSize();
     float getHealth();
