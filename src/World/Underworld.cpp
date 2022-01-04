@@ -1,21 +1,41 @@
 #include "Underworld.hpp"
 
+/**
+ * @brief Initialize any textures to be used in the Underworld
+ * @author @scawful
+ * 
+ */
 void Underworld::initTextures() 
 {
     
 }
 
+/**
+ * @brief Initialize any fonts to be used in the Underworld
+ * @author @scawful
+ * 
+ */
 void Underworld::initFonts()
 {
     this->gameFont.loadFromFile("../assets/ARCADECLASSIC.TTF");
 }
 
+/**
+ * @brief Initialize the dungeon generator object 
+ * @author @scawful
+ * 
+ */
 void Underworld::initDungeon()
 {
     this->dungeonGenerator = new DungeonGenerator(1);
     this->wallWidth = 100;
 }
 
+/**
+ * @brief Initialize the Players attributes for the Underworld
+ * @author @scawful
+ * 
+ */
 void Underworld::initPlayers()
 {
     this->playerSize = this->player->getSize();
@@ -23,6 +43,13 @@ void Underworld::initPlayers()
     this->playerPosition = sf::Vector2f( this->dungeonGenerator->getDungeonDimensions().x / 2, this->dungeonGenerator->getDungeonDimensions().y / 2 );
 }
 
+/**
+ * @brief Construct a new Underworld:: Underworld object
+ * @author @scawful
+ * 
+ * @param playerRef 
+ * @param textureRef 
+ */
 Underworld::Underworld( Player *playerRef, std::map<std::string, sf::Texture> &textureRef ) : World( playerRef, textureRef )
 {
     this->initFonts();
@@ -33,6 +60,11 @@ Underworld::Underworld( Player *playerRef, std::map<std::string, sf::Texture> &t
     // cout << "Underworld created" << endl;
 }
 
+/**
+ * @brief Destroy the Underworld:: Underworld object
+ * @author @scawful
+ * 
+ */
 Underworld::~Underworld() 
 {
     delete this->dungeonGenerator;
@@ -42,6 +74,12 @@ Underworld::~Underworld()
     // cout << "Underworld destroyed" << endl;
 }
 
+/**
+ * @brief Update player input and collision
+ * @author @scawful
+ * 
+ * @param dt 
+ */
 void Underworld::updateInput(const float& dt)
 {
     // collide with edges of screen
@@ -70,6 +108,12 @@ void Underworld::updateInput(const float& dt)
         this->player->move(0.f, 1.f, dt);
 }
 
+/**
+ * @brief Cumulative update routine for the Underworld
+ * @author @scawful
+ * 
+ * @param dt 
+ */
 void Underworld::update(const float& dt) 
 {
     playerPosition = this->player->getPosition();
@@ -81,6 +125,12 @@ void Underworld::update(const float& dt)
     this->updateInput(dt);
 }
 
+/**
+ * @brief Cumulative render routine for the Underworld
+ * @author @scawful
+ * 
+ * @param target 
+ */
 void Underworld::render(sf::RenderTarget &target) 
 {    
     // the camera of the game, centered on the players position

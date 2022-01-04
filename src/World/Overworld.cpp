@@ -1,10 +1,20 @@
 #include "Overworld.hpp"
 
+/**
+ * @brief Initialize any fonts to be used in the Overworld
+ * @author @scawful
+ * 
+ */
 void Overworld::initFonts()
 {
     this->gameFont.loadFromFile("../assets/ARCADECLASSIC.TTF");
 }
 
+/**
+ * @brief Initialize any textures to be used in the Overworld
+ * @author @scawful
+ * 
+ */
 void Overworld::initTextures() 
 {
     // load individual enemy images 
@@ -26,12 +36,22 @@ void Overworld::initTextures()
     floorTileTexture.setRepeated( true );
 }
 
+/**
+ * @brief Initialize the Players attributes
+ * @author @scawful
+ * 
+ */
 void Overworld::initPlayers()
 {
     playerSize = this->player->getSize();
     playerPosition = this->player->getPosition();
 }
 
+/**
+ * @brief Initialize some random enemies for the Overworld
+ * @author @scawful
+ * 
+ */
 void Overworld::initEnemies() 
 {
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
@@ -70,6 +90,15 @@ void Overworld::initEnemies()
 
 }
 
+/**
+ * @brief Construct a new Overworld:: Overworld object
+ * @author @scawful
+ * 
+ * @todo Create an initBackground routine for the background
+ * 
+ * @param playerRef 
+ * @param textureRef 
+ */
 Overworld::Overworld( Player *playerRef, std::map<std::string, sf::Texture> &textureRef ) : World( playerRef, textureRef )
 {
     this->initFonts();
@@ -93,6 +122,11 @@ Overworld::Overworld( Player *playerRef, std::map<std::string, sf::Texture> &tex
     
 }
 
+/**
+ * @brief Destroy the Overworld:: Overworld object
+ * @author @scawful
+ * 
+ */
 Overworld::~Overworld() 
 {
     for ( int i = 0; i < 10; i++ )
@@ -102,7 +136,12 @@ Overworld::~Overworld()
     // cout << "Overworld destroyed" << endl;
 }
 
-
+/**
+ * @brief Update the Enemy AI to chase the player when within line of sight 
+ * @author @scawful
+ * 
+ * @param dt 
+ */
 void Overworld::updateEnemyAI(const float& dt)
 {
     sf::Vector2f trueCenter( playerPosition );
@@ -139,6 +178,12 @@ void Overworld::updateEnemyAI(const float& dt)
 
 }
 
+/**
+ * @brief Update the Players input and position
+ * @author @scawful
+ * 
+ * @param dt 
+ */
 void Overworld::updateInput(const float& dt)
 {
     // collide with edges of screen
@@ -166,6 +211,12 @@ void Overworld::updateInput(const float& dt)
         this->player->move(0.f, 1.f, dt);
 }
 
+/**
+ * @brief Cumulative update routine for the Overworld
+ * @author @scawful
+ * 
+ * @param dt 
+ */
 void Overworld::update(const float& dt) 
 {
     playerPosition = this->player->getPosition();
@@ -178,6 +229,12 @@ void Overworld::update(const float& dt)
     this->updateInput(dt);
 }
 
+/**
+ * @brief Render any contents of the Overworld to the sf::RenderTarget
+ * @author @scawful
+ * 
+ * @param target 
+ */
 void Overworld::render(sf::RenderTarget &target) 
 {
     // sets background to white for regions without objects being rendered over them

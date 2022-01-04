@@ -27,8 +27,11 @@ protected:
 public:
     World( Player *playerRef, std::map<std::string, sf::Texture> &textureRef );
     virtual ~World();
-
+    
+    // Virtual update routine 
     virtual void update(const float& dt) = 0;
+
+    // Virtual render routine
     virtual void render(sf::RenderTarget& target) = 0;
 };
 
