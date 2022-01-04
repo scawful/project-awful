@@ -9,7 +9,11 @@ void MainMenuState::initVariables()
 
 }
 
-
+/**
+ * @brief Initialize the background image and dimensions 
+ * @author @scawful
+ * 
+ */
 void MainMenuState::initBackground() 
 {
     // set the size for the white background equal to the size of the window itself
@@ -28,7 +32,11 @@ void MainMenuState::initBackground()
     this->background.setTexture(&this->backgroundTexture);
 }
 
-
+/**
+ * @brief Initialize any fonts to be used in the MainMenuState
+ * @author @scawful
+ * 
+ */
 void MainMenuState::initFonts() 
 {    
     // loading the font to be used for the title and mouse cursor position display
@@ -38,7 +46,11 @@ void MainMenuState::initFonts()
     }       
 }
 
-
+/**
+ * @brief Initialize any buttons to be used in the MainMenuState
+ * @author @scawful
+ * 
+ */
 void MainMenuState::initButtons()
 {
     // @scawful: see Gui/Button.cpp for more details on how this object works. 
@@ -76,8 +88,12 @@ void MainMenuState::initButtons()
     
 }
 
-
-void MainMenuState::initTextboxes () 
+/**
+ * @brief Initialize any input textboxes to be used in the MainMenuState
+ * @authors @jmielc2 @scawful
+ * 
+ */
+void MainMenuState::initTextboxes() 
 {
     this->textboxes["CHARACTER_NAME"] = new Textbox (
                         sf::Vector2f((SCREEN_WIDTH - 450.f) / 2, ((SCREEN_HEIGHT - 50.f) / 2) - 250.f),
@@ -87,7 +103,14 @@ void MainMenuState::initTextboxes ()
                         sf::Color(225, 231, 238, 200), sf::Color(244, 244, 244, 200), sf::Color::White, true, "Enter Name");
 }
 
-
+/**
+ * @brief Construct a new Main Menu State:: Main Menu State object
+ * @authors @jmielc2 @scawful
+ * 
+ * @param window 
+ * @param states 
+ * @param Event 
+ */
 MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* states, shared_ptr<sf::Event> Event)
     : State(window, states)
 {
@@ -102,6 +125,11 @@ MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* state
     // cout << "MainMenuState::MainMenuState created\n";
 }
 
+/**
+ * @brief Destroy the Main Menu State:: Main Menu State object
+ * @authors @jmielc2 @scawful
+ * 
+ */
 MainMenuState::~MainMenuState()
 {
     auto it = this->buttons.begin();
@@ -120,7 +148,12 @@ MainMenuState::~MainMenuState()
     // cout << "MainMenuState::~MainMenuState destroyed\n";
 }
 
-
+/**
+ * @brief Update any state variables 
+ * @author @scawful
+ * 
+ * @param dt 
+ */
 void MainMenuState::updateInput(const float &dt) 
 {
     if (!this->getKeytime()) {
@@ -128,7 +161,11 @@ void MainMenuState::updateInput(const float &dt)
     }
 }
 
-
+/**
+ * @brief Update any buttons initialized in the MainMenuState and handle their results
+ * @authors @jmielc2 @scawful
+ * 
+ */
 void MainMenuState::updateButtons()
 {
     // Update all buttons in state and handles functionalty
@@ -161,7 +198,11 @@ void MainMenuState::updateButtons()
     }
 }
 
-
+/**
+ * @brief Update the state of a TextBox object
+ * @author @jmielc2
+ * 
+ */
 void MainMenuState::updateTextboxes () 
 {
     for (auto &it : this->textboxes)
@@ -170,7 +211,11 @@ void MainMenuState::updateTextboxes ()
     }
 }
 
-
+/**
+ * @brief Neutralize the state of a TextBox object
+ * @author @jmielc2
+ * 
+ */
 void MainMenuState::neutralizeTextboxes () 
 {
     for (auto &it : this->textboxes)
@@ -179,7 +224,12 @@ void MainMenuState::neutralizeTextboxes ()
     }
 }
 
-
+/**
+ * @brief Cumulative update routine for the MainMenuState
+ * @authors @jmielc2 @scawful
+ * 
+ * @param dt 
+ */
 void MainMenuState::update(const float& dt) 
 {
     // updateMousePositions comes from the parent State class, will be useful for GUI buttons 
@@ -190,7 +240,12 @@ void MainMenuState::update(const float& dt)
     this->updateTextboxes();
 }
 
-
+/**
+ * @brief Render any buttons to the sf::RenderTarget
+ * @author @scawful
+ * 
+ * @param target 
+ */
 void MainMenuState::renderButtons(sf::RenderTarget& target)
 {
     for ( auto &it : this->buttons ) 
@@ -199,7 +254,12 @@ void MainMenuState::renderButtons(sf::RenderTarget& target)
     }
 }
 
-
+/**
+ * @brief Render any TextBox objects to the sf::RenderTarget
+ * @author @jmielc2
+ * 
+ * @param target 
+ */
 void MainMenuState::renderTextbox(sf::RenderTarget& target) 
 {
     for (auto &it : this->textboxes)
@@ -208,7 +268,12 @@ void MainMenuState::renderTextbox(sf::RenderTarget& target)
     }
 }
 
-
+/**
+ * @brief Cumulative render routine for the MainMenuState
+ * @authors @scawful @jmielc2
+ * 
+ * @param target 
+ */
 void MainMenuState::render(sf::RenderTarget* target)
 {
     // if the target for whatever reason is invalid, attempt to render to the whole window
