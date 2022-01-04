@@ -1,7 +1,10 @@
 #include "Game.hpp"
 
-// @scawful
-// @brief: set default variables for game runtime 
+/**
+ * @brief set default variables for game runtime 
+ * @author @scawful
+ * 
+ */
 void Game::initVariables() 
 {
     this->window = NULL;
@@ -9,9 +12,13 @@ void Game::initVariables()
     this->dt = 0.f;
 }
 
-// @scawful
-// @brief: initialization of game window 
-// @todo: add a config file with saved settings to import from 
+/**
+ * @brief initialization of game window via sfml RenderWindow
+ * @author @scawful
+ * 
+ * @todo add a config file with saved settings to import from 
+ * 
+ */
 void Game::initWindow() 
 {    
     sf::VideoMode window_bounds = sf::VideoMode::getDesktopMode();
@@ -40,8 +47,11 @@ void Game::initWindow()
 
 }
 
-// @scawful
-// @brief: push the initial state of the game to the stack 
+/**
+ * @brief push the initial state of the game to the stack 
+ * @author @scawful 
+ * 
+ */
 void Game::initStates() 
 {
     // add the MainMenuState to the stack of States 
@@ -49,9 +59,11 @@ void Game::initStates()
     this->states.top()->currentState = "MainMenuState";
 }
 
-
-// @scawful
-// Constructor
+/**
+ * @brief Construct a new Game:: Game object
+ * @author @scawful
+ * 
+ */
 Game::Game() 
 {
     // @scawful: commenting out debug lines for the master branch 
@@ -61,8 +73,11 @@ Game::Game()
     this->initStates();
 }
 
-// @scawful
-// Destructor
+/**
+ * @brief Destroy the Game:: Game object
+ * @author @scawful
+ * 
+ */
 Game::~Game()
 {
     // dispose of the sfml window instance and pop any remaining states off the stack
@@ -74,16 +89,22 @@ Game::~Game()
     }
 }
 
-// @scawful
-// @brief: handles delta time clock refresh 
+/**
+ * @brief handles delta time clock refresh 
+ * @author @scawful
+ * 
+ */
 void Game::updateDt() 
 {
     // Updates delta time variable with update/render time for one frame
     this->dt = this->dtClock.restart().asSeconds();
 }
 
-// @scawful
-// @brief: universal event handling 
+/**
+ * @brief universal event handling 
+ * @author @scawful
+ * 
+ */
 void Game::updateSFMLEvents() 
 {
     // polling events from sfml using the sf::Event class
@@ -108,8 +129,11 @@ void Game::updateSFMLEvents()
     }
 }
 
-// @scawful
-// @brief: primary update function which handles the current state on the stack
+/**
+ * @brief primary update function which handles the current state on the stack
+ * @author @scawful
+ * 
+ */
 void Game::update() 
 {
     this->updateSFMLEvents();
@@ -133,8 +157,11 @@ void Game::update()
     }
 }
 
-// @scawful
-// @brief: primary render function for top of stack state 
+/**
+ * @brief primary render function for top of stack state 
+ * @author @scawful
+ * 
+ */
 void Game::render() 
 {
     // Clear screen
@@ -148,8 +175,11 @@ void Game::render()
     this->window->display();
 }
 
-// @scawful
-// @brief: main game loop
+/**
+ * @brief main game loop
+ * @author @scawful
+ * 
+ */
 void Game::run() 
 {
     while ( this->window->isOpen() )
