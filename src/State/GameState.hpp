@@ -9,28 +9,36 @@ enum world { UNDERWORLD, OVERWORLD };
 class GameState: public State
 {
 private:
-    // Variables
+    // Game Variables
     World *currentWorld;
     Player *player;
     Sword *playerSword;
-    DungeonGenerator *dungeonGenerator;
 
+    // Data Structures for Custom Objects 
     std::vector<Enemy*> enemies;
     std::map<std::string, Button*> buttons;
 
+    // sfml Font Object
+    sf::Font gameFont;
+
+    // sfml Event Object 
+    sf::Event sfEvent; 
+
+    // sfml Vector Objects 
     sf::Vector2f playerPosition;
     sf::Vector2f playerSize;
     sf::Vector2f swordPosition;
 
+    // sfml Rectangle Objects 
     sf::RectangleShape enemySights[10];
     sf::RectangleShape background;
     sf::RectangleShape enemyLineOfSight;
+
+    // sfml Texture Objects
     sf::Texture playerTexture;
     sf::Texture floorTileTexture;
-    sf::Event sfEvent; 
-    sf::Font gameFont;
 
-    // Functions
+    // Initialization functions
     void initFonts();
     void initTextures();
     void initPlayers();
@@ -41,12 +49,15 @@ public:
     GameState(sf::RenderWindow* window, std::stack<State*>* states);
     virtual ~GameState();
         
-    // Functions
+    // Accessors
     void getQuit();
     
+    // Update routines 
     void updateInput(const float& dt);
     void updateButtons();
     void update(const float& dt);
+
+    // Render routines 
     void renderButtons(sf::RenderTarget& target);
     void render(sf::RenderTarget* target = nullptr);
 };

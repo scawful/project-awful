@@ -1,6 +1,11 @@
 #include "GameState.hpp"
 #include "MainMenuState.hpp"
 
+/**
+ * @brief Load any desired TTF fonts for the GameState
+ * @author @scawful
+ * 
+ */
 void GameState::initFonts()
 {
     if (!this->gameFont.loadFromFile("../assets/ARCADECLASSIC.TTF")) 
@@ -9,6 +14,11 @@ void GameState::initFonts()
     }   
 }
 
+/**
+ * @brief Load any desired image textures for the GameState
+ * @author @scawful
+ * 
+ */
 void GameState::initTextures()
 {
     // load player spritesheet
@@ -23,6 +33,11 @@ void GameState::initTextures()
     this->textures["SWORD"].loadFromImage( swordSprite );
 }
 
+/**
+ * @brief Load the Player character and their spritesheet
+ * @author @scawful
+ * 
+ */
 void GameState::initPlayers()
 {
     this->player = new Player( (SCREEN_WIDTH - this->textures["PLAYER_SHEET"].getSize().x) / 2, 
@@ -30,11 +45,21 @@ void GameState::initPlayers()
                             this->textures["PLAYER_SHEET"] );
 }
 
+/**
+ * @brief Load the state of the game world to be displayed
+ * @author @scawful
+ * 
+ */
 void GameState::initWorld()
 {
     currentWorld = new Underworld( this->player, this->textures );
 }
 
+/**
+ * @brief Create any buttons to be displayed in the GameState
+ * @author @scawful
+ * 
+ */
 void GameState::initButtons()
 {
     this->buttons["MAIN_MENU_BTN"] = new Button(
@@ -46,6 +71,13 @@ void GameState::initButtons()
 
 }
 
+/**
+ * @brief Construct a new Game State:: Game State object
+ * @author @scawful
+ * 
+ * @param window 
+ * @param states 
+ */
 GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : State(window, states)
 {
     this->initFonts();
@@ -57,6 +89,11 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states) : Sta
     cout << "GameState::GameState created\n";
 }
 
+/**
+ * @brief Destroy the Game State:: Game State object
+ * @author @scawful 
+ * 
+ */
 GameState::~GameState() 
 {
     //delete this->playerSword;
@@ -76,6 +113,11 @@ GameState::~GameState()
     cout << "GameState::~GameState destroyed\n";
 }
 
+/**
+ * @brief Update any input from the User for GUI, Player or Debug controls 
+ * 
+ * @param dt 
+ */
 void GameState::updateInput(const float& dt)
 {
     // sword
@@ -101,6 +143,10 @@ void GameState::updateInput(const float& dt)
 
 }
 
+/**
+ * @brief Update the state of any buttons present on the screen 
+ * 
+ */
 void GameState::updateButtons()
 {
     for (auto &it : this->buttons) 
@@ -108,6 +154,7 @@ void GameState::updateButtons()
         it.second->update(this->mousePosView);
     }
     
+    // Return to MainMenuState from GameState
     if ( this->buttons["MAIN_MENU_BTN"]->isPressed() ) 
     {
         this->endState();
@@ -117,6 +164,12 @@ void GameState::updateButtons()
 
 }
 
+/**
+ * @brief cumulative update function 
+ * @author @scawful
+ * 
+ * @param dt 
+ */
 void GameState::update(const float& dt)
 {
     //this->playerSword->update(dt);
@@ -127,6 +180,12 @@ void GameState::update(const float& dt)
     currentWorld->update(dt);
 }
 
+/**
+ * @brief Render any initialized buttons to the sf::RenderTarget\
+ * @author @scawful
+ * 
+ * @param target 
+ */
 void GameState::renderButtons( sf::RenderTarget& target )
 {
     for ( auto &it : this->buttons )
@@ -135,6 +194,12 @@ void GameState::renderButtons( sf::RenderTarget& target )
     }
 }
 
+/**
+ * @brief Cumulative render function using the sf::RenderTarget
+ * @author @scawful
+ * 
+ * @param target 
+ */
 void GameState::render( sf::RenderTarget* target )
 {
     // tinfoil hat
