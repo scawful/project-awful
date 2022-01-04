@@ -16,6 +16,8 @@ private:
     int numRooms;
     int difficultyLevel;
     int currentRoomNumber;
+
+    // State Variables 
     DungeonType dungeonType;    
     
     // Boolean 
@@ -39,12 +41,17 @@ public:
     DungeonGenerator( int difficulty );
     ~DungeonGenerator();
 
-    // Functions    
+    // Accessors 
     sf::Vector2f getDungeonDimensions();
     void setPlayerPositionInDungeon( sf::Vector2f position, sf::Vector2f size );
+
+    // Random Dungeon Generation 
     void generateDungeon();
 
+    // Update routine
     void updateDungeon();
+
+    // Render routine 
     void render(sf::RenderTarget& target);
 
 };

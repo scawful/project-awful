@@ -3,6 +3,7 @@
 /**
  * @brief Randomly chooses a room id that hasn't yet been used as a specific room type
  *        Prevents duplicate boss, mini-boss, origin, etc 
+ * @author @scawful
  * 
  * @return int 
  */
@@ -27,6 +28,7 @@ int DungeonGenerator::getRandomUnusedRoomID()
 
 /**
  * @brief Construct a new Dungeon Generator:: Dungeon Generator object
+ * @author @scawful
  * 
  * @param difficulty 
  */
@@ -39,6 +41,7 @@ DungeonGenerator::DungeonGenerator( int difficulty )
 
 /**
  * @brief Destroy the Dungeon Generator:: Dungeon Generator object
+ * @author @scawful
  * 
  */
 DungeonGenerator::~DungeonGenerator()
@@ -50,16 +53,40 @@ DungeonGenerator::~DungeonGenerator()
     cout << "DungeonGenerator destroyed\n";
 }
 
+/**
+ * @brief Return real dimensions of dungeon
+ * @author @scawful
+ * 
+ * @todo make the tile size a variable 
+ * 
+ * @return sf::Vector2f 
+ */
 sf::Vector2f DungeonGenerator::getDungeonDimensions()
 {
     return sf::Vector2f( rooms.at(currentRoomNumber)->width * 100, rooms.at(currentRoomNumber)->height * 100 );
 }
 
+/**
+ * @brief Let the room know the position and size of the player 
+ * @author @scawful
+ * 
+ * @todo Either make the size assignment a separate function OR 
+ *       just pass a reference to the player object or player position to the room object
+ *       not sure yet
+ * 
+ * @param position 
+ * @param size 
+ */
 void DungeonGenerator::setPlayerPositionInDungeon( sf::Vector2f position, sf::Vector2f size )
 {
     rooms.at(currentRoomNumber)->setPlayerPosition( position, size );
 }
 
+/**
+ * @brief Randomly generate the contents of the dungeon 
+ * @author @scawful
+ * 
+ */
 void DungeonGenerator::generateDungeon()
 {
     // random-number engine used (Mersenne-Twister in this case)
@@ -115,6 +142,12 @@ void DungeonGenerator::generateDungeon()
     rooms.at(currentRoomNumber)->createRoom();
 }
 
+/**
+ * @brief Update the contents of the current room in the dungeon 
+ *        Change rooms when using a door 
+ * @author @scawful
+ * 
+ */
 void DungeonGenerator::updateDungeon() 
 {
     rooms.at(currentRoomNumber)->updateRoom();
@@ -127,6 +160,12 @@ void DungeonGenerator::updateDungeon()
     }
 }
 
+/**
+ * @brief Render the contents of the current room in the dungeon
+ * @author @scawful
+ * 
+ * @param target 
+ */
 void DungeonGenerator::render(sf::RenderTarget& target)
 {
     try {

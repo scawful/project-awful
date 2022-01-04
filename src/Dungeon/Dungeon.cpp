@@ -4,8 +4,8 @@
 // TABLE OF CONTENTS 
 // 1. TILE 
 // 2. DOOR 
-// 3. 
-
+// 3. ROOM 
+//
 
 // ==============================================================================================================
 //
@@ -13,21 +13,43 @@
 //
 // ==============================================================================================================
 
+/**
+ * @brief Construct a new Dungeon:: Tile:: Tile object
+ * @author @scawful
+ * 
+ */
 Dungeon::Tile::Tile()
 {
-
+    this->tileTexture = nullptr;
 }
 
+/**
+ * @brief Destroy the Dungeon:: Tile:: Tile object
+ * 
+ */
 Dungeon::Tile::~Tile()
 {
-
+    delete this->tileTexture;
+    this->tileTexture = nullptr 
 }
 
+/**
+ * @brief Accesses the RectangleShape object for the tile 
+ * @author @scawful
+ * 
+ * @return sf::RectangleShape 
+ */
 sf::RectangleShape Dungeon::Tile::getTileRectangle()
 {
     return this->tileRect;
 }
 
+/**
+ * @brief Assign graphics to the sf::Texture object 
+ * @author @scawful
+ * 
+ * @param type 
+ */
 void Dungeon::Tile::setTileType( TileType type )
 {
     this->tileType = type;
@@ -65,16 +87,36 @@ void Dungeon::Tile::setTileType( TileType type )
     }
 }
 
+/**
+ * @brief Assign tiles position 
+ * @author @scawful
+ * 
+ * @param top 
+ * @param left 
+ */
 void Dungeon::Tile::setTileRectCoords( int top, int left )
 {
     tileRect.setPosition( sf::Vector2f( top, left ) );
 }
 
+/**
+ * @brief Assign tiles scale 
+ * @author @scawful
+ * 
+ * @param width 
+ * @param height 
+ */
 void Dungeon::Tile::setTileRectSize( int width, int height ) 
 {
     tileRect.setSize( sf::Vector2f(width, height) );
 }
 
+/**
+ * @brief Render the sf::Texture object to the screen 
+ * @author @scawful
+ * 
+ * @param target 
+ */
 void Dungeon::Tile::render( sf::RenderTarget& target )
 {
     tileRect.setTexture(&tileTexture);
@@ -89,6 +131,7 @@ void Dungeon::Tile::render( sf::RenderTarget& target )
 
 /**
  * @brief Construct a new Dungeon:: Door:: Door object
+ * @author @scawful 
  * 
  */
 Dungeon::Door::Door(int x, int y, int dest)
@@ -99,28 +142,60 @@ Dungeon::Door::Door(int x, int y, int dest)
     this->isClosed = true;
 }
 
+/**
+ * @brief Destroy the Dungeon:: Door:: Door object
+ * @author @scawful
+ * 
+ */
 Dungeon::Door::~Door()
 {
     
 }
 
+/**
+ * @brief Return id of the next destination room 
+ * 
+ * @return int 
+ */
 int Dungeon::Door::getDestinationRoom() {
     return destinationRoom;
 }
 
+/**
+ * @brief Return the position of the door itself 
+ * 
+ * @return sf::Vector2i 
+ */
 sf::Vector2i Dungeon::Door::getPosition() {
     return sf::Vector2i(x,y);
 }
 
+/**
+ * @brief Check if the door is closed or not 
+ * @author @scawful
+ * 
+ * @return true 
+ * @return false 
+ */
 bool Dungeon::Door::getIsClosed() {
     return isClosed;
 }
 
+/**
+ * @brief Modifier for door state 
+ * @author @scawful
+ * 
+ */
 void Dungeon::Door::setOpen()
 {
     isClosed = false;
 }
 
+/**
+ * @brief Modifier for the door state 
+ * @author @scawful
+ * 
+ */
 void Dungeon::Door::setClosed()
 {
     isClosed = true;
@@ -134,6 +209,11 @@ void Dungeon::Door::setClosed()
 
 /**
  * @brief Assign the different tile types to the matrix 
+ * @author @scawful
+ * 
+ * @todo verify consistent connections between doors 
+ * @todo add left, right, and bottom door connections 
+ *     
  * 
  */
 void Dungeon::Room::initTiles() 
@@ -183,6 +263,7 @@ void Dungeon::Room::initTiles()
         }
     }
 
+    // todo see header 
     while ( numDoors != 0 ) {
         int x = randDoorLocation(rng);
         uniform_int_distribution<int> randomRoom(0, numSiblings - 1);
@@ -195,6 +276,7 @@ void Dungeon::Room::initTiles()
 
 /**
  * @brief Construct a new Dungeon:: Room:: Room object
+ * @author @scawful
  * 
  * @param id 
  */
@@ -212,6 +294,7 @@ Dungeon::Room::Room(int id, int width, int height, int numDoors, int numSiblings
 
 /**
  * @brief Destroy the Dungeon:: Room:: Room object
+ * @author @scawful
  * 
  */
 Dungeon::Room::~Room()
@@ -221,6 +304,7 @@ Dungeon::Room::~Room()
 
 /**
  * @brief Publicly available routine to clear the tiles matrix 
+ * @author @scawful
  * 
  */
 void Dungeon::Room::destroyRoom()
@@ -236,6 +320,7 @@ void Dungeon::Room::destroyRoom()
 
 /**
  * @brief Publicly available function for building the Room 
+ * @author @scawful
  * 
  */
 void Dungeon::Room::createRoom() {
@@ -244,6 +329,7 @@ void Dungeon::Room::createRoom() {
 
 /**
  * @brief Next Room Number to transition to as reported by update 
+ * @author @scawful
  * 
  * @return int 
  */
@@ -253,6 +339,7 @@ int Dungeon::Room::getNextRoomNumber() {
 
 /**
  * @brief Set the Room Type which determines rooms random content set 
+ * @author @scawful
  * 
  * @param type 
  */
@@ -263,6 +350,7 @@ void Dungeon::Room::setRoomType( RoomType type )
 
 /**
  * @brief get the players position and size from the outer layer for collission detection
+ * @author @scawful
  * 
  * @param position 
  * @param size 
@@ -275,6 +363,7 @@ void Dungeon::Room::setPlayerPosition( sf::Vector2f position, sf::Vector2f size 
 
 /**
  * @brief tell the room we're done changing rooms 
+ * @author @scawful
  * 
  */
 void Dungeon::Room::setRoomChangeHandshake()
@@ -284,6 +373,7 @@ void Dungeon::Room::setRoomChangeHandshake()
 
 /**
  * @brief reports if player is changing rooms or not 
+ * @author @scawful
  * 
  * @return true 
  * @return false 
@@ -294,6 +384,7 @@ bool Dungeon::Room::changeRoom() {
 
 /**
  * @brief update the contents of the Dungeon room 
+ * @author @scawful
  * 
  */
 void Dungeon::Room::updateRoom()
@@ -322,6 +413,7 @@ void Dungeon::Room::updateRoom()
 
 /**
  * @brief Render the non state entities of the room (tiles)
+ * @author @scawful
  * 
  * @param target 
  */
@@ -333,5 +425,3 @@ void Dungeon::Room::drawRoom( sf::RenderTarget& target )
         }
     }
 }
-
-
