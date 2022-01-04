@@ -37,8 +37,10 @@ public:
     void assignColors (sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color, 
             sf::Color idle_color, sf::Color hover_color, sf::Color active_color);
 
-    // Functions
+    // Update routine 
     void update(const sf::Vector2f& mousePos);
+
+    // Render routine 
     void render(sf::RenderTarget& target);
 };
 

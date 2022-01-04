@@ -8,10 +8,10 @@ class TextBlock : public sf::Text
 private:
     // Backdrop Determiner
     bool hasBackdrop = false;
+    
 public:
     // Actual Backdrop
     sf::RectangleShape backdrop;
-
 
     // Constructors & Destructor
     TextBlock () {};
@@ -30,7 +30,7 @@ public:
             float thickness = 0.f);
     void removeBackdrop () {this->hasBackdrop = false;}
 
-    // Functions
+    // Render routine 
     void render (sf::RenderTarget &window);
 };
 

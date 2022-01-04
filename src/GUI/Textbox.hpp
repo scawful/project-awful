@@ -39,9 +39,11 @@ public:
     // Accessors
     std::string getInputText ();
 
-    // Functions
+    // Update routines 
     void neutralize ();
     void update (const sf::Vector2f &mousePos, sf::Event &event);
+
+    // Render routine
     void render (sf::RenderTarget& target);
 };
 

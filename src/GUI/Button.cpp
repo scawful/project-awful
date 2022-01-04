@@ -1,5 +1,22 @@
 #include "Button.hpp"
 
+/**
+ * @brief Construct a new Button:: Button object
+ * @author @scawful
+ * 
+ * @param position 
+ * @param dimensions 
+ * @param font 
+ * @param text 
+ * @param character_size 
+ * @param hasBorder 
+ * @param text_idle_color 
+ * @param text_hover_color 
+ * @param text_active_color 
+ * @param idle_color 
+ * @param hover_color 
+ * @param active_color 
+ */
 Button::Button( sf::Vector2f position, sf::Vector2f dimensions,
             sf::Font* font, std::string text, unsigned character_size, bool hasBorder,
             sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
@@ -28,14 +45,24 @@ Button::Button( sf::Vector2f position, sf::Vector2f dimensions,
     this->assignColors(text_idle_color, text_hover_color, text_active_color, idle_color, hover_color, active_color);
 }
 
-
+/**
+ * @brief Destroy the Button:: Button object
+ * @author @scawful
+ * 
+ */
 Button::~Button () {
     while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         continue;
     }
 }
 
-
+/**
+ * @brief Retrieve the current state of the Button press
+ * @author @scawful
+ * 
+ * @return true 
+ * @return false 
+ */
 const bool Button::isPressed() const 
 {
     if ( this->buttonState == BTN_ACTIVE )
@@ -46,7 +73,13 @@ const bool Button::isPressed() const
     return false;
 }
 
-
+/**
+ * @brief Retrieve the colors of the Button
+ * @author @scawful @jmielc2
+ * 
+ * @param state 
+ * @return vector <sf::Color> 
+ */
 vector <sf::Color> Button::getStateColors (int state) {
     vector <sf::Color> colors;
     if (state == BTN_IDLE) {
@@ -63,7 +96,17 @@ vector <sf::Color> Button::getStateColors (int state) {
     return colors;
 }
 
-
+/**
+ * @brief Assign new colors to a button
+ * @author @scawful @jmielc2
+ * 
+ * @param text_idle_color 
+ * @param text_hover_color 
+ * @param text_active_color 
+ * @param idle_color 
+ * @param hover_color 
+ * @param active_color 
+ */
 void Button::assignColors (sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color, 
             sf::Color idle_color, sf::Color hover_color, sf::Color active_color) {
     this->textIdleColor = text_idle_color;
@@ -75,7 +118,12 @@ void Button::assignColors (sf::Color text_idle_color, sf::Color text_hover_color
     this->activeColor = active_color;
 }
 
-
+/**
+ * @brief Cumulative update routine for the Button object
+ * @author @scawful @jmielc2
+ * 
+ * @param mousePos 
+ */
 void Button::update(const sf::Vector2f& mousePos) 
 {
     // update booleans for hover and pressed
@@ -118,7 +166,12 @@ void Button::update(const sf::Vector2f& mousePos)
     }    
 }
 
-
+/**
+ * @brief Cumulative update routine for the Button
+ * @author @scawful
+ * 
+ * @param target 
+ */
 void Button::render(sf::RenderTarget& target) 
 {
     if (this->checkBackdrop()) {

@@ -1,6 +1,23 @@
 #include "Textbox.hpp"
 
-// Constructor
+/**
+ * @brief Construct a new Textbox:: Textbox object
+ * @author @jmielc2
+ * 
+ * @param position 
+ * @param dimensions 
+ * @param font 
+ * @param character_size 
+ * @param character_limit 
+ * @param text_idle_color 
+ * @param text_hover_color 
+ * @param text_active_color 
+ * @param idle_color 
+ * @param hover_color 
+ * @param active_color 
+ * @param hasBorder 
+ * @param dfltText 
+ */
 Textbox::Textbox (sf::Vector2f position, sf::Vector2f dimensions,
             sf::Font* font, unsigned character_size, unsigned character_limit,
             sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
@@ -26,6 +43,12 @@ Textbox::Textbox (sf::Vector2f position, sf::Vector2f dimensions,
     this->assignColors(text_idle_color, text_hover_color, text_active_color, idle_color, hover_color, active_color);
 }
 
+/**
+ * @brief Handle user input logic for typing in text
+ * @author @jmielc2
+ * 
+ * @param charTyped 
+ */
 void Textbox::inputLogic (char charTyped) {
     if (charTyped != ENTER_KEY && charTyped != ESCAPE_KEY && charTyped != DELETE_KEY) {
         if (this->getString().getSize() < this->limit) {
@@ -60,6 +83,11 @@ void Textbox::inputLogic (char charTyped) {
     }
 }
 
+/**
+ * @brief Delete the last character inputted 
+ * @author @jmielc2
+ * 
+ */
 void Textbox::deleteLastChar () {
     string origText = this->getString();
     string newText = "";
@@ -69,14 +97,31 @@ void Textbox::deleteLastChar () {
     this->setString(newText);
 }
 
+/**
+ * @brief Set the character limit for the textbox
+ * @author @jmielc2
+ * 
+ * @param character_limit 
+ */
 void Textbox::setLimit (unsigned character_limit) {
     this->limit = character_limit;
 }
 
+/**
+ * @brief Get the inputted text as std::string object
+ * @author @jmielc2
+ * 
+ * @return std::string 
+ */
 std::string Textbox::getInputText () {
     return this->getString();
 }
 
+/**
+ * @brief Neutralize the textbox state
+ * @author @jmielc2
+ * 
+ */
 void Textbox::neutralize () {
     if (this->isSelected) {
         this->isSelected = false;
@@ -88,6 +133,13 @@ void Textbox::neutralize () {
     }
 }
 
+/**
+ * @brief Cumulative update routine for the Textbox 
+ * @author @jmielc2
+ * 
+ * @param mousePos 
+ * @param event 
+ */
 void Textbox::update (const sf::Vector2f &mousePos, sf::Event &event) {
     // Set Textbox State
     textboxState = BTN_IDLE;
@@ -158,6 +210,12 @@ void Textbox::update (const sf::Vector2f &mousePos, sf::Event &event) {
     }
 }
 
+/**
+ * @brief Cumulative render routien for the Textbox
+ * @author @jmielc2
+ * 
+ * @param target 
+ */
 void Textbox::render (sf::RenderTarget& target) {
     if (this->checkBackdrop()) {
         target.draw(this->backdrop);

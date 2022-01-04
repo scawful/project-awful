@@ -1,5 +1,19 @@
 #include "DropDown.hpp"
 
+/**
+ * @brief Construct a new Drop Down:: Drop Down object
+ * @author @scawful
+ * 
+ * @todo Change the active element to be some sort of prompt 
+ *       Update the styling to look better any less blocky 
+ * 
+ * @param position 
+ * @param size 
+ * @param font 
+ * @param list 
+ * @param numElements 
+ * @param default_index 
+ */
 DropDown::DropDown(sf::Vector2f position, sf::Vector2f size, sf::Font& font, std::string list[], unsigned numElements, const unsigned default_index)
     : font(font), showList(false), keytimeMax(1.f), keytime(0.f)
 {
@@ -26,7 +40,11 @@ DropDown::DropDown(sf::Vector2f position, sf::Vector2f size, sf::Font& font, std
     
 }
 
-
+/**
+ * @brief Destroy the Drop Down:: Drop Down object
+ * @author @scawful
+ * 
+ */
 DropDown::~DropDown()
 {
     delete this->activeElement;
@@ -36,6 +54,17 @@ DropDown::~DropDown()
     }
 }
 
+/**
+ * @brief Set the dropdown boxes colors 
+ * @author @scawful
+ * 
+ * @param text_idle 
+ * @param text_hover 
+ * @param text_active 
+ * @param active 
+ * @param idle 
+ * @param hover 
+ */
 void DropDown::setColors( sf::Color text_idle, sf::Color text_hover, sf::Color text_active, sf::Color active, sf::Color idle, sf::Color hover )
 {
     this->activeElement->assignColors(text_idle, text_hover, text_active, idle, active, hover);
@@ -45,6 +74,13 @@ void DropDown::setColors( sf::Color text_idle, sf::Color text_hover, sf::Color t
     }
 }
 
+/**
+ * @brief Retrieve the current keytime 
+ * @author @scawful
+ * 
+ * @return true 
+ * @return false 
+ */
 const bool DropDown::getKeytime()
 {
     if (this->keytime >= this->keytimeMax)
@@ -55,6 +91,12 @@ const bool DropDown::getKeytime()
     return false;
 }
 
+/**
+ * @brief Update the current keytime 
+ * @author @scawful
+ * 
+ * @param dt 
+ */
 void DropDown::updateKeytime(const float& dt)
 {
     if ( this->keytime < this->keytimeMax )
@@ -63,6 +105,13 @@ void DropDown::updateKeytime(const float& dt)
     }
 }
 
+/**
+ * @brief Cumulative update routine for the dropdown menu 
+ * @author @scawful
+ * 
+ * @param mousePos 
+ * @param dt 
+ */
 void DropDown::update(const sf::Vector2f &mousePos, const float& dt)
 {
     this->updateKeytime(dt);
@@ -77,6 +126,7 @@ void DropDown::update(const sf::Vector2f &mousePos, const float& dt)
             this->showList = true;
     }
     
+    // if list is activated 
     if (this->showList)
     {
         for (auto &i : this->list)
@@ -93,6 +143,12 @@ void DropDown::update(const sf::Vector2f &mousePos, const float& dt)
     }
 }
 
+/**
+ * @brief Cumulative render function for the dropdown menu
+ * @author @scawful
+ * 
+ * @param target 
+ */
 void DropDown::render(sf::RenderTarget &target)
 {
     this->activeElement->render(target);
