@@ -38,6 +38,7 @@ DropDown::~DropDown()
 
 void DropDown::setColors( sf::Color text_idle, sf::Color text_hover, sf::Color text_active, sf::Color active, sf::Color idle, sf::Color hover )
 {
+    this->activeElement->assignColors(text_idle, text_hover, text_active, idle, active, hover);
     for ( auto buttons : list )
     {
         buttons->assignColors( text_idle, text_hover, text_active, idle, active, hover );
