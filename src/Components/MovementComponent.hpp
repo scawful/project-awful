@@ -10,12 +10,14 @@ class MovementComponent
 private:
     // Variables
     int lastDirection;
+
+    // sfml Sprite
     sf::Sprite& sprite;
 
+    // Movement values 
     float maxVelocity;    
     float acceleration;
     float deceleration;
-    
     sf::Vector2f velocity;
 
 public:
@@ -25,14 +27,12 @@ public:
     // Accessors
     const float& getMaxVelocity() const;
     const sf::Vector2f& getVelocity() const;
-    
-    // Functions
     const bool getState(const short unsigned state);
     const int getDirection();
     
+    // Update routines
     void move(const float x, const float y, const float& dt);
     void update(const float& dt);
-    
 };
 
 #endif /* MovementComponent_hpp */

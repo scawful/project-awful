@@ -1,26 +1,60 @@
 #include "MovementComponent.hpp"
 
+/**
+ * @brief Construct a new Movement Component:: Movement Component object
+ * @author @scawful
+ * 
+ * @param sprite 
+ * @param maxVelocity 
+ * @param acceleration 
+ * @param deceleration 
+ */
 MovementComponent::MovementComponent(sf::Sprite& sprite, float maxVelocity, float acceleration, float deceleration)
     : sprite(sprite), maxVelocity(maxVelocity), acceleration(acceleration), deceleration(deceleration)
 {
     this->maxVelocity = maxVelocity;
 }
 
+/**
+ * @brief Destroy the Movement Component:: Movement Component object
+ * @author @scawful
+ * 
+ */
 MovementComponent::~MovementComponent() 
 {
     
 }
 
+/**
+ * @brief Retrieve the max velocity member variable 
+ * @author @scawful
+ * 
+ * @return const float& 
+ */
 const float & MovementComponent::getMaxVelocity() const 
 {
     return this->maxVelocity;
 }
 
+/**
+ * @brief Retrieve the currente velocity member variable
+ * @author @scawful
+ * 
+ * @return const sf::Vector2f& 
+ */
 const sf::Vector2f & MovementComponent::getVelocity() const 
 {
     return this->velocity;
 }
 
+/**
+ * @brief Retrieve the current state of the MovementComponent
+ * @author @scawful
+ * 
+ * @param state 
+ * @return true 
+ * @return false 
+ */
 const bool MovementComponent::getState(const short unsigned state) 
 {
     switch (state) 
@@ -58,11 +92,25 @@ const bool MovementComponent::getState(const short unsigned state)
     return false;
 }
 
+/**
+ * @brief Retrieve the direction of the MovementComponent as reported by getState
+ * @author @scawful
+ * 
+ * @return const int 
+ */
 const int MovementComponent::getDirection()
 {
     return this->lastDirection;
 }
 
+/**
+ * @brief Shift the direction of the object using acceleration added to the current velocity of the object
+ * @author @scawful
+ * 
+ * @param dir_x 
+ * @param dir_y 
+ * @param dt 
+ */
 void MovementComponent::move(const float dir_x, const float dir_y, const float& dt) 
 {
     // Acceleration
@@ -70,6 +118,13 @@ void MovementComponent::move(const float dir_x, const float dir_y, const float& 
     this->velocity.y += this->acceleration * dir_y;
 }
 
+/**
+ * @brief Update the object 
+ *        Decelerate the objects velocity if no longer in motion or moving in another direction
+ * @author @scawful
+ * 
+ * @param dt 
+ */
 void MovementComponent::update(const float& dt) 
 {
     // Deceleration

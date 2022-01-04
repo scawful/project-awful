@@ -6,11 +6,16 @@
 class HitboxComponent 
 {
 private:
-    sf::Sprite& sprite;
-    sf::RectangleShape hitbox;
+    // Position values 
     float offsetX;
     float offsetY;
-    
+
+    // sfml Sprite 
+    sf::Sprite& sprite;
+
+    // sfml RectangleShape
+    sf::RectangleShape hitbox;
+
 public:
     HitboxComponent(sf::Sprite& sprite,
                     float offset_x, float offset_y,
@@ -20,7 +25,10 @@ public:
     // Functions
     bool checkIntersect(const sf::FloatRect& frect);
     
+    // Update routine 
     void update();
+
+    // Render routine
     void render(sf::RenderTarget& target);
 
 };
