@@ -2,6 +2,7 @@
 #define Dungeon_hpp
 
 #include "../core.hpp"
+#include "../Actor/Player.hpp"
 
 namespace Dungeon
 {
@@ -29,8 +30,8 @@ namespace Dungeon
         WALL_UPPER_RIGHT_CORNER,
         WALL_LOWER_LEFT_CORNER,
         WALL_LOWER_RIGHT_CORNER,
-        DOOR_CLOSED,
-        DOOR_OPEN
+        DOOR_UPPER_CLOSED,
+        DOOR_UPPER_OPEN
     };
 
     /**
@@ -63,12 +64,13 @@ namespace Dungeon
     {
     private:
         int x, y;
+        int doorId;
         int destinationRoom;
         bool isClosed;
         sf::Texture graphics;
 
     public:
-        Door(int x, int y, int dest);
+        Door(int id, int destination, sf::Vector2i location);
         ~Door();
 
         int getDestinationRoom();
@@ -104,11 +106,15 @@ namespace Dungeon
 
         // Data Structures    
         vector<Dungeon::Door> doors;
+
+        // Connections between doors
+        unordered_map<int, int> doorConnections;
         
         Tile **tilesMatrix;
 
         // Initializers
         void initTiles();
+        void initDoors();
 
     public:
         int width, height;
@@ -116,10 +122,16 @@ namespace Dungeon
         ~Room();
         
         void destroyRoom();
-
         void createRoom();
-        int getNextRoomNumber();
 
+        void addDoor( int id, int destination, sf::Vector2i location );
+
+        // Accessors
+        int getDoorConnection(int id);
+        int getNextRoomNumber();
+        int getNumDoors();
+
+        // Modifiers
         void setRoomType( RoomType type );
         void setPlayerPosition( sf::Vector2f position, sf::Vector2f size );
         void setRoomChangeHandshake();

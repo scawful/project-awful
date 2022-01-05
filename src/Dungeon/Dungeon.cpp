@@ -20,7 +20,7 @@
  */
 Dungeon::Tile::Tile()
 {
-    this->tileTexture = nullptr;
+
 }
 
 /**
@@ -29,8 +29,7 @@ Dungeon::Tile::Tile()
  */
 Dungeon::Tile::~Tile()
 {
-    delete this->tileTexture;
-    this->tileTexture = nullptr 
+    
 }
 
 /**
@@ -78,10 +77,10 @@ void Dungeon::Tile::setTileType( TileType type )
     } else if ( type == TileType::WALL_RIGHT ) {
         textureImage.loadFromFile("../assets/wall_right.png");
         tileTexture.loadFromImage(textureImage);
-    } else if ( type == TileType::DOOR_CLOSED ) {
+    } else if ( type == TileType::DOOR_UPPER_CLOSED ) {
         textureImage.loadFromFile("../assets/door_closed.png");
         tileTexture.loadFromImage(textureImage);
-    } else if ( type == TileType::DOOR_OPEN ) {
+    } else if ( type == TileType::DOOR_UPPER_OPEN ) {
         textureImage.loadFromFile("../assets/door_open.png");
         tileTexture.loadFromImage(textureImage);
     }
@@ -134,11 +133,12 @@ void Dungeon::Tile::render( sf::RenderTarget& target )
  * @author @scawful 
  * 
  */
-Dungeon::Door::Door(int x, int y, int dest)
+Dungeon::Door::Door(int id, int destination, sf::Vector2i location)
 {
-    this->x = x;
-    this->y = y;
-    this->destinationRoom = dest;
+    this->doorId = id;
+    this->x = location.x;
+    this->y = location.y;
+    this->destinationRoom = destination;
     this->isClosed = true;
 }
 
@@ -213,7 +213,6 @@ void Dungeon::Door::setClosed()
  * 
  * @todo verify consistent connections between doors 
  * @todo add left, right, and bottom door connections 
- *     
  * 
  */
 void Dungeon::Room::initTiles() 
@@ -262,16 +261,6 @@ void Dungeon::Room::initTiles()
             }
         }
     }
-
-    // todo see header 
-    while ( numDoors != 0 ) {
-        int x = randDoorLocation(rng);
-        uniform_int_distribution<int> randomRoom(0, numSiblings - 1);
-        tilesMatrix[x][0].setTileType(TileType::DOOR_CLOSED);
-        doors.push_back( Door(x, 0, randomRoom(rng)) );
-        numDoors--;
-    }
-
 }
 
 /**
@@ -328,6 +317,35 @@ void Dungeon::Room::createRoom() {
 }
 
 /**
+ * @brief Add a door to the room 
+ * 
+ * @param id 
+ * @param destination 
+ * @param location 
+ */
+void Dungeon::Room::addDoor( int id, int destination, sf::Vector2i location )
+{
+    doors.push_back(Door( id, destination, location ));
+    tilesMatrix[location.x][location.y].setTileType(TileType::DOOR_UPPER_CLOSED);
+    doorConnections.emplace( id, destination );
+}
+
+/**
+ * @brief 
+ * 
+ * @param id 
+ * @return int 
+ */
+int Dungeon::Room::getDoorConnection(int id)
+{
+    if ( doorConnections.count(id) != 0 ) {
+        return doorConnections[id];
+    }
+
+    return -1;
+}
+
+/**
  * @brief Next Room Number to transition to as reported by update 
  * @author @scawful
  * 
@@ -335,6 +353,16 @@ void Dungeon::Room::createRoom() {
  */
 int Dungeon::Room::getNextRoomNumber() {
     return nextRoomNumber;
+}
+
+/**
+ * @brief 
+ * 
+ * @return int 
+ */
+int Dungeon::Room::getNumDoors() 
+{
+    return this->numDoors;
 }
 
 /**
@@ -393,18 +421,18 @@ void Dungeon::Room::updateRoom()
         sf::Rect<float> playerRect;
         playerRect.top = playerPosition.x;
         playerRect.left = playerPosition.y;
-        playerRect.width = playerSize.x;
+        playerRect.width = playerSize.;
         playerRect.height = playerSize.y;
 
-        if ( tilesMatrix[doors[i].getPosition().x][doors[i].getPosition().y].getTileRectangle().getGlobalBounds().contains(playerPosition) ) 
+        if (tilesMatrix[doors[i].getPosition().x][doors[i].getPosition().y].getTileRectangle().getGlobalBounds().contains(playerPosition)) 
         {
-            tilesMatrix[doors[i].getPosition().x][doors[i].getPosition().y].setTileType(TileType::DOOR_OPEN);
+            tilesMatrix[doors[i].getPosition().x][doors[i].getPosition().y].setTileType(TileType::DOOR_UPPER_OPEN);
             doors[i].setOpen();
             isChangingRoom = true;
             nextRoomNumber = doors[i].getDestinationRoom();
         } else {
             if (!doors[i].getIsClosed()) {
-                tilesMatrix[doors[i].getPosition().x][doors[i].getPosition().y].setTileType(TileType::DOOR_CLOSED);
+                tilesMatrix[doors[i].getPosition().x][doors[i].getPosition().y].setTileType(TileType::DOOR_UPPER_CLOSED);
                 doors[i].setOpen();
             }
         }
