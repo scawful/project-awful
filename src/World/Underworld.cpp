@@ -27,7 +27,7 @@ void Underworld::initFonts()
  */
 void Underworld::initDungeon()
 {
-    this->dungeonGenerator = new DungeonGenerator(1);
+    this->dungeonGenerator = new DungeonGenerator(this->player, 1);
     this->wallWidth = 100;
 }
 

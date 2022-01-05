@@ -11,7 +11,6 @@
 #include "../GUI/Button.hpp"
 #include "../GUI/Text.hpp"
 
-
 class World
 {
 private:
