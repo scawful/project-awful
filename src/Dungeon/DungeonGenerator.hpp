@@ -34,11 +34,14 @@ private:
     sf::Text debugText;
     sf::Vector2f playerPosition;
 
+    // Actor Objects
+    Player *player;
+
     // Helper
     int getRandomUnusedRoomID();
 
 public:
-    DungeonGenerator( int difficulty );
+    DungeonGenerator( Player *player, int difficulty );
     ~DungeonGenerator();
 
     // Accessors 
@@ -46,6 +49,7 @@ public:
     void setPlayerPositionInDungeon( sf::Vector2f position, sf::Vector2f size );
 
     // Random Dungeon Generation 
+    void generateDungeonDoors();
     void generateDungeon();
 
     // Update routine

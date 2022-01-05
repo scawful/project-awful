@@ -32,8 +32,9 @@ int DungeonGenerator::getRandomUnusedRoomID()
  * 
  * @param difficulty 
  */
-DungeonGenerator::DungeonGenerator( int difficulty )
+DungeonGenerator::DungeonGenerator(Player *player, int difficulty)
 {
+    this->player = player;
     this->difficultyLevel = difficulty;
     this->numRoomsModifier = difficulty % 10;
     generateDungeon();
@@ -80,6 +81,60 @@ sf::Vector2f DungeonGenerator::getDungeonDimensions()
 void DungeonGenerator::setPlayerPositionInDungeon( sf::Vector2f position, sf::Vector2f size )
 {
     rooms.at(currentRoomNumber)->setPlayerPosition( position, size );
+}
+
+/**
+ * @brief 
+ * 
+ */
+void DungeonGenerator::generateDungeonDoors()
+{
+    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+    for ( int i = 0; i < this->numRooms; i++ )
+    {
+        sf::Vector2i location;
+        int doorId = 0;
+        int width = rooms.at(i)->width;
+        int height = rooms.at(i)->height;
+        int numDoors = rooms.at(i)->getNumDoors();
+        while ( numDoors != 0 ) 
+        {
+            // decide which wall to put the door on and generate its position 
+            uniform_int_distribution<int> randomEdge(0,3);
+            int edge = randomEdge(rng);
+            
+            if ( edge == 0 ) {
+                uniform_int_distribution<int> randDoorLocation(1, width - 2);
+                location.x = randDoorLocation(rng);
+                location.y = 0;
+            } else if ( edge == 1 ) {
+                uniform_int_distribution<int> randDoorLocation(1, height - 2);
+                location.x = width - 1; 
+                location.y = randDoorLocation(rng);
+            } else if ( edge == 2 ) {
+                uniform_int_distribution<int> randDoorLocation(1, width - 2);
+                location.x = randDoorLocation(rng);
+                location.y = height - 1;
+            } else if ( edge == 3 ) {
+                uniform_int_distribution<int> randDoorLocation(1, height - 2);
+                location.x = 0;
+                location.y = randDoorLocation(rng);
+            }
+
+            // calculate the destination of this door and make sure it's not already connected to another door 
+            bool isAlreadyConnected = true;
+            uniform_int_distribution<int> randomRoom(0, numRooms - 1);
+            while (isAlreadyConnected) {
+                int doorDestinationId = randomRoom(rng);
+                
+                if ( rooms.at(i)->getDoorConnection(doorDestinationId) == -1  && doorDestinationId != i ) {
+                    isAlreadyConnected = false;
+                    rooms.at(i)->addDoor( doorId, doorDestinationId, location );
+                }
+            }
+            numDoors--;
+        }
+    }
 }
 
 /**
@@ -138,8 +193,11 @@ void DungeonGenerator::generateDungeon()
         rooms.at(newID)->setRoomType(Dungeon::RoomType(randomRoomType(rng)));
     }
 
-    cout << "Creating Origin Room #" << currentRoomNumber << endl;
-    rooms.at(currentRoomNumber)->createRoom();
+    // Creating all the rooms and their tiles 
+    for ( auto & eachRoom : rooms ) {
+        eachRoom.second->createRoom();
+    }
+    generateDungeonDoors();
 }
 
 /**
@@ -155,7 +213,6 @@ void DungeonGenerator::updateDungeon()
     // player is at a door and can move to the next room 
     if ( rooms.at(currentRoomNumber)->changeRoom() ) {
         rooms.at(currentRoomNumber)->setRoomChangeHandshake();
-        rooms.at(rooms.at(currentRoomNumber)->getNextRoomNumber())->createRoom();
         currentRoomNumber = rooms.at(currentRoomNumber)->getNextRoomNumber();
     }
 }
