@@ -31,7 +31,13 @@ namespace Dungeon
         WALL_LOWER_LEFT_CORNER,
         WALL_LOWER_RIGHT_CORNER,
         DOOR_UPPER_CLOSED,
-        DOOR_UPPER_OPEN
+        DOOR_UPPER_OPEN,
+        DOOR_LOWER_CLOSED,
+        DOOR_LOWER_OPEN,
+        DOOR_LEFT_CLOSED,
+        DOOR_LEFT_OPEN,
+        DOOR_RIGHT_CLOSED,
+        DOOR_RIGHT_OPEN
     };
 
     /**
@@ -124,7 +130,7 @@ namespace Dungeon
         void destroyRoom();
         void createRoom();
 
-        void addDoor( int id, int destination, sf::Vector2i location );
+        void addDoor( int id, int destination, int direction, sf::Vector2i location );
 
         // Accessors
         int getDoorConnection(int id);

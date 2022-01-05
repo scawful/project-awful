@@ -157,7 +157,8 @@ Dungeon::Door::~Door()
  * 
  * @return int 
  */
-int Dungeon::Door::getDestinationRoom() {
+int Dungeon::Door::getDestinationRoom() 
+{
     return destinationRoom;
 }
 
@@ -166,7 +167,8 @@ int Dungeon::Door::getDestinationRoom() {
  * 
  * @return sf::Vector2i 
  */
-sf::Vector2i Dungeon::Door::getPosition() {
+sf::Vector2i Dungeon::Door::getPosition() 
+{
     return sf::Vector2i(x,y);
 }
 
@@ -227,7 +229,6 @@ void Dungeon::Room::initTiles()
     }
 
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); 
-    uniform_int_distribution<int> randDoorLocation(1, width - 2);
 
     int defaultTileSize = 100;
     for ( int i = 0; i < width; i++ ) {
@@ -312,7 +313,8 @@ void Dungeon::Room::destroyRoom()
  * @author @scawful
  * 
  */
-void Dungeon::Room::createRoom() {
+void Dungeon::Room::createRoom() 
+{
     initTiles();
 }
 
@@ -323,10 +325,18 @@ void Dungeon::Room::createRoom() {
  * @param destination 
  * @param location 
  */
-void Dungeon::Room::addDoor( int id, int destination, sf::Vector2i location )
+void Dungeon::Room::addDoor( int id, int destination, int direction, sf::Vector2i location )
 {
     doors.push_back(Door( id, destination, location ));
-    tilesMatrix[location.x][location.y].setTileType(TileType::DOOR_UPPER_CLOSED);
+    if ( direction == 0 ) {
+        tilesMatrix[location.x][location.y].setTileType(TileType::DOOR_UPPER_CLOSED);
+    } else if ( direction == 1 ) {
+        tilesMatrix[location.x][location.y].setTileType(TileType::DOOR_RIGHT_CLOSED);
+    } else if ( direction == 2 ) {
+        tilesMatrix[location.x][location.y].setTileType(TileType::DOOR_LOWER_CLOSED);
+    } else if ( direction == 3 ) {
+        tilesMatrix[location.x][location.y].setTileType(TileType::DOOR_LEFT_CLOSED);
+    }
     doorConnections.emplace( id, destination );
 }
 

@@ -84,7 +84,8 @@ void DungeonGenerator::setPlayerPositionInDungeon( sf::Vector2f position, sf::Ve
 }
 
 /**
- * @brief 
+ * @brief Generate the dungeon doors for each room
+ * @author @scawful
  * 
  */
 void DungeonGenerator::generateDungeonDoors()
@@ -129,7 +130,7 @@ void DungeonGenerator::generateDungeonDoors()
                 
                 if ( rooms.at(i)->getDoorConnection(doorDestinationId) == -1  && doorDestinationId != i ) {
                     isAlreadyConnected = false;
-                    rooms.at(i)->addDoor( doorId, doorDestinationId, location );
+                    rooms.at(i)->addDoor( doorId, doorDestinationId, edge, location );
                 }
             }
             numDoors--;
