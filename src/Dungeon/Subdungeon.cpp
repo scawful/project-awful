@@ -12,6 +12,15 @@ Subdungeon::Subdungeon(int id, int top, int left, int width, int height)
     this->sibling = NULL;
 }
 
+Subdungeon::~Subdungeon()
+{
+    if ( this->room != NULL )
+    {   
+        delete this->room;
+        this->room = NULL;
+    }
+}
+
 void Subdungeon::setLeftChild( Subdungeon *leftChild )
 {
     this->left_child = leftChild;
