@@ -9,12 +9,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # set the project name
 project(awful VERSION 1.0)
 
-# add the executable
+# add the executable(s)
 add_executable(awful awful.cpp Game.cpp 
                 State/State.cpp State/MainMenuState.cpp State/GameState.cpp State/CharacterState.cpp State/SettingsState.cpp
                 Actor/Actor.cpp Actor/Player.cpp Actor/Enemy.cpp
                 Ancilla/Ancilla.cpp Ancilla/Sword.cpp
-                Components/MovementComponent.cpp Components/HitboxComponent.cpp Components/AnimationComponent.cpp
+                Components/MovementComponent.cpp Components/HitboxComponent.cpp Components/AnimationComponent.cpp Components/HitboxManager.cpp
                 World/World.cpp World/Overworld.cpp World/Underworld.cpp
                 Dungeon/DungeonGenerator.cpp Dungeon/Dungeon.cpp Dungeon/Subdungeon.cpp Dungeon/Room.cpp
                 GUI/Text.cpp GUI/Textbox.cpp  GUI/Button.cpp  GUI/PauseMenu.cpp GUI/DropDown.cpp )

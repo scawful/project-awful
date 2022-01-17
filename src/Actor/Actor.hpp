@@ -11,6 +11,9 @@ class Actor
 private:
     // Initializer Functions
     void initVariables();
+    unsigned int ID;
+    static int genID();
+    static std::vector<int> allIDS;
 
 protected:
     sf::Sprite sprite;
